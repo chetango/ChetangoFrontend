@@ -1,0 +1,34 @@
+// Typography system
+$font-family-base: 'Poppins', sans-serif;
+$font-family-heading: 'Poppins', sans-serif;
+
+// Font sizes (px-based, responsive)
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 20px;
+$font-size-2xl: 24px;
+$font-size-3xl: 28px;
+$font-size-4xl: 32px;
+
+// Responsive font sizes
+$font-size-h1-mobile: 24px;
+$font-size-h1-tablet: 32px;
+$font-size-h1-desktop: 40px;
+
+$font-size-h2-mobile: 20px;
+$font-size-h2-tablet: 24px;
+$font-size-h2-desktop: 32px;
+
+// Font weights
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Line heights
+$line-height-tight: 1.25;
+$line-height-base: 1.5;
+$line-height-relaxed: 1.75;

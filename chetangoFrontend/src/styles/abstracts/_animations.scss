@@ -1,0 +1,76 @@
+// Animation system - Profesional y fluido
+
+// Duraciones optimizadas
+$duration-fast: 150ms;
+$duration-base: 250ms;
+$duration-slow: 350ms;
+$duration-slower: 500ms;
+
+// Easing curves profesionales
+$ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+$ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+$ease-in-out-back: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+$ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// OPCIÓN 1: Micro-interacciones sutiles (Recomendada para mobile)
+@mixin hover-lift {
+  transition: transform $duration-fast $ease-out-quart;
+  &:hover { transform: translateY(-2px); }
+}
+
+@mixin button-press {
+  transition: transform $duration-fast $ease-out-quart;
+  &:active { transform: scale(0.98); }
+}
+
+@mixin fade-in {
+  opacity: 0;
+  animation: fadeIn $duration-base $ease-out-quart forwards;
+}
+
+// OPCIÓN 2: Animaciones modernas con blur/scale
+@mixin glass-hover {
+  transition: all $duration-base $ease-out-expo;
+  &:hover {
+    backdrop-filter: blur(10px);
+    transform: scale(1.02);
+  }
+}
+
+@mixin slide-up {
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideUp $duration-slow $ease-out-expo forwards;
+}
+
+// OPCIÓN 3: Animaciones premium con spring
+@mixin spring-bounce {
+  transition: transform $duration-slower $ease-spring;
+  &:hover { transform: scale(1.05); }
+}
+
+@mixin elastic-entrance {
+  transform: scale(0.3);
+  animation: elasticIn $duration-slower $ease-in-out-back forwards;
+}
+
+// Keyframes
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes elasticIn {
+  to { transform: scale(1); }
+}
+
+// Clases utilitarias
+.animate-fade-in { @include fade-in; }
+.animate-slide-up { @include slide-up; }
+.animate-elastic { @include elastic-entrance; }
