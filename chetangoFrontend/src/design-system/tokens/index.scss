@@ -1,0 +1,122 @@
+// ============================================
+// DESIGN TOKENS - ÍNDICE PRINCIPAL CHETANGO
+// ============================================
+// Este archivo importa todos los tokens de diseño
+// Úsalo en tus componentes: @use '@/design-system/tokens' as *;
+
+// IMPORTAR TODOS LOS TOKENS
+// ORDEN IMPORTANTE: colores primero, luego el resto
+@forward 'colors';
+@forward 'typography';
+@forward 'spacing';
+@forward 'breakpoints';
+@forward 'animations';
+@forward 'borders';
+@forward 'elevation';
+@forward 'icons';
+@forward 'forms';
+@forward 'mobile';
+@forward 'brand';
+
+// USAR PARA MIXINS
+@use 'borders' as *;
+@use 'animations' as *;
+
+// ============================================
+// TOKENS GLOBALES ADICIONALES
+// ============================================
+
+// Z-INDEX movido a elevation.scss
+
+// OPACIDADES
+$opacity-0: 0;
+$opacity-5: 0.05;
+$opacity-10: 0.1;
+$opacity-20: 0.2;
+$opacity-25: 0.25;
+$opacity-30: 0.3;
+$opacity-40: 0.4;
+$opacity-50: 0.5;
+$opacity-60: 0.6;
+$opacity-70: 0.7;
+$opacity-75: 0.75;
+$opacity-80: 0.8;
+$opacity-90: 0.9;
+$opacity-95: 0.95;
+$opacity-100: 1;
+
+// CURSORES
+$cursor-auto: auto;
+$cursor-default: default;
+$cursor-pointer: pointer;
+$cursor-wait: wait;
+$cursor-text: text;
+$cursor-move: move;
+$cursor-help: help;
+$cursor-not-allowed: not-allowed;
+$cursor-grab: grab;
+$cursor-grabbing: grabbing;
+
+// ============================================
+// MIXINS UTILITARIOS
+// ============================================
+
+// Mixin para centrar elementos
+@mixin center-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Mixin para truncar texto
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Mixin para texto multilínea truncado
+@mixin text-truncate-lines($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Mixin para ocultar visualmente (accesibilidad)
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Mixin para focus visible
+@mixin focus-visible {
+  &:focus-visible {
+    outline: $outline-focus;
+    outline-offset: $outline-offset-2;
+  }
+}
+
+// Mixin para estados de hover/focus
+@mixin interactive-states($hover-transform: none, $focus-shadow: $shadow-input-focus) {
+  transition: $transition-hover;
+  
+  &:hover {
+    transform: $hover-transform;
+  }
+  
+  &:focus {
+    box-shadow: $focus-shadow;
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}

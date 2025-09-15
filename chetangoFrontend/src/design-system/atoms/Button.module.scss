@@ -1,0 +1,99 @@
+@use '../tokens' as *;
+
+.button {
+  // Tipografía
+  font-family: $font-family-primary;
+  font-weight: $button-medium-weight;
+  line-height: $button-medium-line-height;
+  
+  // Apariencia
+  border: $border-button;
+  border-radius: $radius-button;
+  cursor: $cursor-pointer;
+  transition: $transition-button;
+  
+  // Estados de interacción
+  @include interactive-states();
+  @include focus-visible();
+  
+  // Variantes de color
+  &.primary {
+    background-color: $color-primary;
+    color: $color-text-inverse;
+    
+    &:hover {
+      background-color: $color-primary-dark;
+      box-shadow: $shadow-button-hover;
+    }
+    
+    &:focus {
+      box-shadow: $shadow-primary;
+    }
+  }
+  
+  &.secondary {
+    background-color: $color-gray-200;
+    color: $color-text-primary;
+    
+    &:hover {
+      background-color: $color-gray-300;
+      box-shadow: $shadow-button-hover;
+    }
+  }
+  
+  &.danger {
+    background-color: $color-error;
+    color: $color-text-inverse;
+    
+    &:hover {
+      background-color: $color-error-dark;
+      box-shadow: $shadow-button-hover;
+    }
+    
+    &:focus {
+      box-shadow: $shadow-error;
+    }
+  }
+  
+  // Tamaños (Mobile-first)
+  &.sm {
+    @include touch-button;
+    font-size: $font-size-mobile-sm;
+    
+    @include tablet {
+      padding: $padding-button-sm;
+      font-size: $button-small-size;
+    }
+  }
+  
+  &.md {
+    @include touch-button;
+    
+    @include tablet {
+      padding: $padding-button-md;
+      font-size: $button-medium-size;
+    }
+  }
+  
+  &.lg {
+    min-height: $button-mobile-lg-height;
+    padding: $button-mobile-lg-padding;
+    font-size: $button-mobile-lg-font-size;
+    
+    @include tablet {
+      padding: $padding-button-lg;
+      font-size: $button-large-size;
+    }
+  }
+  
+  // Estados
+  &:disabled {
+    opacity: $opacity-50;
+    cursor: $cursor-not-allowed;
+    
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}

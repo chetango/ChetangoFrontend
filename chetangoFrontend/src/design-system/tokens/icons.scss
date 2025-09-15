@@ -1,0 +1,81 @@
+// ============================================
+// DESIGN TOKENS - ICONOGRAFÍA CHETANGO
+// ============================================
+
+@use 'colors' as *;
+@use 'animations' as *;
+
+// TAMAÑOS DE ICONOS (Esenciales)
+$icon-xs: 12px;      // Indicadores pequeños
+$icon-sm: 16px;      // Iconos en texto, botones pequeños
+$icon-md: 20px;      // Iconos estándar (más usado)
+$icon-lg: 24px;      // Iconos en headers, navegación
+$icon-xl: 32px;      // Iconos destacados
+$icon-2xl: 48px;     // Iconos de estado, placeholders
+
+// COLORES DE ICONOS
+$icon-color-primary: $color-text-primary;     // Negro Chetango
+$icon-color-secondary: $color-text-secondary; // Gris
+$icon-color-muted: $color-text-muted;         // Gris claro
+$icon-color-brand: $color-primary;            // Rojo Chetango
+$icon-color-inverse: $color-text-inverse;     // Blanco
+$icon-color-success: $color-success;          // Verde
+$icon-color-warning: $color-warning;          // Amarillo
+$icon-color-error: $color-error;              // Rojo error
+
+// ESTADOS DE ICONOS
+$icon-opacity-disabled: 0.4;
+$icon-transition: color $duration-fast $ease-out, transform $duration-fast $ease-out;
+
+// ============================================
+// ICONOS ESPECÍFICOS DE CHETANGO (Dominio)
+// ============================================
+
+// ASISTENCIA
+$icon-attendance-present: $color-success;     // Verde - presente
+$icon-attendance-absent: $color-primary;      // Rojo Chetango - ausente  
+$icon-attendance-late: $color-warning;        // Amarillo - tarde
+
+// PAGOS
+$icon-payment-paid: $color-success;           // Verde - pagado
+$icon-payment-pending: $color-warning;        // Amarillo - pendiente
+$icon-payment-overdue: $color-primary;        // Rojo Chetango - vencido
+
+// ROLES
+$icon-role-admin: $color-primary-darker;      // Granate - admin
+$icon-role-teacher: $color-primary-dark;      // Rojo medio - profesor
+$icon-role-student: $color-gray-500;          // Gris - alumno
+
+// ============================================
+// CLASES UTILITARIAS PARA ICONOS
+// ============================================
+
+.icon {
+  display: inline-block;
+  vertical-align: middle;
+  transition: $icon-transition;
+  
+  // Tamaños
+  &--xs { width: $icon-xs; height: $icon-xs; }
+  &--sm { width: $icon-sm; height: $icon-sm; }
+  &--md { width: $icon-md; height: $icon-md; }
+  &--lg { width: $icon-lg; height: $icon-lg; }
+  &--xl { width: $icon-xl; height: $icon-xl; }
+  &--2xl { width: $icon-2xl; height: $icon-2xl; }
+  
+  // Colores
+  &--primary { color: $icon-color-primary; }
+  &--secondary { color: $icon-color-secondary; }
+  &--muted { color: $icon-color-muted; }
+  &--brand { color: $icon-color-brand; }
+  &--success { color: $icon-color-success; }
+  &--warning { color: $icon-color-warning; }
+  &--error { color: $icon-color-error; }
+  
+  // Estados
+  &--disabled { opacity: $icon-opacity-disabled; }
+  &--interactive {
+    cursor: pointer;
+    &:hover { transform: scale(1.1); }
+  }
+}

@@ -1,0 +1,73 @@
+// ============================================
+// DESIGN TOKENS - BORDES Y SOMBRAS CHETANGO
+// ============================================
+
+@use 'colors' as *;
+
+// ANCHOS DE BORDE
+$border-width-0: 0;
+$border-width-1: 1px;
+$border-width-2: 2px;
+$border-width-4: 4px;
+$border-width-8: 8px;
+
+// RADIOS DE BORDE (Border Radius)
+$border-radius-none: 0;
+$border-radius-sm: 0.125rem;    // 2px
+$border-radius-base: 0.25rem;   // 4px
+$border-radius-md: 0.375rem;    // 6px
+$border-radius-lg: 0.5rem;      // 8px
+$border-radius-xl: 0.75rem;     // 12px
+$border-radius-2xl: 1rem;       // 16px
+$border-radius-3xl: 1.5rem;     // 24px
+$border-radius-full: 9999px;    // Círculo completo
+
+// ============================================
+// TOKENS SEMÁNTICOS DE BORDES
+// ============================================
+
+// BORDES DE COMPONENTES (usar variables de colores)
+$border-button: 1px solid transparent;
+$border-input: 1px solid $color-border-light;
+$border-input-focus: 2px solid $color-border-focus;
+$border-input-error: 1px solid $color-error;
+
+$border-card: 1px solid $color-border-light;
+$border-modal: 1px solid $color-border-medium;
+$border-table: 1px solid $color-border-light;
+
+// RADIOS DE COMPONENTES
+$radius-button: $border-radius-md;      // 6px
+$radius-input: $border-radius-md;       // 6px
+$radius-card: $border-radius-lg;        // 8px
+$radius-modal: $border-radius-xl;       // 12px
+$radius-avatar: $border-radius-full;    // Círculo
+$radius-badge: $border-radius-full;     // Píldora
+$radius-image: $border-radius-lg;       // 8px
+
+// ============================================
+// SOMBRAS DE FOCO (Para accesibilidad)
+// ============================================
+
+$shadow-input-focus: 0 0 0 3px rgba(59, 130, 246, 0.1); // Sombra de foco
+
+// SOMBRAS DE COLORES (Para estados)
+$shadow-primary: 0 0 0 3px rgba(212, 175, 55, 0.1);     // Sombra dorada
+$shadow-success: 0 0 0 3px rgba(16, 185, 129, 0.1);     // Sombra verde
+$shadow-warning: 0 0 0 3px rgba(245, 158, 11, 0.1);     // Sombra amarilla
+$shadow-error: 0 0 0 3px rgba(239, 68, 68, 0.1);        // Sombra roja
+
+// ============================================
+// OUTLINES (Para accesibilidad)
+// ============================================
+
+$outline-none: none;
+$outline-focus: 2px solid #3b82f6;
+$outline-focus-primary: 2px solid #BF0628;
+$outline-focus-error: 2px solid #ef4444;
+
+// OFFSET DE OUTLINE
+$outline-offset-0: 0px;
+$outline-offset-1: 1px;
+$outline-offset-2: 2px;
+$outline-offset-4: 4px;

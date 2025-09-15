@@ -1,0 +1,57 @@
+@use './index.scss' as *;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: $font-family-primary;
+  font-size: $body-base-size;
+  font-weight: $body-base-weight;
+  line-height: $body-base-line-height;
+  color: $color-text-primary;
+  background-color: $color-background-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: 1rem;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+/* Scrollbar personalizada */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+/* Transiciones básicas */
+a, button {
+  transition: all 0.2s ease;
+}

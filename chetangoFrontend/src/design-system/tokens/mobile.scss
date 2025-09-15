@@ -1,0 +1,130 @@
+// ============================================
+// DESIGN TOKENS - MOBILE-FIRST CHETANGO
+// ============================================
+
+@use 'spacing' as *;
+@use 'typography' as *;
+@use 'borders' as *;
+@use 'breakpoints' as *;
+
+// ALTURAS MÍNIMAS PARA TOUCH (44px mínimo iOS/Android)
+$touch-target-min: 44px;
+$touch-target-comfortable: 48px;
+$touch-target-large: 56px;
+
+// BOTONES MOBILE-FIRST
+$button-mobile-height: $touch-target-min;        // 44px - Mínimo touch
+$button-mobile-padding: $spacing-3 $spacing-4;   // 12px 16px
+$button-mobile-font-size: $font-size-mobile-base; // 16px
+
+$button-mobile-lg-height: $touch-target-comfortable; // 48px
+$button-mobile-lg-padding: $spacing-4 $spacing-5;    // 16px 20px
+$button-mobile-lg-font-size: $font-size-mobile-lg;   // 18px
+
+// CAMPOS DE FORMULARIO MOBILE
+$form-mobile-height: $touch-target-min;          // 44px - Fácil de tocar
+$form-mobile-padding: $spacing-3 $spacing-4;     // 12px 16px
+$form-mobile-font-size: $font-size-mobile-base;  // 16px (evita zoom iOS)
+
+$form-mobile-lg-height: $touch-target-comfortable; // 48px
+$form-mobile-lg-padding: $spacing-4 $spacing-5;    // 16px 20px
+
+// NAVEGACIÓN MOBILE
+$nav-mobile-height: 56px;                        // Altura navbar mobile
+$nav-mobile-item-height: $touch-target-min;      // 44px - Items navegación
+$nav-mobile-padding: $spacing-2 $spacing-4;      // 8px 16px
+
+// CARDS Y CONTENEDORES MOBILE
+$card-mobile-padding: $spacing-4;                // 16px - Padding compacto
+$card-mobile-margin: $spacing-3;                 // 12px - Margin entre cards
+$card-mobile-radius: $border-radius-lg;          // 8px - Bordes suaves
+
+// MODALES MOBILE
+$modal-mobile-padding: $spacing-4;               // 16px - Padding interno
+$modal-mobile-margin: $spacing-4;                // 16px - Margin de pantalla
+$modal-mobile-max-height: 90vh;                  // Máximo 90% de pantalla
+
+// TABLAS MOBILE (Responsive)
+$table-mobile-font-size: $font-size-mobile-sm;   // 14px - Texto compacto
+$table-mobile-padding: $spacing-2 $spacing-3;    // 8px 12px - Celdas compactas
+$table-mobile-row-height: 48px;                  // Altura mínima filas
+
+// ICONOS MOBILE
+$icon-mobile-touch: 24px;                        // Iconos tocables
+$icon-mobile-nav: 20px;                          // Iconos navegación
+$icon-mobile-inline: 16px;                       // Iconos en texto
+
+// ESPACIADO ESPECÍFICO MOBILE
+$header-mobile-height: 56px;                     // Altura header mobile
+$footer-mobile-height: 60px;                     // Altura footer mobile
+$sidebar-mobile-width: 280px;                    // Ancho sidebar mobile
+$fab-mobile-size: 56px;                          // Floating Action Button
+
+// ============================================
+// MIXINS MOBILE-FIRST
+// ============================================
+
+// Mixin para botones touch-friendly
+@mixin touch-button {
+  min-height: $touch-target-min;
+  padding: $button-mobile-padding;
+  font-size: $button-mobile-font-size;
+  
+  @include tablet {
+    min-height: auto;
+    padding: $padding-button-md;
+    font-size: $button-medium-size;
+  }
+}
+
+// Mixin para campos de formulario mobile
+@mixin touch-input {
+  min-height: $form-mobile-height;
+  padding: $form-mobile-padding;
+  font-size: $form-mobile-font-size; // Evita zoom en iOS
+  
+  @include tablet {
+    min-height: $form-field-height-md;
+    padding: $form-field-padding-md;
+    font-size: $body-base-size;
+  }
+}
+
+// Mixin para contenedores responsivos
+@mixin responsive-container {
+  padding: $container-padding-mobile;
+  
+  @include mobile-lg {
+    padding: $container-padding-mobile;
+  }
+  
+  @include tablet {
+    padding: $container-padding-tablet;
+  }
+  
+  @include desktop {
+    padding: $container-padding-desktop;
+  }
+}
+
+// Mixin para texto responsivo
+@mixin responsive-text($mobile-size, $desktop-size) {
+  font-size: $mobile-size;
+  
+  @include tablet {
+    font-size: $desktop-size;
+  }
+}
+
+// Mixin para espaciado responsivo
+@mixin responsive-spacing($property, $mobile-value, $tablet-value, $desktop-value) {
+  #{$property}: $mobile-value;
+  
+  @include tablet {
+    #{$property}: $tablet-value;
+  }
+  
+  @include desktop {
+    #{$property}: $desktop-value;
+  }
+}

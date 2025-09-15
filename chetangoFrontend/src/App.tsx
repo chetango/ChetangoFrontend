@@ -1,10 +1,17 @@
+// ============================================
+// APP COMPONENT - CHETANGO
+// ============================================
+
+import { RouterProvider } from 'react-router-dom'
+import { AppProviders } from '@/app/providers'
+import { router } from '@/app/router'
+
 function App() {
   return (
-    <div className="App">
-      <h1>Welcome to Chetango!</h1>
-      <p>This is the frontend application.</p>
-    </div>
-  );
+    <AppProviders>
+      <RouterProvider router={router} />
+    </AppProviders>
+  )
 }
 
-export default App;
+export default App

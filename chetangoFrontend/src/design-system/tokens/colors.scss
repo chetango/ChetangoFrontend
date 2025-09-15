@@ -1,0 +1,80 @@
+// ============================================
+// DESIGN TOKENS - COLORES CHETANGO
+// ============================================
+
+// COLORES PRIMARIOS (Identidad Chetango - del logo)
+$color-primary: #BF0628;           // Rojo vibrante Chetango (principal)
+$color-primary-light: #d63851;     // Rojo claro (generado)
+$color-primary-dark: #8C041D;      // Rojo medio Chetango
+$color-primary-darker: #730217;    // Rojo muy oscuro Chetango
+$color-primary-50: rgba(191, 6, 40, 0.05);
+$color-primary-100: rgba(191, 6, 40, 0.1);
+$color-primary-200: rgba(191, 6, 40, 0.2);
+$color-primary-500: rgba(191, 6, 40, 0.5);
+
+// NEGRO CHETANGO
+$color-chetango-black: #0D0D0D;    // Negro Chetango
+
+// COLORES NEUTROS (Grises esenciales)
+$color-white: #ffffff;
+$color-black: #000000;
+$color-gray-100: #f3f4f6;    // Fondo muy claro
+$color-gray-200: #e5e7eb;    // Bordes suaves
+$color-gray-300: #d1d5db;    // Bordes normales
+$color-gray-500: #6b7280;    // Texto secundario
+$color-gray-600: #4b5563;    // Texto muted
+$color-gray-700: #374151;    // Texto oscuro
+
+// COLORES SEMÁNTICOS (Estados y feedback)
+$color-success: #10b981;           // Verde éxito
+$color-success-light: #34d399;
+$color-success-dark: #059669;
+
+$color-warning: #f59e0b;           // Amarillo advertencia
+$color-warning-light: #fbbf24;
+$color-warning-dark: #d97706;
+
+$color-error: #ef4444;             // Rojo error
+$color-error-light: #f87171;
+$color-error-dark: #dc2626;
+
+$color-info: #3b82f6;              // Azul información
+$color-info-light: #60a5fa;
+$color-info-dark: #2563eb;
+
+// COLORES DE TEXTO (Jerarquía de lectura) - DARK MODE
+$color-text-primary: #ffffff;                // Texto principal (blanco)
+$color-text-secondary: #a1a1aa;              // Texto secundario (gris claro)
+$color-text-inverse: $color-chetango-black;  // Texto sobre fondos claros
+$color-text-muted: #71717a;                  // Texto deshabilitado
+$color-text-brand: $color-primary;           // Texto con color de marca
+
+// COLORES DE FONDO (Superficies) - DARK MODE
+$color-background-primary: #0a0a0a;          // Fondo principal (negro profundo)
+$color-background-secondary: #1a1a1a;        // Fondo secundario (gris muy oscuro)
+$color-background-tertiary: #262626;         // Fondo terciario (cards, modales)
+$color-background-overlay: rgba(0, 0, 0, 0.8); // Overlay modales
+
+// COLORES DE BORDES (usar valores directos) - DARK MODE
+$color-border-light: #404040;      // Borde claro (gris oscuro)
+$color-border-medium: #525252;     // Borde medio (gris medio)
+$color-border-focus: $color-primary; // Borde en foco (rojo Chetango)
+
+// COLORES ESPECÍFICOS DE CHETANGO (Dominio)
+$color-attendance-present: #10b981;     // Verde para presente
+$color-attendance-absent: $color-primary; // Rojo Chetango para ausente
+$color-attendance-late: #f59e0b;        // Amarillo para tarde
+
+$color-payment-paid: #10b981;           // Verde para pagado
+$color-payment-pending: #f59e0b;        // Amarillo para pendiente
+$color-payment-overdue: $color-primary; // Rojo Chetango para vencido
+
+$color-role-admin: $color-primary-darker;    // Granate Chetango para admin
+$color-role-teacher: $color-primary-dark;    // Rojo medio para profesor
+$color-role-student: $color-gray-500;           // Gris para alumno
+
+// COLORES DE ACENTO CHETANGO
+$color-chetango-gradient-start: $color-primary-darker;
+$color-chetango-gradient-end: $color-primary;
+$color-chetango-hover: $color-primary-dark;
+$color-chetango-active: $color-primary-darker;

@@ -1,0 +1,110 @@
+// ============================================
+// DESIGN TOKENS - FORMULARIOS CHETANGO
+// ============================================
+
+@use 'colors' as *;
+@use 'spacing' as *;
+@use 'borders' as *;
+@use 'typography' as *;
+@use 'icons' as *;
+
+// ALTURAS DE CAMPOS
+$form-field-height-sm: 32px;     // Campos pequeños
+$form-field-height-md: 40px;     // Campos estándar (más usado)
+$form-field-height-lg: 48px;     // Campos grandes
+
+// PADDING DE CAMPOS
+$form-field-padding-sm: $spacing-2 $spacing-3;    // 8px 12px
+$form-field-padding-md: $spacing-3 $spacing-4;    // 12px 16px
+$form-field-padding-lg: $spacing-4 $spacing-5;    // 16px 20px
+
+// BORDES DE CAMPOS
+$form-field-border: 1px solid #e5e7eb;
+$form-field-border-focus: 2px solid #BF0628;
+$form-field-border-error: 1px solid #BF0628;
+$form-field-border-success: 1px solid #10b981;
+$form-field-border-disabled: 1px solid #e5e7eb;
+
+// RADIOS DE CAMPOS
+$form-field-radius: $radius-input;
+
+// COLORES DE FONDO
+$form-field-bg: $color-background-primary;
+$form-field-bg-disabled: $color-background-secondary;
+$form-field-bg-focus: $color-background-primary;
+
+// COLORES DE TEXTO
+$form-field-text: $color-text-primary;
+$form-field-text-disabled: $color-text-muted;
+$form-field-placeholder: $color-text-secondary;
+
+// SOMBRAS DE CAMPOS
+$form-field-shadow-focus: $shadow-primary;
+$form-field-shadow-error: $shadow-error;
+
+// ESPACIADO DE FORMULARIOS
+$form-group-spacing: $spacing-6;        // 24px - Entre grupos
+$form-field-spacing: $spacing-4;        // 16px - Entre campos
+$form-label-spacing: $spacing-2;        // 8px - Label a campo
+$form-help-spacing: $spacing-1;         // 4px - Campo a help text
+
+// ============================================
+// LABELS Y TEXTOS DE AYUDA
+// ============================================
+
+// LABELS
+$form-label-color: $color-text-primary;
+$form-label-color-required: $color-primary;
+$form-label-size: $label-medium-size;
+$form-label-weight: $label-medium-weight;
+
+// HELP TEXT
+$form-help-color: $color-text-secondary;
+$form-help-size: $caption-size;
+$form-help-weight: $caption-weight;
+
+// ERROR TEXT
+$form-error-color: $color-primary;      // Rojo Chetango para errores
+$form-error-size: $caption-size;
+$form-error-weight: $caption-weight;
+
+// SUCCESS TEXT
+$form-success-color: $color-success;
+$form-success-size: $caption-size;
+$form-success-weight: $caption-weight;
+
+// ============================================
+// CHECKBOXES Y RADIOS
+// ============================================
+
+$form-checkbox-size: 16px;
+$form-checkbox-border: $border-width-1 solid $color-border-medium;
+$form-checkbox-checked-bg: $color-primary;
+$form-checkbox-checked-border: $color-primary;
+$form-checkbox-radius: $border-radius-sm;
+
+$form-radio-size: 16px;
+$form-radio-border: $border-width-1 solid $color-border-medium;
+$form-radio-checked-bg: $color-primary;
+$form-radio-checked-border: $color-primary;
+
+// ============================================
+// SELECTS Y DROPDOWNS
+// ============================================
+
+$form-select-arrow-color: $color-text-secondary;
+$form-select-arrow-size: $icon-sm;
+
+// ============================================
+// ESTADOS ESPECÍFICOS DE CHETANGO
+// ============================================
+
+// CAMPOS DE ASISTENCIA
+$form-attendance-present-border: $color-success;
+$form-attendance-absent-border: $color-primary;
+$form-attendance-late-border: $color-warning;
+
+// CAMPOS DE PAGOS
+$form-payment-paid-border: $color-success;
+$form-payment-pending-border: $color-warning;
+$form-payment-overdue-border: $color-primary;

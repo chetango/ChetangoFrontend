@@ -1,0 +1,96 @@
+// ============================================
+// DESIGN TOKENS - IDENTIDAD DE MARCA CHETANGO
+// ============================================
+
+@use 'colors' as *;
+
+// DÓNDE USAR LOS COLORES CHETANGO (Estrategia UX/UI)
+
+// ============================================
+// 1. ELEMENTOS DE MARCA (Siempre Chetango)
+// ============================================
+$brand-logo-color: $color-primary;
+$brand-header-bg: linear-gradient(135deg, $color-chetango-gradient-start, $color-chetango-gradient-end);
+$brand-footer-bg: $color-chetango-black;
+$brand-accent-color: $color-primary;
+
+// ============================================
+// 2. NAVEGACIÓN Y ESTRUCTURA
+// ============================================
+$nav-active-color: $color-primary;           // Link activo
+$nav-hover-color: $color-primary-light;      // Hover en navegación
+$sidebar-accent: $color-primary;             // Acento en sidebar
+$breadcrumb-active: $color-primary;          // Breadcrumb activo
+
+// ============================================
+// 3. BOTONES ESTRATÉGICOS (Solo acciones importantes)
+// ============================================
+$button-cta-bg: $color-primary;              // Call-to-action principal
+$button-cta-hover: $color-chetango-hover;    // Hover CTA
+$button-danger-bg: $color-primary;           // Acciones destructivas
+$button-brand-bg: $color-primary;            // Botones de marca
+
+// ============================================
+// 4. ESTADOS Y FEEDBACK
+// ============================================
+$status-error-color: $color-primary;         // Errores (rojo Chetango)
+$status-warning-bg: rgba(191, 6, 40, 0.1);   // Fondo de advertencia suave
+$alert-error-border: $color-primary;         // Borde de alertas de error
+
+// ============================================
+// 5. ELEMENTOS INTERACTIVOS
+// ============================================
+$link-color: $color-primary;                 // Enlaces
+$link-hover: $color-chetango-hover;          // Hover en enlaces
+$checkbox-checked: $color-primary;           // Checkbox seleccionado
+$radio-selected: $color-primary;             // Radio seleccionado
+$switch-active: $color-primary;              // Switch activo
+
+// ============================================
+// 6. INDICADORES Y BADGES
+// ============================================
+$badge-important: $color-primary;            // Badges importantes
+$notification-dot: $color-primary;           // Punto de notificación
+$progress-bar: $color-primary;               // Barra de progreso
+$loading-spinner: $color-primary;            // Spinner de carga
+
+// ============================================
+// 7. DOMINIO ESPECÍFICO CHETANGO
+// ============================================
+$attendance-absent: $color-primary;          // Ausencias (rojo Chetango)
+$payment-overdue: $color-primary;            // Pagos vencidos
+$role-admin: $color-primary-darker;          // Rol administrador
+$role-teacher: $color-primary-dark;          // Rol profesor
+$alert-urgent: $color-primary;               // Alertas urgentes
+
+// ============================================
+// 8. FONDOS Y SUPERFICIES (Uso sutil)
+// ============================================
+$surface-brand-light: rgba(191, 6, 40, 0.05);  // Fondo muy sutil
+$surface-brand-medium: rgba(191, 6, 40, 0.1);   // Fondo suave
+$card-accent-border: $color-primary-200;        // Borde sutil en tarjetas
+$divider-accent: $color-primary-100;            // Divisores con acento
+
+// ============================================
+// REGLAS DE USO (Para mantener buena UX)
+// ============================================
+
+/*
+USAR COLORES CHETANGO PARA:
+✅ Elementos de marca (logo, header)
+✅ Acciones principales (CTA, botones importantes)
+✅ Estados de error/urgencia
+✅ Elementos activos/seleccionados
+✅ Enlaces e interacciones
+✅ Indicadores importantes
+
+NO USAR COLORES CHETANGO PARA:
+❌ Todo el texto (cansaría la vista)
+❌ Fondos grandes (muy intenso)
+❌ Elementos secundarios
+❌ Estados de éxito (usar verde)
+❌ Información neutral (usar grises)
+
+PRINCIPIO: Los colores Chetango deben DESTACAR lo importante,
+no competir por atención en toda la interfaz.
+*/

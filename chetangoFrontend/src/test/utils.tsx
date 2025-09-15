@@ -1,0 +1,70 @@
+// ============================================
+// UTILIDADES DE TESTING - CHETANGO
+// ============================================
+
+import { render, RenderOptions } from '@testing-library/react'
+import { ReactElement } from 'react'
+import { Provider } from 'react-redux'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { store } from '@/app/store'
+
+// Crear QueryClient para testing
+const createTestQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        staleTime: 0,
+      },
+    },
+  })
+
+// Wrapper con providers necesarios
+interface AllTheProvidersProps {
+  children: React.ReactNode
+}
+
+const AllTheProviders = ({ children }: AllTheProvidersProps) => {
+  const queryClient = createTestQueryClient()
+
+  return (
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+      </QueryClientProvider>
+    </Provider>
+  )
+}
+
+// Render personalizado con providers
+const customRender = (
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>
+) => render(ui, { wrapper: AllTheProviders, ...options })
+
+// Re-exportar todo de testing-library
+export * from '@testing-library/react'
+export { customRender as render }
+
+// Helpers específicos para Chetango
+export const mockUser = {
+  id: '1',
+  name: 'Test User',
+  email: 'test@chetango.com',
+  role: 'STUDENT' as const,
+}
+
+export const mockAttendance = {
+  id: '1',
+  userId: '1',
+  date: '2024-01-15',
+  status: 'PRESENT' as const,
+}
+
+export const mockPayment = {
+  id: '1',
+  userId: '1',
+  amount: 50000,
+  status: 'PAID' as const,
+  date: '2024-01-15',
+}

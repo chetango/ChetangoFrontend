@@ -1,0 +1,134 @@
+// ============================================
+// DESIGN TOKENS - TIPOGRAFÍA CHETANGO
+// ============================================
+
+// FAMILIAS TIPOGRÁFICAS
+$font-family-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-family-secondary: 'Poppins', sans-serif; // Poppins también para títulos
+$font-family-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+// PESOS DE FUENTE
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+$font-weight-extrabold: 800;
+
+// TAMAÑOS DE FUENTE RESPONSIVOS
+$font-size-xs: 0.75rem;    // 12px
+$font-size-sm: 0.875rem;   // 14px
+$font-size-base: 1rem;     // 16px (base)
+$font-size-lg: 1.125rem;   // 18px
+$font-size-xl: 1.25rem;    // 20px
+$font-size-2xl: 1.5rem;    // 24px
+$font-size-3xl: 1.875rem;  // 30px
+$font-size-4xl: 2.25rem;   // 36px
+
+// TAMAÑOS RESPONSIVOS PARA MÓVIL
+$font-size-mobile-xs: 0.75rem;   // 12px - Captions móvil
+$font-size-mobile-sm: 0.875rem;  // 14px - Texto pequeño móvil
+$font-size-mobile-base: 1rem;    // 16px - Texto base móvil
+$font-size-mobile-lg: 1.125rem;  // 18px - Texto grande móvil
+$font-size-mobile-xl: 1.25rem;   // 20px - Títulos pequeños móvil
+$font-size-mobile-2xl: 1.375rem; // 22px - Títulos medianos móvil
+$font-size-mobile-3xl: 1.5rem;   // 24px - Títulos grandes móvil
+
+// ALTURAS DE LÍNEA
+$line-height-tight: 1.25;
+$line-height-snug: 1.375;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.625;
+$line-height-loose: 2;
+
+// ESPACIADO DE LETRAS
+$letter-spacing-tighter: -0.05em;
+$letter-spacing-tight: -0.025em;
+$letter-spacing-normal: 0;
+$letter-spacing-wide: 0.025em;
+$letter-spacing-wider: 0.05em;
+$letter-spacing-widest: 0.1em;
+
+// ============================================
+// TOKENS SEMÁNTICOS DE TIPOGRAFÍA
+// ============================================
+
+// HEADINGS (Títulos)
+$heading-1-size: $font-size-4xl;
+$heading-1-weight: $font-weight-bold;
+$heading-1-line-height: $line-height-tight;
+$heading-1-family: $font-family-primary;
+
+$heading-2-size: $font-size-3xl;
+$heading-2-weight: $font-weight-bold;
+$heading-2-line-height: $line-height-tight;
+$heading-2-family: $font-family-primary;
+
+$heading-3-size: $font-size-2xl;
+$heading-3-weight: $font-weight-semibold;
+$heading-3-line-height: $line-height-snug;
+$heading-3-family: $font-family-primary;
+
+$heading-4-size: $font-size-xl;
+$heading-4-weight: $font-weight-semibold;
+$heading-4-line-height: $line-height-snug;
+$heading-4-family: $font-family-primary;
+
+$heading-5-size: $font-size-lg;
+$heading-5-weight: $font-weight-medium;
+$heading-5-line-height: $line-height-normal;
+$heading-5-family: $font-family-primary;
+
+$heading-6-size: $font-size-base;
+$heading-6-weight: $font-weight-medium;
+$heading-6-line-height: $line-height-normal;
+$heading-6-family: $font-family-primary;
+
+// BODY TEXT (Texto de cuerpo)
+$body-large-size: $font-size-lg;
+$body-large-weight: $font-weight-regular;
+$body-large-line-height: $line-height-relaxed;
+
+$body-base-size: $font-size-base;
+$body-base-weight: $font-weight-regular;
+$body-base-line-height: $line-height-normal;
+
+$body-small-size: $font-size-sm;
+$body-small-weight: $font-weight-regular;
+$body-small-line-height: $line-height-normal;
+
+// LABELS Y CAPTIONS
+$label-large-size: $font-size-base;
+$label-large-weight: $font-weight-medium;
+$label-large-line-height: $line-height-normal;
+
+$label-medium-size: $font-size-sm;
+$label-medium-weight: $font-weight-medium;
+$label-medium-line-height: $line-height-normal;
+
+$label-small-size: $font-size-xs;
+$label-small-weight: $font-weight-medium;
+$label-small-line-height: $line-height-normal;
+
+$caption-size: $font-size-xs;
+$caption-weight: $font-weight-regular;
+$caption-line-height: $line-height-normal;
+
+// BOTONES
+$button-large-size: $font-size-lg;
+$button-large-weight: $font-weight-medium;
+$button-large-line-height: $line-height-tight;
+
+$button-medium-size: $font-size-base;
+$button-medium-weight: $font-weight-medium;
+$button-medium-line-height: $line-height-tight;
+
+$button-small-size: $font-size-sm;
+$button-small-weight: $font-weight-medium;
+$button-small-line-height: $line-height-tight;
+
+// CÓDIGO
+$code-size: $font-size-sm;
+$code-weight: $font-weight-regular;
+$code-line-height: $line-height-normal;
+$code-family: $font-family-mono;

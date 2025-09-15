@@ -1,0 +1,112 @@
+// ============================================
+// DESIGN TOKENS - BREAKPOINTS Y MEDIA QUERIES
+// ============================================
+
+// BREAKPOINTS MOBILE-FIRST CHETANGO
+$breakpoint-mobile: 375px;    // Móvil estándar (iPhone SE+)
+$breakpoint-mobile-lg: 414px; // Móvil grande (iPhone Pro)
+$breakpoint-tablet: 768px;    // Tablet (iPad)
+$breakpoint-desktop: 1024px;  // Desktop mínimo
+$breakpoint-desktop-lg: 1440px; // Desktop grande
+
+// BREAKPOINTS LEGACY (mantener compatibilidad)
+$breakpoint-xs: 320px;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+// MEDIA QUERIES MOBILE-FIRST CHETANGO
+$media-mobile: 'screen and (min-width: #{$breakpoint-mobile})';
+$media-mobile-lg: 'screen and (min-width: #{$breakpoint-mobile-lg})';
+$media-tablet: 'screen and (min-width: #{$breakpoint-tablet})';
+$media-desktop: 'screen and (min-width: #{$breakpoint-desktop})';
+$media-desktop-lg: 'screen and (min-width: #{$breakpoint-desktop-lg})';
+
+// MEDIA QUERIES LEGACY (Mobile First)
+$media-xs: 'screen and (min-width: #{$breakpoint-xs})';
+$media-sm: 'screen and (min-width: #{$breakpoint-sm})';
+$media-md: 'screen and (min-width: #{$breakpoint-md})';
+$media-lg: 'screen and (min-width: #{$breakpoint-lg})';
+$media-xl: 'screen and (min-width: #{$breakpoint-xl})';
+$media-2xl: 'screen and (min-width: #{$breakpoint-2xl})';
+
+// MEDIA QUERIES MÁXIMAS (Desktop First)
+$media-max-xs: 'screen and (max-width: #{$breakpoint-xs - 1})';
+$media-max-sm: 'screen and (max-width: #{$breakpoint-sm - 1})';
+$media-max-md: 'screen and (max-width: #{$breakpoint-md - 1})';
+$media-max-lg: 'screen and (max-width: #{$breakpoint-lg - 1})';
+$media-max-xl: 'screen and (max-width: #{$breakpoint-xl - 1})';
+
+// MEDIA QUERIES DE RANGO
+$media-sm-md: 'screen and (min-width: #{$breakpoint-sm}) and (max-width: #{$breakpoint-md - 1})';
+$media-md-lg: 'screen and (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1})';
+$media-lg-xl: 'screen and (min-width: #{$breakpoint-lg}) and (max-width: #{$breakpoint-xl - 1})';
+
+// CONTENEDORES RESPONSIVOS
+$container-xs: 100%;
+$container-sm: 640px;
+$container-md: 768px;
+$container-lg: 1024px;
+$container-xl: 1280px;
+$container-2xl: 1536px;
+
+// MIXINS MOBILE-FIRST CHETANGO
+@mixin mobile {
+  @media #{$media-mobile} { @content; }
+}
+
+@mixin mobile-lg {
+  @media #{$media-mobile-lg} { @content; }
+}
+
+@mixin tablet {
+  @media #{$media-tablet} { @content; }
+}
+
+@mixin desktop {
+  @media #{$media-desktop} { @content; }
+}
+
+@mixin desktop-lg {
+  @media #{$media-desktop-lg} { @content; }
+}
+
+// MIXIN UNIVERSAL (mantener compatibilidad)
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == mobile {
+    @media #{$media-mobile} { @content; }
+  }
+  @if $breakpoint == mobile-lg {
+    @media #{$media-mobile-lg} { @content; }
+  }
+  @if $breakpoint == tablet {
+    @media #{$media-tablet} { @content; }
+  }
+  @if $breakpoint == desktop {
+    @media #{$media-desktop} { @content; }
+  }
+  @if $breakpoint == desktop-lg {
+    @media #{$media-desktop-lg} { @content; }
+  }
+  // Legacy support
+  @if $breakpoint == xs {
+    @media #{$media-xs} { @content; }
+  }
+  @if $breakpoint == sm {
+    @media #{$media-sm} { @content; }
+  }
+  @if $breakpoint == md {
+    @media #{$media-md} { @content; }
+  }
+  @if $breakpoint == lg {
+    @media #{$media-lg} { @content; }
+  }
+  @if $breakpoint == xl {
+    @media #{$media-xl} { @content; }
+  }
+  @if $breakpoint == 2xl {
+    @media #{$media-2xl} { @content; }
+  }
+}
