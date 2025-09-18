@@ -2,11 +2,13 @@
 // DASHBOARD PAGE - CHETANGO
 // ============================================
 
+import styles from './PageStyles.module.scss'
+
 export const DashboardPage = () => {
   return (
-    <div>
-      <h1>Dashboard - Chetango</h1>
-      <p>Panel principal del usuario</p>
+    <div className={styles['page-container']}>
+      <h1 className={styles['page-title']}>Dashboard - Chetango</h1>
+      <p className={styles['page-description']}>Panel principal del usuario</p>
     </div>
   )
 }

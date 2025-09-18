@@ -15,7 +15,7 @@ import {
   NotFoundPage,
 } from '@/pages'
 import { AuthCallbackPage } from '@/pages/AuthCallbackPage'
-import { AuthLayout } from '@/app/router/layouts'
+import { MainLayout } from '@/design-system/templates/MainLayout'
 import { ProtectedRoute } from '@/app/router/guards'
 import { AuthGuard } from '@/features/auth/components/AuthGuard'
 
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
   // Rutas protegidas
   {
     path: '/',
-    element: <AuthLayout />,
+    element: <MainLayout />,
     children: [
       {
         path: ROUTES.DASHBOARD,

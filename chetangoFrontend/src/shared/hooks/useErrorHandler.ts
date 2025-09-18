@@ -17,25 +17,21 @@ export const useErrorHandler = () => {
   ) => {
     const {
       showToast = true,
-      logError = true,
       fallbackMessage = 'Ha ocurrido un error inesperado'
     } = options
 
     let errorMessage = fallbackMessage
 
-    // Extract error message
+    // Extract error message safely
     if (error instanceof Error) {
       errorMessage = error.message
     } else if (typeof error === 'string') {
       errorMessage = error
     } else if (error && typeof error === 'object' && 'message' in error) {
-      errorMessage = (error as any).message
+      const msg = (error as Record<string, unknown>).message
+      errorMessage = typeof msg === 'string' ? msg : fallbackMessage
     }
 
-    // Log error in development
-    if (logError && process.env.NODE_ENV === 'development') {
-      console.error('Error handled:', error)
-    }
 
     // Show error in UI
     if (showToast) {

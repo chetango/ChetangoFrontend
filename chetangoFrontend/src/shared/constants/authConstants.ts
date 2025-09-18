@@ -6,6 +6,7 @@
 export const MSAL_CONFIG = {
   TENANT_ID: import.meta.env.VITE_ENTRA_TENANT_ID,
   CLIENT_ID: import.meta.env.VITE_ENTRA_CLIENT_ID,
+  AUTHORITY: import.meta.env.VITE_ENTRA_AUTHORITY,
   REDIRECT_URI: import.meta.env.VITE_ENTRA_REDIRECT_URI,
   POST_LOGOUT_REDIRECT_URI: import.meta.env.VITE_ENTRA_POST_LOGOUT_REDIRECT_URI,
   SCOPES: import.meta.env.VITE_ENTRA_SCOPES?.split(',') || ['openid', 'profile', 'email'],

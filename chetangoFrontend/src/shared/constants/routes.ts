@@ -24,6 +24,9 @@ export const ROUTES = {
   
   // CLASES
   CLASSES: '/classes',
+  CLASSES_LIST: '/classes/list',
+  CLASSES_CREATE: '/classes/create',
+  CLASSES_SCHEDULE: '/classes/schedule',
   
   // PAGOS
   PAYMENTS: '/payments',
@@ -63,8 +66,7 @@ export const API_ENDPOINTS = {
     REFRESH: '/auth/refresh',
     FORGOT_PASSWORD: '/auth/forgot-password',
     RESET_PASSWORD: '/auth/reset-password',
-    VERIFY_TOKEN: '/auth/verify',
-  },
+   },
   
   // USUARIOS
   USERS: {

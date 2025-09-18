@@ -2,11 +2,13 @@
 // NOT FOUND PAGE - CHETANGO
 // ============================================
 
+import styles from './PageStyles.module.scss'
+
 export const NotFoundPage = () => {
   return (
-    <div>
-      <h1>404 - Página no encontrada</h1>
-      <p>La página que buscas no existe</p>
+    <div className={styles['page-container']}>
+      <h1 className={styles['page-title']}>404 - Página no encontrada</h1>
+      <p className={styles['page-description']}>La página que buscas no existe</p>
     </div>
   )
 }

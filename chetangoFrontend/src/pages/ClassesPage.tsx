@@ -2,11 +2,13 @@
 // CLASSES PAGE - CHETANGO
 // ============================================
 
+import styles from './PageStyles.module.scss'
+
 export const ClassesPage = () => {
   return (
-    <div>
-      <h1>Clases - Chetango</h1>
-      <p>Gestión de clases y horarios</p>
+    <div className={styles['page-container']}>
+      <h1 className={styles['page-title']}>Clases - Chetango</h1>
+      <p className={styles['page-description']}>Gestión de clases y horarios</p>
     </div>
   )
 }

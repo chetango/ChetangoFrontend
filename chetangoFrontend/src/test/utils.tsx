@@ -8,16 +8,15 @@ import { Provider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { store } from '@/app/store'
 
-// Crear QueryClient para testing
-const createTestQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: false,
-        staleTime: 0,
-      },
+// QueryClient singleton para testing
+const testQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      staleTime: 0,
     },
-  })
+  },
+})
 
 // Wrapper con providers necesarios
 interface AllTheProvidersProps {
@@ -25,11 +24,10 @@ interface AllTheProvidersProps {
 }
 
 const AllTheProviders = ({ children }: AllTheProvidersProps) => {
-  const queryClient = createTestQueryClient()
 
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={testQueryClient}>
         {children}
       </QueryClientProvider>
     </Provider>
@@ -42,7 +40,6 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>
 ) => render(ui, { wrapper: AllTheProviders, ...options })
 
-// Re-exportar todo de testing-library
 export * from '@testing-library/react'
 export { customRender as render }
 

@@ -1,0 +1,30 @@
+@use '../design-system/tokens' as *;
+
+// ============================================
+// ESTILOS PARA PÁGINAS USANDO TOKENS EXISTENTES
+// ============================================
+
+.page-container {
+  padding: 24px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.page-title {
+  font-family: $heading-1-family;
+  font-size: $heading-1-size;
+  font-weight: $heading-1-weight;
+  line-height: $heading-1-line-height;
+  color: $color-text-primary;
+  margin: 0 0 16px 0;
+}
+
+.page-description {
+  font-size: $body-base-size;
+  font-weight: $body-base-weight;
+  line-height: $body-base-line-height;
+  color: $color-text-secondary;
+  margin: 0;
+}

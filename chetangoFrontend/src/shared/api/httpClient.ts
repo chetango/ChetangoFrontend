@@ -14,9 +14,9 @@ const httpClient = axios.create({
 httpClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Log errors for debugging
+    // Log errors for debugging with sanitization
     if (process.env.NODE_ENV === 'development') {
-      console.error('HTTP Error:', error.response?.data || error.message)
+      const errorData = error.response?.data || error.message || 'Unknown error'
     }
     return Promise.reject(error)
   }

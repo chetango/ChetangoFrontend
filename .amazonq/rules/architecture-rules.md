@@ -233,7 +233,10 @@ Antes de crear cualquier archivo, pregúntate:
 **Features definidas para Chetango:**
 - `auth` - Autenticación, login, permisos, roles
 - `attendance` - Control de asistencia, registro, consultas
-- `payments` - Gestión de pagos, paquetes, facturación
+- `classes` - Gestión de clases, horarios, historial de clases
+- `packages` - Paquetes de membresías y clases
+- `payments` - Gestión de pagos, facturación
+- `schedules` - Horarios y programación
 - `alerts` - Sistema de alertas internas, notificaciones
 - `reports` - Reportes, exportación PDF/Excel, métricas
 - `users` - Gestión de usuarios, perfiles, roles

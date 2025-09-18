@@ -10,10 +10,10 @@ import { authSlice } from '@/features/auth'
 // import { classesSlice } from '@/features/classes'
 // import { packagesSlice } from '@/features/packages'
 // import { paymentsSlice } from '@/features/payments'
+// import { schedulesSlice } from '@/features/schedules'
 // import { usersSlice } from '@/features/users'
 // import { alertsSlice } from '@/features/alerts'
 // import { reportsSlice } from '@/features/reports'
-// import { schedulesSlice } from '@/features/schedules'
 
 export const rootReducer = combineReducers({
   // TODO: Agregar slices cuando se implementen
@@ -22,10 +22,10 @@ export const rootReducer = combineReducers({
   // classes: classesSlice.reducer,
   // packages: packagesSlice.reducer,
   // payments: paymentsSlice.reducer,
+  // schedules: schedulesSlice.reducer,
   // users: usersSlice.reducer,
   // alerts: alertsSlice.reducer,
   // reports: reportsSlice.reducer,
-  // schedules: schedulesSlice.reducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

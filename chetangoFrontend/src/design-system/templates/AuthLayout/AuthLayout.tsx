@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { SYMBOLS } from '@/shared/constants'
 import styles from './AuthLayout.module.scss'
 
 interface AuthLayoutProps {
@@ -53,7 +54,7 @@ export function AuthLayout({
       {/* Footer */}
       <footer className={styles['auth-layout__footer']}>
         <p className={styles['auth-layout__footer-text']}>
-          © 2025 Chetango. Todos los derechos reservados.
+          {SYMBOLS.COPYRIGHT} 2025 Chetango. Todos los derechos reservados.
         </p>
       </footer>
     </div>

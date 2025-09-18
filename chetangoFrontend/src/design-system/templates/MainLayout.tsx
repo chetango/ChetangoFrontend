@@ -1,26 +1,29 @@
 // ============================================
-// LAYOUTS - CHETANGO
+// MAIN LAYOUT TEMPLATE - CHETANGO
 // ============================================
 
 import { Outlet, Link } from 'react-router-dom'
 import { useAuth } from '@/features/auth'
 import { Button } from '@/design-system/atoms/Button'
-import { ROUTES } from '@/shared/constants/routes'
-import styles from './AuthLayout.module.scss'
+import { ROUTES, SYMBOLS } from '@/shared/constants'
+import styles from './MainLayout.module.scss'
 
-export const AuthLayout = () => {
+export const MainLayout = () => {
   const { logout, session } = useAuth()
 
   const handleLogout = async () => {
     try {
       await logout()
     } catch (error) {
-      console.error('Error al cerrar sesión:', error)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error al cerrar sesión:', error)
+      }
+      // TODO: Mostrar notificación de error al usuario
     }
   }
 
   return (
-    <div className={styles['auth-layout']}>
+    <div className={styles['main-layout']}>
       {/* Header */}
       <header className={styles['header']}>
         <div className={styles['header__brand']}>
@@ -60,7 +63,7 @@ export const AuthLayout = () => {
 
       {/* Footer */}
       <footer className={styles['footer']}>
-        <p>&copy; 2025 Chetango - Sistema de Gestión</p>
+        <p>{SYMBOLS.COPYRIGHT} 2025 Chetango - Sistema de Gestión</p>
       </footer>
     </div>
   )

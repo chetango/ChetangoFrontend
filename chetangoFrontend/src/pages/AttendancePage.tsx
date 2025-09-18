@@ -2,11 +2,13 @@
 // ATTENDANCE PAGE - CHETANGO
 // ============================================
 
+import styles from './PageStyles.module.scss'
+
 export const AttendancePage = () => {
   return (
-    <div>
-      <h1>Asistencia - Chetango</h1>
-      <p>Registro y consulta de asistencia</p>
+    <div className={styles['page-container']}>
+      <h1 className={styles['page-title']}>Asistencia - Chetango</h1>
+      <p className={styles['page-description']}>Registro y consulta de asistencia</p>
     </div>
   )
 }

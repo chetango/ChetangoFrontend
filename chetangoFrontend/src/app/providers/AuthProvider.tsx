@@ -5,9 +5,7 @@ import { msalConfig } from '@/features/auth/api/msalConfig'
 import { useAuthInterceptor } from '@/features/auth/hooks/useAuthInterceptor'
 
 // INSTANCIA MSAL SINGLETON
-console.log('🔍 DEBUG: Creando instancia MSAL con config:', msalConfig)
 const msalInstance = new PublicClientApplication(msalConfig)
-console.log('🔍 DEBUG: Instancia MSAL creada:', msalInstance)
 
 // CONTEXTO PARA INSTANCIA MSAL (NO ESTADO)
 const MsalInstanceContext = createContext<PublicClientApplication | null>(null)

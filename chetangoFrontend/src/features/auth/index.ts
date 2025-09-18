@@ -15,6 +15,7 @@ export { useProfileQuery, useSessionQuery, useLogoutMutation } from './api/authA
 
 // COMPONENTS
 export { AuthGuard } from './components/AuthGuard'
+export { LoginForm } from './components/LoginForm'
 
 // STORE
 export { authSlice, setLoading, setError, setInitialized, clearError } from './store/authSlice'

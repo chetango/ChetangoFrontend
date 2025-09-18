@@ -1,10 +1,10 @@
-@use '../../design-system/tokens' as *;
+@use '../tokens' as *;
 
 // ============================================
-// AUTH LAYOUT - HEADER Y NAVEGACIÓN
+// MAIN LAYOUT - HEADER Y NAVEGACIÓN
 // ============================================
 
-.auth-layout {
+.main-layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;

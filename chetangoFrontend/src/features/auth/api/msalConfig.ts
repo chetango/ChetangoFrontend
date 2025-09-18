@@ -6,7 +6,7 @@ import { MSAL_CONFIG } from '@/shared/constants/authConstants'
 export const msalConfig: Configuration = {
   auth: {
     clientId: MSAL_CONFIG.CLIENT_ID,
-    authority: 'https://chetangoprueba.ciamlogin.com/',
+    authority: MSAL_CONFIG.AUTHORITY,
     redirectUri: MSAL_CONFIG.REDIRECT_URI,
     // Post logout URI opcional (no disponible en HTTP local)
     ...(MSAL_CONFIG.POST_LOGOUT_REDIRECT_URI && {
@@ -20,7 +20,7 @@ export const msalConfig: Configuration = {
   system: {
     loggerOptions: {
       loggerCallback: (level, message, containsPii) => {
-        if (containsPii) return
+        if (containsPii || process.env.NODE_ENV === 'production') return
         switch (level) {
           case LogLevel.Error:
             console.error(message)
