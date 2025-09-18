@@ -1,0 +1,258 @@
+@use '../../tokens' as *;
+
+// ============================================
+// LOGIN FORM ORGANISM - FUTURISTIC NEON 2025
+// ============================================
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  background: linear-gradient(145deg, 
+    rgba(26, 26, 26, 0.95), 
+    rgba(13, 13, 13, 0.98)
+  );
+  border: 1px solid rgba(64, 64, 64, 0.3);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  
+  // Futuristic backdrop blur
+  backdrop-filter: blur(20px);
+  
+  // Subtle neon border glow
+  box-shadow: 
+    0 0 0 1px rgba(191, 6, 40, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  
+  // Animated background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(191, 6, 40, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(191, 6, 40, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  // All content above background
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+  
+  // Loading state
+  &--loading {
+    pointer-events: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(2px);
+      z-index: 10;
+    }
+  }
+}
+
+.login-form__header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.login-form__title {
+  font-family: $font-family-primary;
+  font-size: 28px;
+  font-weight: 700;
+  color: $color-text-primary;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+  
+  // Futuristic title glow
+  text-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.1),
+    0 0 40px rgba(191, 6, 40, 0.1);
+  
+  // Subtle animation
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+.login-form__subtitle {
+  font-family: $font-family-primary;
+  font-size: 14px;
+  font-weight: 400;
+  color: $color-text-secondary;
+  margin: 0;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+.login-form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-form__error {
+  padding: 12px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: $color-error;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  
+  // Error glow effect
+  box-shadow: 
+    0 0 0 1px rgba(239, 68, 68, 0.1),
+    0 0 20px rgba(239, 68, 68, 0.05);
+  
+  // Error icon
+  &::before {
+    content: '⚠';
+    margin-right: 8px;
+    filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.5));
+  }
+  
+  // Slide in animation
+  animation: errorSlideIn 0.3s ease-out;
+}
+
+.login-form__actions {
+  margin-top: 8px;
+}
+
+.login-form__submit {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  
+  // Enhanced button glow for login
+  &:not(:disabled):hover {
+    box-shadow: 
+      0 0 0 2px rgba(191, 6, 40, 0.3),
+      0 0 30px rgba(191, 6, 40, 0.2),
+      0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  // Loading state shimmer
+  &:disabled {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+      );
+      animation: shimmer 1.5s infinite;
+    }
+  }
+}
+
+.login-form__footer {
+  text-align: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(64, 64, 64, 0.3);
+}
+
+.login-form__help {
+  font-size: 13px;
+  color: $color-text-muted;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.login-form__link {
+  color: $color-primary;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  // Link glow effect
+  text-shadow: 0 0 10px rgba(191, 6, 40, 0.3);
+  
+  &:hover {
+    color: $color-primary-light;
+    text-shadow: 0 0 15px rgba(191, 6, 40, 0.5);
+  }
+}
+
+// Animations
+@keyframes titleGlow {
+  0% {
+    text-shadow: 
+      0 0 20px rgba(255, 255, 255, 0.1),
+      0 0 40px rgba(191, 6, 40, 0.1);
+  }
+  100% {
+    text-shadow: 
+      0 0 25px rgba(255, 255, 255, 0.15),
+      0 0 50px rgba(191, 6, 40, 0.15);
+  }
+}
+
+@keyframes errorSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .login-form {
+    padding: 24px 20px;
+    margin: 16px;
+    max-width: none;
+  }
+  
+  .login-form__title {
+    font-size: 24px;
+  }
+  
+  .login-form__fields {
+    gap: 16px;
+  }
+}
+
+// Enhanced focus states for accessibility
+.login-form:focus-within {
+  box-shadow: 
+    0 0 0 2px rgba(191, 6, 40, 0.2),
+    0 0 40px rgba(191, 6, 40, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
