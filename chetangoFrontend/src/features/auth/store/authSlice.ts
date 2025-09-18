@@ -1,42 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import type { AuthStateType } from '@/features/auth/types/authTypes'
 
-interface User {
-  id: string
-  email: string
-  role: 'STUDENT' | 'TEACHER' | 'ADMIN'
-  name: string
+// ESTADO INICIAL DE UI PARA AUTENTICACIÓN
+const initialState: AuthStateType = {
+  isLoading: false,
+  error: null,
+  isInitialized: false,
 }
 
-interface AuthState {
-  user: User | null
-  token: string | null
-  isAuthenticated: boolean
-}
-
-const initialState: AuthState = {
-  user: null,
-  token: localStorage.getItem('auth_token'),
-  isAuthenticated: false,
-}
-
+// SLICE PARA ESTADO DE UI DE AUTENTICACIÓN (NO DATOS DE SESIÓN)
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    loginSuccess: (state: AuthState, action: PayloadAction<{ user: User; token: string }>) => {
-      state.user = action.payload.user
-      state.token = action.payload.token
-      state.isAuthenticated = true
-      localStorage.setItem('auth_token', action.payload.token)
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload
     },
-    logout: (state: AuthState) => {
-      state.user = null
-      state.token = null
-      state.isAuthenticated = false
-      localStorage.removeItem('auth_token')
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload
+    },
+    setInitialized: (state, action: PayloadAction<boolean>) => {
+      state.isInitialized = action.payload
+    },
+    clearError: (state) => {
+      state.error = null
     },
   },
 })
 
-export const { loginSuccess, logout } = authSlice.actions
+export const { setLoading, setError, setInitialized, clearError } = authSlice.actions

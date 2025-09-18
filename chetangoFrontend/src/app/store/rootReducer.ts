@@ -5,7 +5,7 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
 // Importar slices cuando se implementen
-// import { authSlice } from '@/features/auth'
+import { authSlice } from '@/features/auth'
 // import { attendanceSlice } from '@/features/attendance'
 // import { classesSlice } from '@/features/classes'
 // import { packagesSlice } from '@/features/packages'
@@ -17,7 +17,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 
 export const rootReducer = combineReducers({
   // TODO: Agregar slices cuando se implementen
-  // auth: authSlice.reducer,
+  auth: authSlice.reducer,
   // attendance: attendanceSlice.reducer,
   // classes: classesSlice.reducer,
   // packages: packagesSlice.reducer,

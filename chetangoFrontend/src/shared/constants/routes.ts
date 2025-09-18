@@ -9,6 +9,10 @@ export const ROUTES = {
   LOGIN: '/login',
   FORGOT_PASSWORD: '/forgot-password',
   
+  // AUTENTICACIÓN MSAL
+  AUTH_CALLBACK: '/auth/callback',
+  AUTH_LOGOUT: '/auth/logout',
+  
   // DASHBOARD
   DASHBOARD: '/dashboard',
   
