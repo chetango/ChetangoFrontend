@@ -1,15 +1,24 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useMsal } from '@azure/msal-react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
-import { setLoading, setError, setInitialized, clearError } from '@/features/auth/store/authSlice'
+import { setLoading, setInitialized, clearError } from '@/features/auth/store/authSlice'
 import { loginRequest, tokenRequest } from '@/features/auth/api/msalConfig'
 import { mapAccountToUser } from '@/features/auth/types/authTypes'
+import { useErrorHandler } from '@/shared/hooks/useErrorHandler'
 import type { SessionType, AuthContextType } from '@/features/auth/types/authTypes'
 
 export const useAuth = (): AuthContextType => {
-  const { instance, accounts } = useMsal()
+  const { instance, accounts, inProgress } = useMsal()
   const dispatch = useAppDispatch()
   const authState = useAppSelector((state) => state.auth)
+  const { handleError } = useErrorHandler()
+
+  // Inicializar cuando MSAL esté listo
+  useEffect(() => {
+    if (inProgress === 'none' && !authState.isInitialized) {
+      dispatch(setInitialized(true))
+    }
+  }, [inProgress, authState.isInitialized, dispatch, accounts, instance])
 
   // ESTADO DE SESIÓN DERIVADO DE MSAL
   const session: SessionType = {
@@ -20,32 +29,39 @@ export const useAuth = (): AuthContextType => {
   }
 
   // LOGIN
-  const login = useCallback(async () => {
+  const login = useCallback(async (returnUrl?: string) => {
     try {
       dispatch(setLoading(true))
       dispatch(clearError())
       
-      await instance.loginPopup(loginRequest)
+      // Guardar URL de retorno si se proporciona
+      if (returnUrl) {
+        sessionStorage.setItem('returnUrl', returnUrl)
+      }
       
-      dispatch(setInitialized(true))
+      // Usar redirect para External ID
+      await instance.loginRedirect(loginRequest)
+      
+      // No dispatch setInitialized aquí porque redirect cambia de página
     } catch (error) {
-      dispatch(setError(error instanceof Error ? error.message : 'Error de login'))
-    } finally {
+      handleError(error, { fallbackMessage: 'Error de login' })
       dispatch(setLoading(false))
     }
-  }, [instance, dispatch])
+  }, [instance, dispatch, handleError])
 
   // LOGOUT
   const logout = useCallback(async () => {
     try {
       dispatch(setLoading(true))
-      await instance.logoutPopup()
+      // Usar redirect para External ID
+      await instance.logoutRedirect({
+        postLogoutRedirectUri: window.location.origin + '/login'
+      })
     } catch (error) {
-      dispatch(setError(error instanceof Error ? error.message : 'Error de logout'))
-    } finally {
+      handleError(error, { fallbackMessage: 'Error de logout' })
       dispatch(setLoading(false))
     }
-  }, [instance, dispatch])
+  }, [instance, dispatch, handleError])
 
   // OBTENER ACCESS TOKEN
   const getAccessToken = useCallback(async (): Promise<string | null> => {
@@ -63,7 +79,7 @@ export const useAuth = (): AuthContextType => {
         const response = await instance.acquireTokenPopup(tokenRequest)
         return response.accessToken
       } catch (popupError) {
-        dispatch(setError('Error obteniendo token'))
+        handleError(popupError, { fallbackMessage: 'Error obteniendo token' })
         return null
       }
     }

@@ -1,10 +1,13 @@
-import { createContext, useContext, useEffect } from 'react'
+import { createContext, useContext } from 'react'
 import { PublicClientApplication } from '@azure/msal-browser'
 import { MsalProvider } from '@azure/msal-react'
 import { msalConfig } from '@/features/auth/api/msalConfig'
+import { useAuthInterceptor } from '@/features/auth/hooks/useAuthInterceptor'
 
 // INSTANCIA MSAL SINGLETON
+console.log('🔍 DEBUG: Creando instancia MSAL con config:', msalConfig)
 const msalInstance = new PublicClientApplication(msalConfig)
+console.log('🔍 DEBUG: Instancia MSAL creada:', msalInstance)
 
 // CONTEXTO PARA INSTANCIA MSAL (NO ESTADO)
 const MsalInstanceContext = createContext<PublicClientApplication | null>(null)
@@ -13,17 +16,21 @@ interface AuthProviderProps {
   children: React.ReactNode
 }
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-  useEffect(() => {
-    // Inicializar MSAL
-    msalInstance.initialize()
-  }, [])
+const AuthProviderContent = ({ children }: AuthProviderProps) => {
+  // Setup HTTP interceptors for authentication
+  useAuthInterceptor()
+  
+  return (
+    <MsalInstanceContext.Provider value={msalInstance}>
+      {children}
+    </MsalInstanceContext.Provider>
+  )
+}
 
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   return (
     <MsalProvider instance={msalInstance}>
-      <MsalInstanceContext.Provider value={msalInstance}>
-        {children}
-      </MsalInstanceContext.Provider>
+      <AuthProviderContent>{children}</AuthProviderContent>
     </MsalProvider>
   )
 }

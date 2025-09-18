@@ -3,6 +3,7 @@
 // ============================================
 
 export { LoginPage } from './LoginPage'
+export { AuthCallbackPage } from './AuthCallbackPage'
 export { DashboardPage } from './DashboardPage'
 export { AttendancePage } from './AttendancePage'
 export { ClassesPage } from './ClassesPage'

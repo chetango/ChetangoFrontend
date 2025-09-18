@@ -14,14 +14,20 @@ import {
   ReportsPage,
   NotFoundPage,
 } from '@/pages'
+import { AuthCallbackPage } from '@/pages/AuthCallbackPage'
 import { AuthLayout } from '@/app/router/layouts'
 import { ProtectedRoute } from '@/app/router/guards'
+import { AuthGuard } from '@/features/auth/components/AuthGuard'
 
 export const router = createBrowserRouter([
   // Rutas públicas
   {
     path: ROUTES.LOGIN,
     element: <LoginPage />,
+  },
+  {
+    path: ROUTES.AUTH_CALLBACK,
+    element: <AuthCallbackPage />,
   },
   
   // Rutas protegidas
@@ -32,9 +38,9 @@ export const router = createBrowserRouter([
       {
         path: ROUTES.DASHBOARD,
         element: (
-          <ProtectedRoute>
+          <AuthGuard>
             <DashboardPage />
-          </ProtectedRoute>
+          </AuthGuard>
         ),
       },
       {

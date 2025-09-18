@@ -2,32 +2,65 @@
 // LAYOUTS - CHETANGO
 // ============================================
 
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
+import { useAuth } from '@/features/auth'
+import { Button } from '@/design-system/atoms/Button'
+import { ROUTES } from '@/shared/constants/routes'
+import styles from './AuthLayout.module.scss'
 
 export const AuthLayout = () => {
+  const { logout, session } = useAuth()
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error)
+    }
+  }
+
   return (
-    <div className="auth-layout">
+    <div className={styles['auth-layout']}>
       {/* Header */}
-      <header className="header">
-        <h1>Chetango</h1>
-        <nav>
-          <a href="/dashboard">Dashboard</a>
-          <a href="/attendance">Asistencia</a>
-          <a href="/classes">Clases</a>
-          <a href="/payments">Pagos</a>
-          <a href="/users">Usuarios</a>
-          <a href="/reports">Reportes</a>
+      <header className={styles['header']}>
+        <div className={styles['header__brand']}>
+          <h1 className={styles['header__title']}>Chetango</h1>
+        </div>
+        
+        <nav className={styles['header__nav']}>
+          <Link to={ROUTES.DASHBOARD} className={styles['nav-link']}>Dashboard</Link>
+          <Link to={ROUTES.ATTENDANCE} className={styles['nav-link']}>Asistencia</Link>
+          <Link to={ROUTES.CLASSES} className={styles['nav-link']}>Clases</Link>
+          <Link to={ROUTES.PAYMENTS} className={styles['nav-link']}>Pagos</Link>
+          <Link to={ROUTES.USERS} className={styles['nav-link']}>Usuarios</Link>
+          <Link to={ROUTES.REPORTS} className={styles['nav-link']}>Reportes</Link>
         </nav>
+
+        <div className={styles['header__user']}>
+          {session.user && (
+            <span className={styles['user-info']}>
+              {session.user.name || session.user.email}
+            </span>
+          )}
+          <Button 
+            onClick={handleLogout} 
+            variant="secondary" 
+            size="sm"
+            className={styles['logout-btn']}
+          >
+            Cerrar Sesión
+          </Button>
+        </div>
       </header>
 
       {/* Main Content */}
-      <main className="main-content">
+      <main className={styles['main-content']}>
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="footer">
-        <p>&copy; 2024 Chetango - Sistema de Gestión</p>
+      <footer className={styles['footer']}>
+        <p>&copy; 2025 Chetango - Sistema de Gestión</p>
       </footer>
     </div>
   )

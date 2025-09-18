@@ -27,11 +27,10 @@ function getEnvVarNumber(key: string, defaultValue: number): number {
 
 export const ENV_CONFIG = {
   // API
-  API_URL: getEnvVar('VITE_API_URL'),
+  API_URL: getEnvVar('VITE_API_BASE_URL'),
   API_TIMEOUT: getEnvVarNumber('VITE_API_TIMEOUT', 10000),
   
-  // AUTENTICACIÓN
-  JWT_SECRET: getEnvVar('VITE_JWT_SECRET_KEY'),
+  // AUTENTICACIÓN (MSAL maneja tokens automáticamente)
   TOKEN_EXPIRY: getEnvVarOptional('VITE_TOKEN_EXPIRY', '24h'),
   
   // APLICACIÓN
@@ -61,8 +60,7 @@ export const ENV_CONFIG = {
 
 export function validateEnvironment(): void {
   const requiredVars = [
-    'VITE_API_URL',
-    'VITE_JWT_SECRET_KEY',
+    'VITE_API_BASE_URL',
   ]
   
   const missing = requiredVars.filter(varName => !import.meta.env[varName])

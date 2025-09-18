@@ -6,7 +6,7 @@ import { MSAL_CONFIG } from '@/shared/constants/authConstants'
 export const msalConfig: Configuration = {
   auth: {
     clientId: MSAL_CONFIG.CLIENT_ID,
-    authority: `https://login.microsoftonline.com/${MSAL_CONFIG.TENANT_ID}`,
+    authority: 'https://chetangoprueba.ciamlogin.com/',
     redirectUri: MSAL_CONFIG.REDIRECT_URI,
     // Post logout URI opcional (no disponible en HTTP local)
     ...(MSAL_CONFIG.POST_LOGOUT_REDIRECT_URI && {
@@ -42,11 +42,11 @@ export const msalConfig: Configuration = {
 
 // REQUEST DE LOGIN
 export const loginRequest = {
-  scopes: MSAL_CONFIG.SCOPES,
+  scopes: [], // External ID maneja scopes automáticamente
 }
 
 // REQUEST DE TOKEN SILENCIOSO
 export const tokenRequest = {
-  scopes: MSAL_CONFIG.SCOPES,
+  scopes: ['openid', 'profile', 'email'],
   forceRefresh: false,
 }

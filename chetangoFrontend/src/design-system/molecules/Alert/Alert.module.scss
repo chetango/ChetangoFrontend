@@ -1,0 +1,147 @@
+@use '../../tokens' as *;
+
+// ============================================
+// ALERT MOLECULE - FUTURISTIC NOTIFICATIONS
+// ============================================
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid;
+  position: relative;
+  backdrop-filter: blur(10px);
+  
+  // Base animation
+  animation: alertSlideIn 0.3s ease-out;
+  
+  // Variants
+  &--info {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
+    
+    .alert__icon {
+      color: #3b82f6;
+      text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+    }
+  }
+  
+  &--success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #34d399;
+    
+    .alert__icon {
+      color: #10b981;
+      text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    }
+  }
+  
+  &--warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #fbbf24;
+    
+    .alert__icon {
+      color: #f59e0b;
+      text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+    }
+  }
+  
+  &--error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    
+    .alert__icon {
+      color: #ef4444;
+      text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    }
+  }
+}
+
+.alert__icon {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.alert__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.alert__title {
+  font-family: $font-family-primary;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.alert__message {
+  font-family: $font-family-primary;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: 0.9;
+}
+
+.alert__close {
+  background: none;
+  border: none;
+  color: currentColor;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+  }
+  
+  &:focus {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+// Animations
+@keyframes alertSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (max-width: 480px) {
+  .alert {
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .alert__icon {
+    font-size: 14px;
+  }
+  
+  .alert__title {
+    font-size: 13px;
+  }
+  
+  .alert__message {
+    font-size: 12px;
+  }
+}
