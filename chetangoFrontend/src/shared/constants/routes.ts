@@ -18,6 +18,9 @@ export const ROUTES = {
   ATTENDANCE_REGISTER: '/attendance/register',
   ATTENDANCE_REPORTS: '/attendance/reports',
   
+  // CLASES
+  CLASSES: '/classes',
+  
   // PAGOS
   PAYMENTS: '/payments',
   PAYMENTS_LIST: '/payments/list',

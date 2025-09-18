@@ -2,8 +2,8 @@
 // UTILIDADES DE TESTING - CHETANGO
 // ============================================
 
-import { render, RenderOptions } from '@testing-library/react'
-import { ReactElement } from 'react'
+import { render, type RenderOptions } from '@testing-library/react'
+import { type ReactElement } from 'react'
 import { Provider } from 'react-redux'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { store } from '@/app/store'
