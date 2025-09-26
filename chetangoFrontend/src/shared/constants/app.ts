@@ -10,11 +10,31 @@ export const APP_CONFIG = {
   AUTHOR: 'Chetango Team',
 } as const
 
-// ROLES DE USUARIO
+// ROLES DE USUARIO (unificados)
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
   TEACHER: 'TEACHER', 
   STUDENT: 'STUDENT',
+} as const
+
+// CONFIGURACIÓN MSAL (movido desde authConstants)
+export const MSAL_CONFIG = {
+  TENANT_ID: import.meta.env.VITE_ENTRA_TENANT_ID,
+  CLIENT_ID: import.meta.env.VITE_ENTRA_CLIENT_ID,
+  AUTHORITY: import.meta.env.VITE_ENTRA_AUTHORITY,
+  REDIRECT_URI: import.meta.env.VITE_ENTRA_REDIRECT_URI,
+  POST_LOGOUT_REDIRECT_URI: import.meta.env.VITE_ENTRA_POST_LOGOUT_REDIRECT_URI,
+  SCOPES: import.meta.env.VITE_ENTRA_SCOPES?.split(',') || ['openid', 'profile', 'email'],
+} as const
+
+// CLAIMS Y ROLES (movido desde authConstants)
+export const AUTH_CLAIMS = {
+  EMAIL: 'email',
+  NAME: 'name',
+  GIVEN_NAME: 'given_name',
+  FAMILY_NAME: 'family_name',
+  OBJECT_ID: 'oid',
+  ROLES: 'roles',
 } as const
 
 export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES]

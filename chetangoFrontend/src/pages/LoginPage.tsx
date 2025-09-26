@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { AuthLayout } from '@/design-system/templates/AuthLayout'
-import { LoginForm } from '@/features/auth'
-import { useAuth } from '@/features/auth'
+import { LoginForm, useAuth } from '@/features/auth'
 import { ROUTES } from '@/shared/constants/routes'
 
 // Validar que la URL sea interna y segura
@@ -12,7 +11,7 @@ function isValidReturnUrl(url: string): boolean {
   return url.startsWith('/') && !url.startsWith('//')
 }
 
-export function LoginPage() {
+function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const { session } = useAuth()
@@ -38,3 +37,5 @@ export function LoginPage() {
     </AuthLayout>
   )
 }
+
+export default LoginPage

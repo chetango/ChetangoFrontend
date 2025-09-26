@@ -119,11 +119,15 @@ features/[feature-name]/
 - `features/[any]` → `design-system/*`
 - `pages/*` → `features/*`
 - `pages/*` → `design-system/*`
-- `app/*` → `features/*` (solo para store y routing)
+- `app/router/*` → `features/auth` (hooks públicos para routing)
+- `app/store/*` → `features/*` (slices para store)
 
 #### ❌ IMPORTS PROHIBIDOS:
 - `shared/*` → `features/*` (NUNCA)
 - `design-system/*` → `features/*` (NUNCA)
+- `design-system/*` → `shared/*` (NUNCA - debe ser independiente)
+- `app/providers/*` → `features/*` (NUNCA)
+- `features/*` → `app/*` (NUNCA)
 - `features/[A]` → `features/[B]` (NUNCA directamente)
 - `features/*` → `pages/*` (NUNCA)
 
@@ -217,18 +221,50 @@ import { useAuth } from '../../auth/hooks/useAuth'
 2. Ubicación: src/pages/ReportsPage.tsx
 ```
 
-### 9. CHECKLIST ANTES DE CREAR ARCHIVOS
+### 9. REGLAS ANTI-VIOLACIONES (NUEVAS)
+
+#### 🚫 PROHIBIDO - PARA EVITAR PROBLEMAS IDENTIFICADOS:
+
+**NO FRAGMENTAR LÓGICA DE DOMINIO:**
+- Una responsabilidad = Una ubicación
+- Ejemplo: Toda la lógica de auth debe estar en `features/auth/`
+- NO dispersar en app/, pages/, shared/
+
+**NO CREAR DEPENDENCIAS CIRCULARES:**
+- app/ NO debe importar lógica de features/
+- shared/ NO debe importar de features/
+- design-system/ debe ser completamente independiente
+
+**NO DUPLICAR FUNCIONALIDAD:**
+- Antes de crear, verificar si ya existe
+- Un guard, un interceptor, una constante por responsabilidad
+- Usar barrel exports para evitar duplicación
+
+**NO MEZCLAR RESPONSABILIDADES:**
+- pages/ = Solo orquestación
+- templates/ = Solo estructura visual
+- Un archivo = Una responsabilidad
+
+**ORGANIZACIÓN CONSISTENTE:**
+- TODOS los componentes en carpetas con index.ts
+- NO mezclar archivos sueltos con carpetas
+- Seguir el mismo patrón en toda la aplicación
+
+### 10. CHECKLIST ANTES DE CREAR ARCHIVOS
 
 Antes de crear cualquier archivo, pregúntate:
 
 - [ ] ¿He leído las reglas de arquitectura?
 - [ ] ¿Sé exactamente en qué carpeta va este archivo?
 - [ ] ¿He verificado las reglas de dependencias?
+- [ ] ¿¿Ya existe esta funcionalidad en otro lugar?
+- [ ] ¿Estoy creando dependencias circulares?
 - [ ] ¿Estoy usando la convención de nombres correcta?
 - [ ] ¿Estoy usando imports absolutos con @/?
 - [ ] ¿Este archivo respeta la separación de responsabilidades?
+- [ ] ¿Estoy siguiendo el patrón organizacional consistente?
 
-### 10. FEATURES ACTUALES DEL DOMINIO
+### 11. FEATURES ACTUALES DEL DOMINIO
 
 **Features definidas para Chetango:**
 - `auth` - Autenticación, login, permisos, roles

@@ -29,6 +29,7 @@ export interface AuthStateType {
 export interface AuthContextType {
   session: SessionType
   authState: AuthStateType
+  status: 'unknown' | 'unauthenticated' | 'authenticated'
   login: () => Promise<void>
   logout: () => Promise<void>
   getAccessToken: () => Promise<string | null>

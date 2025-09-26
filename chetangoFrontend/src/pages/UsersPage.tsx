@@ -4,7 +4,7 @@
 
 import styles from './PageStyles.module.scss'
 
-export const UsersPage = () => {
+const UsersPage = () => {
   return (
     <div className={styles['page-container']}>
       <h1 className={styles['page-title']}>Usuarios - Chetango</h1>
@@ -12,3 +12,5 @@ export const UsersPage = () => {
     </div>
   )
 }
+
+export default UsersPage

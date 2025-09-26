@@ -4,7 +4,7 @@
 
 import styles from './PageStyles.module.scss'
 
-export const NotFoundPage = () => {
+const NotFoundPage = () => {
   return (
     <div className={styles['page-container']}>
       <h1 className={styles['page-title']}>404 - Página no encontrada</h1>
@@ -12,3 +12,5 @@ export const NotFoundPage = () => {
     </div>
   )
 }
+
+export default NotFoundPage

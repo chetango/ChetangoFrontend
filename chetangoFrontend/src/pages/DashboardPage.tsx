@@ -4,7 +4,7 @@
 
 import styles from './PageStyles.module.scss'
 
-export const DashboardPage = () => {
+const DashboardPage = () => {
   return (
     <div className={styles['page-container']}>
       <h1 className={styles['page-title']}>Dashboard - Chetango</h1>
@@ -12,3 +12,5 @@ export const DashboardPage = () => {
     </div>
   )
 }
+
+export default DashboardPage

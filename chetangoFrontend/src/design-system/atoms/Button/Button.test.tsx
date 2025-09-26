@@ -4,28 +4,7 @@
 
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-
-// Componente Button simplificado para testing
-interface ButtonProps {
-  children: React.ReactNode
-  variant?: 'primary' | 'secondary' | 'danger'
-  size?: 'sm' | 'md' | 'lg'
-  disabled?: boolean
-  className?: string
-  onClick?: () => void
-}
-
-const Button = ({ children, variant = 'primary', size = 'md', disabled, className, onClick }: ButtonProps) => {
-  return (
-    <button 
-      className={`button ${variant} ${size} ${className || ''}`}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  )
-}
+import { Button } from './Button'
 
 describe('Button Component', () => {
   it('renders with correct text', () => {

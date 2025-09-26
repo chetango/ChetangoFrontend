@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { ICONS } from '@/shared/constants'
+import { ALERT_ICONS } from '@/design-system/tokens'
 import styles from './Alert.module.scss'
 
 interface AlertProps {
@@ -26,13 +26,13 @@ export function Alert({
   const getIcon = () => {
     switch (variant) {
       case 'success':
-        return ICONS.SUCCESS
+        return ALERT_ICONS.SUCCESS
       case 'warning':
-        return ICONS.WARNING
+        return ALERT_ICONS.WARNING
       case 'error':
-        return ICONS.ERROR
+        return ALERT_ICONS.ERROR
       default:
-        return ICONS.INFO
+        return ALERT_ICONS.INFO
     }
   }
 
@@ -59,7 +59,7 @@ export function Alert({
           onClick={onClose}
           aria-label="Cerrar alerta"
         >
-          {ICONS.CLOSE}
+          {ALERT_ICONS.CLOSE}
         </button>
       )}
     </div>

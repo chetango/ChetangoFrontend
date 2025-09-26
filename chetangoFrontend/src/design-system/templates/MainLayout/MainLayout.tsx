@@ -3,24 +3,29 @@
 // ============================================
 
 import { Outlet, Link } from 'react-router-dom'
-import { useAuth } from '@/features/auth'
 import { Button } from '@/design-system/atoms/Button'
-import { ROUTES, SYMBOLS } from '@/shared/constants'
+import { SYMBOLS } from '@/design-system/tokens'
 import styles from './MainLayout.module.scss'
 
-export const MainLayout = () => {
-  const { logout, session } = useAuth()
+// Rutas locales para evitar dependencia de shared
+const ROUTES = {
+  DASHBOARD: '/dashboard',
+  ATTENDANCE: '/attendance',
+  CLASSES: '/classes',
+  PAYMENTS: '/payments',
+  USERS: '/users',
+  REPORTS: '/reports',
+} as const
 
-  const handleLogout = async () => {
-    try {
-      await logout()
-    } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error al cerrar sesión:', error)
-      }
-      // TODO: Mostrar notificación de error al usuario
-    }
-  }
+interface MainLayoutProps {
+  user?: {
+    name?: string
+    email: string
+  } | null
+  onLogout?: () => void
+}
+
+const MainLayout = ({ user, onLogout }: MainLayoutProps) => {
 
   return (
     <div className={styles['main-layout']}>
@@ -40,19 +45,21 @@ export const MainLayout = () => {
         </nav>
 
         <div className={styles['header__user']}>
-          {session.user && (
+          {user && (
             <span className={styles['user-info']}>
-              {session.user.name || session.user.email}
+              {user.name || user.email}
             </span>
           )}
-          <Button 
-            onClick={handleLogout} 
-            variant="secondary" 
-            size="sm"
-            className={styles['logout-btn']}
-          >
-            Cerrar Sesión
-          </Button>
+          {onLogout && (
+            <Button 
+              onClick={onLogout} 
+              variant="secondary" 
+              size="sm"
+              className={styles['logout-btn']}
+            >
+              Cerrar Sesión
+            </Button>
+          )}
         </div>
       </header>
 
@@ -68,3 +75,5 @@ export const MainLayout = () => {
     </div>
   )
 }
+
+export default MainLayout

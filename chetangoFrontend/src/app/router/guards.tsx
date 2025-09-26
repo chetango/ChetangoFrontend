@@ -1,22 +1,15 @@
 // ============================================
-// ROUTE GUARDS - CHETANGO
+// UNIVERSAL GUARDS - CHETANGO
 // ============================================
 
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '@/features/auth'
-import { ROUTES } from '@/shared/constants/routes'
 
-interface ProtectedRouteProps {
-  children: React.ReactNode
-  roles?: string[] // Para uso futuro con backend
-}
-
-export const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
-  const { session, authState } = useAuth()
+export function RequireAuth({ to = '/login' }: { to?: string }) {
+  const { status } = useAuth()
   const location = useLocation()
-
-  // Mostrar loading mientras se inicializa
-  if (!authState.isInitialized || authState.isLoading) {
+  
+  if (status === 'unknown') {
     return (
       <div style={{ 
         display: 'flex', 
@@ -24,29 +17,83 @@ export const ProtectedRoute = ({ children, roles }: ProtectedRouteProps) => {
         alignItems: 'center', 
         height: '100vh' 
       }}>
-        <div>Verificando autenticación...</div>
+        {/* QUITAR ESTILOS INLINE EN EL FUTURO*/}
+        <div>Cargando... Guardian RequireAuth</div>
       </div>
     )
   }
-
-  // Si no está autenticado, redirigir a login
-  if (!session.isAuthenticated) {
+  
+  if (status !== 'authenticated') {
     return (
       <Navigate 
-        to={ROUTES.LOGIN} 
-        state={{ returnUrl: location.pathname + location.search }}
+        to={to} 
         replace 
+        state={{ from: location }} 
       />
     )
   }
+  
+  return <Outlet />
+}
 
-  // TODO: Implementar validación de roles cuando tengas backend
-  // if (roles && session.user?.roles) {
-  //   const hasRequiredRole = roles.some(role => session.user.roles.includes(role))
-  //   if (!hasRequiredRole) {
-  //     return <Navigate to={ROUTES.DASHBOARD} replace />
-  //   }
-  // }
+export function OnlyGuests({ to = '/dashboard' }: { to?: string }) {
+  const { status } = useAuth()
+  
+  if (status === 'unknown') {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        {/* QUITAR ESTILOS INLINE EN EL FUTURO*/}
+        <div>Cargando... Guardian OnlyGuests</div>
+      </div>
+    )
+  }
+  
+  if (status === 'authenticated') {
+    return <Navigate to={to} replace />
+  }
+  
+  return <Outlet />
+}
 
-  return <>{children}</>
+type RequireRoleProps = {
+  anyOf?: string[]
+  allOf?: string[]
+  to?: string
+}
+
+export function RequireRole({ anyOf, allOf, to = '/dashboard' }: RequireRoleProps) {
+  const { status, session } = useAuth()
+  
+  if (status === 'unknown') {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        {/* QUITAR ESTILOS INLINE EN EL FUTURO*/}
+        <div>Cargando... Guardían RequireRole</div>
+      </div>
+    )
+  }
+  
+  if (status !== 'authenticated') {
+    return <Navigate to="/login" replace />
+  }
+
+  const roles = session?.user?.roles ?? []
+  const okAny = anyOf ? anyOf.some(r => roles.includes(r)) : true
+  const okAll = allOf ? allOf.every(r => roles.includes(r)) : true
+
+  if (!okAny || !okAll) {
+    return <Navigate to={to} replace />
+  }
+  
+  return <Outlet />
 }

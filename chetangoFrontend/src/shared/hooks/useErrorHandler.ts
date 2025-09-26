@@ -1,6 +1,4 @@
 import { useCallback } from 'react'
-import { useAppDispatch } from '@/app/store/hooks'
-import { setError } from '@/features/auth'
 
 interface ErrorHandlerOptions {
   showToast?: boolean
@@ -9,14 +7,12 @@ interface ErrorHandlerOptions {
 }
 
 export const useErrorHandler = () => {
-  const dispatch = useAppDispatch()
-
   const handleError = useCallback((
     error: unknown,
     options: ErrorHandlerOptions = {}
   ) => {
     const {
-      showToast = true,
+      logError = true,
       fallbackMessage = 'Ha ocurrido un error inesperado'
     } = options
 
@@ -32,21 +28,15 @@ export const useErrorHandler = () => {
       errorMessage = typeof msg === 'string' ? msg : fallbackMessage
     }
 
-
-    // Show error in UI
-    if (showToast) {
-      dispatch(setError(errorMessage))
+    // Log error for debugging
+    if (logError && process.env.NODE_ENV === 'development') {
+      console.error('Error handled:', errorMessage, error)
     }
 
     return errorMessage
-  }, [dispatch])
-
-  const clearError = useCallback(() => {
-    dispatch(setError(null))
-  }, [dispatch])
+  }, [])
 
   return {
     handleError,
-    clearError,
   }
 }

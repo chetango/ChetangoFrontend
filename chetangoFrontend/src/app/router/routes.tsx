@@ -1,94 +1,62 @@
 // ============================================
-// ROUTES DEFINITION - CHETANGO
+// ROUTES WITH META-CONFIG - CHETANGO
 // ============================================
 
-import { createBrowserRouter } from 'react-router-dom'
-import { ROUTES } from '@/shared/constants'
-import {
-  LoginPage,
-  DashboardPage,
-  AttendancePage,
-  ClassesPage,
-  PaymentsPage,
-  UsersPage,
-  ReportsPage,
-  NotFoundPage,
-} from '@/pages'
-import { AuthCallbackPage } from '@/pages/AuthCallbackPage'
-import { MainLayout } from '@/design-system/templates/MainLayout'
-import { ProtectedRoute } from '@/app/router/guards'
-import { AuthGuard } from '@/features/auth/components/AuthGuard'
+import { lazy } from 'react'
 
-export const router = createBrowserRouter([
-  // Rutas públicas
-  {
-    path: ROUTES.LOGIN,
-    element: <LoginPage />,
+const LoginPage = lazy(() => import('@/pages').then(m => ({ default: m.LoginPage })))
+const AuthCallbackPage = lazy(() => import('@/pages').then(m => ({ default: m.AuthCallbackPage })))
+const MainLayoutWrapper = lazy(() => import('@/pages/layouts/MainLayoutWrapper').then(m => ({ default: m.MainLayoutWrapper })))
+const DashboardPage = lazy(() => import('@/pages').then(m => ({ default: m.DashboardPage })))
+const PaymentsPage = lazy(() => import('@/pages').then(m => ({ default: m.PaymentsPage })))
+const UsersPage = lazy(() => import('@/pages').then(m => ({ default: m.UsersPage })))
+const AttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.AttendancePage })))
+const ClassesPage = lazy(() => import('@/pages').then(m => ({ default: m.ClassesPage })))
+const ReportsPage = lazy(() => import('@/pages').then(m => ({ default: m.ReportsPage })))
+const NotFoundPage = lazy(() => import('@/pages').then(m => ({ default: m.NotFoundPage })))
+
+export type Meta = {
+  public?: boolean
+  onlyGuests?: boolean
+  auth?: boolean
+  anyRole?: string[]
+  allRole?: string[]
+  redirectTo?: string
+}
+
+export type AppRoute = {
+  path?: string
+  index?: boolean
+  element: React.ReactElement
+  meta?: Meta
+  children?: AppRoute[]
+}
+
+export const appRoutes: AppRoute[] = [
+  { 
+    path: '/login', 
+    element: <LoginPage />, 
+    meta: { public: true, onlyGuests: true, redirectTo: '/dashboard' } 
   },
-  {
-    path: ROUTES.AUTH_CALLBACK,
-    element: <AuthCallbackPage />,
+  { 
+    path: '/auth-callback', 
+    element: <AuthCallbackPage />, 
+    meta: { public: true } 
   },
-  
-  // Rutas protegidas
+
   {
     path: '/',
-    element: <MainLayout />,
+    element: <MainLayoutWrapper />,
+    meta: { auth: true },
     children: [
-      {
-        path: ROUTES.DASHBOARD,
-        element: (
-          <AuthGuard>
-            <DashboardPage />
-          </AuthGuard>
-        ),
-      },
-      {
-        path: ROUTES.ATTENDANCE,
-        element: (
-          <ProtectedRoute roles={['ADMIN', 'TEACHER']}>
-            <AttendancePage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.CLASSES,
-        element: (
-          <ProtectedRoute roles={['ADMIN', 'TEACHER']}>
-            <ClassesPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.PAYMENTS,
-        element: (
-          <ProtectedRoute roles={['ADMIN']}>
-            <PaymentsPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.USERS,
-        element: (
-          <ProtectedRoute roles={['ADMIN']}>
-            <UsersPage />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.REPORTS,
-        element: (
-          <ProtectedRoute>
-            <ReportsPage />
-          </ProtectedRoute>
-        ),
-      },
+      { path: 'dashboard', element: <DashboardPage /> },
+      { path: 'attendance', element: <AttendancePage />, meta: { anyRole: ['ADMIN', 'TEACHER'] } },
+      { path: 'classes', element: <ClassesPage />, meta: { anyRole: ['ADMIN', 'TEACHER'] } },
+      { path: 'reports', element: <ReportsPage />, meta: { anyRole: ['ADMIN', 'TEACHER'] } },
+      { path: 'payments', element: <PaymentsPage />, meta: { anyRole: ['ADMIN'] } },
+      { path: 'users', element: <UsersPage />, meta: { anyRole: ['ADMIN'] } },
     ],
   },
-  
-  // 404
-  {
-    path: '*',
-    element: <NotFoundPage />,
-  },
-])
+
+  { path: '*', element: <NotFoundPage />, meta: { public: true } },
+]

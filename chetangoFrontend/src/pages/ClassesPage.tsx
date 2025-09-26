@@ -4,7 +4,7 @@
 
 import styles from './PageStyles.module.scss'
 
-export const ClassesPage = () => {
+const ClassesPage = () => {
   return (
     <div className={styles['page-container']}>
       <h1 className={styles['page-title']}>Clases - Chetango</h1>
@@ -12,3 +12,5 @@ export const ClassesPage = () => {
     </div>
   )
 }
+
+export default ClassesPage

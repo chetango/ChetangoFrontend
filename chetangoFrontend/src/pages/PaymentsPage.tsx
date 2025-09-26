@@ -4,7 +4,7 @@
 
 import styles from './PageStyles.module.scss'
 
-export const PaymentsPage = () => {
+const PaymentsPage = () => {
   return (
     <div className={styles['page-container']}>
       <h1 className={styles['page-title']}>Pagos - Chetango</h1>
@@ -12,3 +12,5 @@ export const PaymentsPage = () => {
     </div>
   )
 }
+
+export default PaymentsPage

@@ -85,9 +85,20 @@ export const useAuth = (): AuthContextType => {
     }
   }, [instance, accounts, dispatch])
 
+  // STATUS DERIVADO PARA GUARDS
+  let status: 'unknown' | 'unauthenticated' | 'authenticated'
+  if (!authState.isInitialized) {
+    status = 'unknown'
+  } else if (session.isAuthenticated) {
+    status = 'authenticated'
+  } else {
+    status = 'unauthenticated'
+  }
+
   return {
     session,
     authState,
+    status,
     login,
     logout,
     getAccessToken,

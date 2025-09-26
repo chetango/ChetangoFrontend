@@ -1,13 +1,16 @@
 // ============================================
 // BARREL EXPORT - PAGES
 // ============================================
+// Nota: Ahora las páginas usan export default para lazy loading
+// Este archivo mantiene compatibilidad con imports existentes
 
-export { LoginPage } from './LoginPage'
-export { AuthCallbackPage } from './AuthCallbackPage'
-export { DashboardPage } from './DashboardPage'
-export { AttendancePage } from './AttendancePage'
-export { ClassesPage } from './ClassesPage'
-export { PaymentsPage } from './PaymentsPage'
-export { UsersPage } from './UsersPage'
-export { ReportsPage } from './ReportsPage'
-export { NotFoundPage } from './NotFoundPage'
+export { default as LoginPage } from './LoginPage'
+export { default as AuthCallbackPage } from './AuthCallbackPage'
+export { default as DashboardPage } from './DashboardPage'
+export { default as AttendancePage } from './AttendancePage'
+export { default as ClassesPage } from './ClassesPage'
+export { default as PaymentsPage } from './PaymentsPage'
+export { default as UsersPage } from './UsersPage'
+export { default as ReportsPage } from './ReportsPage'
+export { default as NotFoundPage } from './NotFoundPage'
+export { MainLayoutWrapper } from './layouts/MainLayoutWrapper'
