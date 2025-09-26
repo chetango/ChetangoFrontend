@@ -1,0 +1,35 @@
+name: Sync frontend lockfile
+on:
+  workflow_dispatch: {}   # lo ejecutas manualmente
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-lock:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: chetangoFrontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Update lockfile only
+        run: npm install --package-lock-only
+      - name: Create PR with updated lockfile
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(frontend): sync package-lock.json"
+          title: "chore(frontend): sync package-lock.json"
+          body: "Auto-generated to align lockfile with package.json."
+          branch: chore/sync-frontend-lock
+          add-paths: |
+            chetangoFrontend/package-lock.json
