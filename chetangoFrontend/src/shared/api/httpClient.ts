@@ -17,6 +17,7 @@ httpClient.interceptors.response.use(
     // Log errors for debugging with sanitization
     if (process.env.NODE_ENV === 'development') {
       const errorData = error.response?.data || error.message || 'Unknown error'
+      console.error('HTTP Error:', JSON.stringify(errorData))
     }
     return Promise.reject(error)
   }
