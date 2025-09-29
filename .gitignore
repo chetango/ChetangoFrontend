@@ -1,0 +1,18 @@
+# deps / builds
+node_modules/
+dist/
+build/
+
+# env & logs
+.env
+.env.*
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# editor / os
+.DS_Store
+Thumbs.db
+
+# test coverage (si en el futuro usamos)
+coverage/
