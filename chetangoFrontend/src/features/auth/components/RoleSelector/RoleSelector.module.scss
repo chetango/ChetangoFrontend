@@ -1,0 +1,35 @@
+// ============================================
+// ROLE SELECTOR STYLES - CHETANGO
+// ============================================
+
+.role-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.role-selector__label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+}
+
+.role-selector__buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.role-button {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  min-width: auto;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+}

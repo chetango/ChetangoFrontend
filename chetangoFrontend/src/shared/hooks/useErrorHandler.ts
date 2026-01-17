@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 
 interface ErrorHandlerOptions {
-  showToast?: boolean
   logError?: boolean
   fallbackMessage?: string
 }

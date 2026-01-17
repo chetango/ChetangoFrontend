@@ -13,48 +13,78 @@ export const ROUTES = {
   AUTH_CALLBACK: '/auth/callback',
   AUTH_LOGOUT: '/auth/logout',
   
-  // DASHBOARD
+  // DASHBOARD COMÚN
   DASHBOARD: '/dashboard',
   
-  // ASISTENCIA
-  ATTENDANCE: '/attendance',
-  ATTENDANCE_LIST: '/attendance/list',
-  ATTENDANCE_REGISTER: '/attendance/register',
-  ATTENDANCE_REPORTS: '/attendance/reports',
+  // RUTAS DE ADMIN
+  ADMIN: {
+    ROOT: '/admin',
+    ATTENDANCE: '/admin/attendance',
+    ATTENDANCE_CORRECTION: '/admin/attendance/correction',
+    ATTENDANCE_LIST: '/admin/attendance/list',
+    ATTENDANCE_REGISTER: '/admin/attendance/register',
+    ATTENDANCE_REPORTS: '/admin/attendance/reports',
+    
+    USERS: '/admin/users',
+    USERS_LIST: '/admin/users/list',
+    USERS_CREATE: '/admin/users/create',
+    USERS_EDIT: (id: string) => `/admin/users/${id}/edit`,
+    
+    PAYMENTS: '/admin/payments',
+    PAYMENTS_LIST: '/admin/payments/list',
+    PAYMENTS_CREATE: '/admin/payments/create',
+    PAYMENTS_HISTORY: '/admin/payments/history',
+    
+    CLASSES: '/admin/classes',
+    CLASSES_LIST: '/admin/classes/list',
+    CLASSES_CREATE: '/admin/classes/create',
+    CLASSES_SCHEDULE: '/admin/classes/schedule',
+    
+    PACKAGES: '/admin/paquetes',
+    
+    REPORTS: '/admin/reports',
+    REPORTS_ATTENDANCE: '/admin/reports/attendance',
+    REPORTS_PAYMENTS: '/admin/reports/payments',
+    REPORTS_USERS: '/admin/reports/users',
+    
+    SETTINGS: '/admin/settings',
+    SETTINGS_SYSTEM: '/admin/settings/system',
+    SETTINGS_ROLES: '/admin/settings/roles',
+  },
   
-  // CLASES
-  CLASSES: '/classes',
-  CLASSES_LIST: '/classes/list',
-  CLASSES_CREATE: '/classes/create',
-  CLASSES_SCHEDULE: '/classes/schedule',
+  // RUTAS DE ESTUDIANTE
+  STUDENT: {
+    ROOT: '/student',
+    ATTENDANCE: '/student/attendance',
+    ATTENDANCE_HISTORY: '/student/attendance/history',
+    
+    PAYMENTS: '/student/payments',
+    PAYMENTS_HISTORY: '/student/payments/history',
+    
+    CLASSES: '/student/classes',
+    CLASSES_SCHEDULE: '/student/classes/schedule',
+    
+    PROFILE: '/student/profile',
+    PROFILE_EDIT: '/student/profile/edit',
+  },
   
-  // PAGOS
-  PAYMENTS: '/payments',
-  PAYMENTS_LIST: '/payments/list',
-  PAYMENTS_CREATE: '/payments/create',
-  PAYMENTS_HISTORY: '/payments/history',
+  // RUTAS DE PROFESOR (FUTURO)
+  TEACHER: {
+    ROOT: '/teacher',
+    ATTENDANCE: '/teacher/attendance',
+    ATTENDANCE_REGISTER: '/teacher/attendance/register',
+    
+    CLASSES: '/teacher/classes',
+    CLASSES_MY: '/teacher/classes/my',
+    CLASSES_SCHEDULE: '/teacher/classes/schedule',
+    
+    REPORTS: '/teacher/reports',
+    REPORTS_MY_CLASSES: '/teacher/reports/my-classes',
+  },
   
-  // USUARIOS
-  USERS: '/users',
-  USERS_LIST: '/users/list',
-  USERS_CREATE: '/users/create',
-  USERS_PROFILE: '/users/profile',
-  
-  // ALERTAS
-  ALERTS: '/alerts',
-  ALERTS_LIST: '/alerts/list',
-  ALERTS_CREATE: '/alerts/create',
-  
-  // REPORTES
-  REPORTS: '/reports',
-  REPORTS_ATTENDANCE: '/reports/attendance',
-  REPORTS_PAYMENTS: '/reports/payments',
-  REPORTS_USERS: '/reports/users',
-  
-  // CONFIGURACIÓN
-  SETTINGS: '/settings',
-  SETTINGS_PROFILE: '/settings/profile',
-  SETTINGS_ACCOUNT: '/settings/account',
+  // RUTAS COMPARTIDAS (ACCESO SEGÚN ROL)
+  PROFILE: '/profile',
+  NOTIFICATIONS: '/notifications',
 } as const
 
 // ENDPOINTS DEL BACKEND API
@@ -135,19 +165,44 @@ export const QUERY_PARAMS = {
 // RUTAS PROTEGIDAS POR ROL
 export const PROTECTED_ROUTES = {
   ADMIN_ONLY: [
-    ROUTES.USERS_CREATE,
-    ROUTES.SETTINGS,
-    ROUTES.REPORTS,
+    '/admin',
+    '/admin/*',
   ],
-  TEACHER_AND_ADMIN: [
-    ROUTES.ATTENDANCE_REGISTER,
-    ROUTES.PAYMENTS_CREATE,
-    ROUTES.ALERTS_CREATE,
+  STUDENT_ONLY: [
+    '/student',
+    '/student/*',
+  ],
+  TEACHER_ONLY: [
+    '/teacher',
+    '/teacher/*',
   ],
   ALL_AUTHENTICATED: [
     ROUTES.DASHBOARD,
-    ROUTES.ATTENDANCE_LIST,
-    ROUTES.PAYMENTS_LIST,
-    ROUTES.USERS_PROFILE,
+    ROUTES.PROFILE,
+    ROUTES.NOTIFICATIONS,
   ],
+} as const
+
+// HELPER PARA VERIFICAR ACCESO A RUTAS
+export const ROUTE_ACCESS = {
+  // Rutas que requieren rol específico
+  requiresRole: (path: string): string[] | null => {
+    if (path.startsWith('/admin')) return ['admin']
+    if (path.startsWith('/student')) return ['alumno']
+    if (path.startsWith('/teacher')) return ['profesor']
+    return null
+  },
+  
+  // Rutas accesibles para cualquier usuario autenticado
+  isPublicAuthenticated: (path: string): boolean => {
+    return PROTECTED_ROUTES.ALL_AUTHENTICATED.includes(path as any)
+  },
+  
+  // Obtener ruta por defecto según rol
+  getDefaultRoute: (roles: string[]): string => {
+    if (roles.includes('admin')) return ROUTES.ADMIN.ROOT
+    if (roles.includes('alumno')) return ROUTES.STUDENT.ROOT
+    if (roles.includes('profesor')) return ROUTES.TEACHER.ROOT
+    return ROUTES.DASHBOARD
+  },
 } as const

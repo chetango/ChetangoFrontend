@@ -11,10 +11,9 @@ export function AuthCallback() {
   const { instance } = useMsal()
   const dispatch = useAppDispatch()
   
-  // Obtener URL de retorno del sessionStorage (guardada antes del login)
   const getReturnUrl = () => {
     const saved = sessionStorage.getItem('returnUrl')
-    sessionStorage.removeItem('returnUrl') // Limpiar después de usar
+    sessionStorage.removeItem('returnUrl')
     return saved || ROUTES.DASHBOARD
   }
 
@@ -22,47 +21,33 @@ export function AuthCallback() {
     const handleCallback = async () => {
       try {
         dispatch(setLoading(true))
+        await instance.initialize()
         
-        // Verificar si MSAL está inicializado
-        const config = instance.getConfiguration()
-        if (!config) {
-          throw new Error('MSAL no está configurado correctamente')
-        }
-                
-        // Handle redirect response
         const response = await instance.handleRedirectPromise()
-                
-        if (response && response.account) {
-          // Login successful
+        
+        if (response?.account) {
           instance.setActiveAccount(response.account)
           dispatch(setInitialized(true))
-          const returnUrl = getReturnUrl()
-          navigate(returnUrl, { replace: true })
+          navigate(getReturnUrl(), { replace: true })
         } else {
-          // Check if there's already an active account
           const accounts = instance.getAllAccounts()
-          
           if (accounts.length > 0) {
             instance.setActiveAccount(accounts[0])
             dispatch(setInitialized(true))
-            const returnUrl = getReturnUrl()
-            navigate(returnUrl, { replace: true })
+            navigate(getReturnUrl(), { replace: true })
           } else {
-            // No account, redirect to login
             navigate(ROUTES.LOGIN, { replace: true })
           }
         }
       } catch (error) {
-        dispatch(setError(error instanceof Error ? error.message : 'Error de autenticación'))
+        dispatch(setError(error instanceof Error ? error.message : 'Error de autenticacion'))
         navigate(ROUTES.LOGIN, { replace: true })
       } finally {
         dispatch(setLoading(false))
       }
     }
 
-    // Pequeño delay para asegurar que MSAL esté listo
-    const timer = setTimeout(handleCallback, 100)
-    return () => clearTimeout(timer)
+    handleCallback()
   }, [instance, navigate, dispatch])
 
   return (

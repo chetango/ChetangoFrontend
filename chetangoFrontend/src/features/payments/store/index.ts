@@ -1,8 +1,14 @@
 // ============================================
-// PAYMENTS STORE - PLACEHOLDER
+// PAYMENTS STORE - CHETANGO ADMIN
 // ============================================
 
-// TODO: Implementar paymentsSlice
-export const paymentsStore = {
-  // Placeholder
-}
+export {
+  paymentsSlice,
+  setSearchTerm,
+  setSelectedAlumno,
+  setActiveTab,
+  setQRScannerActive,
+  clearSelection,
+  resetPaymentsUI,
+  default as paymentsReducer,
+} from './paymentsSlice'

@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { AuthLayout } from '@/design-system/templates/AuthLayout'
 import { LoginForm, useAuth } from '@/features/auth'
-import { ROUTES } from '@/shared/constants/routes'
+import { ROUTES, ROUTE_ACCESS } from '@/shared/constants/routes'
 
 // Validar que la URL sea interna y segura
 function isValidReturnUrl(url: string): boolean {
@@ -18,24 +17,30 @@ function LoginPage() {
   
   // Obtener URL de retorno del state con validación
   const rawReturnUrl = location.state?.returnUrl
-  const returnUrl = isValidReturnUrl(rawReturnUrl) ? rawReturnUrl : ROUTES.DASHBOARD
+  
+  // Determinar URL de destino según el rol del usuario
+  const getDestinationUrl = () => {
+    if (isValidReturnUrl(rawReturnUrl)) return rawReturnUrl
+    if (session.user?.roles) {
+      return ROUTE_ACCESS.getDefaultRoute(session.user.roles)
+    }
+    return ROUTES.DASHBOARD
+  }
 
   // Redirect if already authenticated
   useEffect(() => {
     if (session.isAuthenticated) {
-      navigate(returnUrl, { replace: true })
+      const destinationUrl = getDestinationUrl()
+      navigate(destinationUrl, { replace: true })
     }
-  }, [session.isAuthenticated, navigate, returnUrl])
+  }, [session.isAuthenticated, navigate])
 
   const handleLoginSuccess = () => {
-    navigate(returnUrl, { replace: true })
+    const destinationUrl = getDestinationUrl()
+    navigate(destinationUrl, { replace: true })
   }
 
-  return (
-    <AuthLayout>
-      <LoginForm onSuccess={handleLoginSuccess} />
-    </AuthLayout>
-  )
+  return <LoginForm onSuccess={handleLoginSuccess} />
 }
 
 export default LoginPage

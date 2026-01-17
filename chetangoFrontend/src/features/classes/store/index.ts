@@ -1,8 +1,14 @@
 // ============================================
-// CLASSES STORE - PLACEHOLDER
+// CLASSES STORE - EXPORTS
 // ============================================
 
-// TODO: Implementar classesSlice
-export const classesStore = {
-  // Placeholder
-}
+export {
+  default as classesReducer,
+  setSearchTerm,
+  setFilterProfesor,
+  setFilterTipo,
+  setFilterFecha,
+  setSelectedClaseId,
+  clearFilters,
+  type ClassesUIState,
+} from './classesSlice'

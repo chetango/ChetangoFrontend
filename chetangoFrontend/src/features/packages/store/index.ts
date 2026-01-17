@@ -1,8 +1,14 @@
 // ============================================
-// PACKAGES STORE - PLACEHOLDER
+// PACKAGES STORE - CHETANGO ADMIN
 // ============================================
 
-// TODO: Implementar packagesSlice
-export const packagesStore = {
-  // Placeholder
-}
+export {
+  packagesSlice,
+  setSearchTerm,
+  setFilterEstado,
+  setFilterTipoPaquete,
+  clearFilters,
+  default as packagesReducer,
+} from './packagesSlice'
+
+export type { PackagesUIState } from './packagesSlice'

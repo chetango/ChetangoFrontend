@@ -40,13 +40,13 @@ export const msalConfig: Configuration = {
   },
 }
 
-// REQUEST DE LOGIN
+// REQUEST DE LOGIN - incluye scope de API para obtener token con permisos
 export const loginRequest = {
-  scopes: [], // External ID maneja scopes automáticamente
+  scopes: MSAL_CONFIG.SCOPES,
 }
 
-// REQUEST DE TOKEN SILENCIOSO
+// REQUEST DE TOKEN SILENCIOSO - incluye todos los scopes necesarios
 export const tokenRequest = {
-  scopes: ['openid', 'profile', 'email'],
+  scopes: MSAL_CONFIG.SCOPES,
   forceRefresh: false,
 }

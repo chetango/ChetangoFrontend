@@ -24,8 +24,6 @@ export const useAuth = (): AuthContextType => {
   const session: SessionType = {
     user: accounts.length > 0 ? mapAccountToUser(accounts[0]) : null,
     isAuthenticated: accounts.length > 0,
-    accessToken: null, // Se obtiene dinámicamente
-    expiresAt: null,
   }
 
   // LOGIN

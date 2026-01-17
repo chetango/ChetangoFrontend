@@ -2,10 +2,16 @@
 // UNIVERSAL GUARDS - CHETANGO
 // ============================================
 
-import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '@/features/auth'
+import { ROUTE_ACCESS } from '@/shared/constants/routes'
 
-export function RequireAuth({ to = '/login' }: { to?: string }) {
+interface GuardProps {
+  to?: string
+  children: React.ReactNode
+}
+
+export function RequireAuth({ to = '/login', children }: GuardProps) {
   const { status } = useAuth()
   const location = useLocation()
   
@@ -17,8 +23,7 @@ export function RequireAuth({ to = '/login' }: { to?: string }) {
         alignItems: 'center', 
         height: '100vh' 
       }}>
-        {/* QUITAR ESTILOS INLINE EN EL FUTURO*/}
-        <div>Cargando... Guardian RequireAuth</div>
+        <div>Cargando...</div>
       </div>
     )
   }
@@ -33,10 +38,10 @@ export function RequireAuth({ to = '/login' }: { to?: string }) {
     )
   }
   
-  return <Outlet />
+  return <>{children}</>
 }
 
-export function OnlyGuests({ to = '/dashboard' }: { to?: string }) {
+export function OnlyGuests({ to = '/dashboard', children }: GuardProps) {
   const { status } = useAuth()
   
   if (status === 'unknown') {
@@ -47,8 +52,7 @@ export function OnlyGuests({ to = '/dashboard' }: { to?: string }) {
         alignItems: 'center', 
         height: '100vh' 
       }}>
-        {/* QUITAR ESTILOS INLINE EN EL FUTURO*/}
-        <div>Cargando... Guardian OnlyGuests</div>
+        <div>Cargando...</div>
       </div>
     )
   }
@@ -57,16 +61,17 @@ export function OnlyGuests({ to = '/dashboard' }: { to?: string }) {
     return <Navigate to={to} replace />
   }
   
-  return <Outlet />
+  return <>{children}</>
 }
 
-type RequireRoleProps = {
+interface RequireRoleProps {
   anyOf?: string[]
   allOf?: string[]
   to?: string
+  children: React.ReactNode
 }
 
-export function RequireRole({ anyOf, allOf, to = '/dashboard' }: RequireRoleProps) {
+export function RequireRole({ anyOf, allOf, to, children }: RequireRoleProps) {
   const { status, session } = useAuth()
   
   if (status === 'unknown') {
@@ -77,8 +82,7 @@ export function RequireRole({ anyOf, allOf, to = '/dashboard' }: RequireRoleProp
         alignItems: 'center', 
         height: '100vh' 
       }}>
-        {/* QUITAR ESTILOS INLINE EN EL FUTURO*/}
-        <div>Cargando... Guardían RequireRole</div>
+        <div>Cargando...</div>
       </div>
     )
   }
@@ -92,8 +96,13 @@ export function RequireRole({ anyOf, allOf, to = '/dashboard' }: RequireRoleProp
   const okAll = allOf ? allOf.every(r => roles.includes(r)) : true
 
   if (!okAny || !okAll) {
-    return <Navigate to={to} replace />
+    const defaultRoute = to || getDefaultRouteForUser(roles)
+    return <Navigate to={defaultRoute} replace />
   }
   
-  return <Outlet />
+  return <>{children}</>
+}
+
+function getDefaultRouteForUser(roles: string[]): string {
+  return ROUTE_ACCESS.getDefaultRoute(roles)
 }

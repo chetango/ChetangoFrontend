@@ -17,33 +17,23 @@ function wrap(r: AppRoute): RouteObject {
   // Envolver en Suspense para lazy loading
   element = <Suspense fallback={<div>Cargando...</div>}>{element}</Suspense>
 
-  // Aplicar guards según meta (orden: invitado -> auth -> rol)
+  // Aplicar guards según meta
+  // Los guards ahora envuelven el elemento directamente, no usan Outlet
   if (meta.onlyGuests) {
-    element = (
-      <>
-        <OnlyGuests to={meta.redirectTo ?? '/dashboard'} />
-        {element}
-      </>
-    )
+    element = <OnlyGuests to={meta.redirectTo ?? '/dashboard'}>{element}</OnlyGuests>
   }
   if (meta.auth) {
-    element = (
-      <>
-        <RequireAuth to={meta.redirectTo ?? '/login'} />
-        {element}
-      </>
-    )
+    element = <RequireAuth to={meta.redirectTo ?? '/login'}>{element}</RequireAuth>
   }
   if (meta.anyRole || meta.allRole) {
     element = (
-      <>
-        <RequireRole 
-          anyOf={meta.anyRole} 
-          allOf={meta.allRole} 
-          to={meta.redirectTo ?? '/dashboard'} 
-        />
+      <RequireRole 
+        anyOf={meta.anyRole} 
+        allOf={meta.allRole} 
+        to={meta.redirectTo ?? '/dashboard'}
+      >
         {element}
-      </>
+      </RequireRole>
     )
   }
 

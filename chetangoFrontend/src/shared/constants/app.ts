@@ -1,16 +1,4 @@
-// ============================================
-// CONSTANTES DE APLICACIÓN - CHETANGO
-// ============================================
-
-// INFORMACIÓN DE LA APP
-export const APP_CONFIG = {
-  NAME: 'Chetango',
-  DESCRIPTION: 'Sistema de gestión para academia de tango',
-  VERSION: '1.0.0',
-  AUTHOR: 'Chetango Team',
-} as const
-
-// ROLES DE USUARIO (unificados)
+// ROLES DE USUARIO
 export const USER_ROLES = {
   ADMIN: 'ADMIN',
   TEACHER: 'TEACHER', 
