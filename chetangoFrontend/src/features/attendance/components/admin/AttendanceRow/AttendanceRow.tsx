@@ -3,7 +3,6 @@
 // ============================================
 
 import { useState, useEffect, useCallback } from 'react'
-import { GlassInput } from '@/design-system'
 import { GlassTableRow, GlassTableCell } from '@/design-system/molecules/GlassTable'
 import { AttendanceToggle } from '../AttendanceToggle'
 import { PackageStatusBadge } from '../PackageStatusBadge'
@@ -73,32 +72,31 @@ export function AttendanceRow({
     <GlassTableRow>
       {/* ALUMNO column */}
       <GlassTableCell>
-        <div className="flex items-center gap-3">
-          {/* Avatar with initials */}
+        <div className="flex items-center gap-4">
+          {/* Avatar with initials - gradient dual per Figma */}
           <div
             className="
               w-10 h-10
-              rounded-full
+              rounded-xl
               flex items-center justify-center
-              backdrop-blur-xl
-              bg-[rgba(201,52,72,0.2)]
-              border border-[rgba(201,52,72,0.4)]
+              backdrop-blur-sm
+              bg-gradient-to-br from-[rgba(201,52,72,0.2)] to-[rgba(124,90,248,0.2)]
+              border border-[rgba(255,255,255,0.1)]
               text-[#f9fafb]
               font-medium
-              text-sm
             "
             aria-label={`Avatar de ${student.nombreCompleto}`}
           >
             {formatStudentInitials(student.avatarIniciales)}
           </div>
           {/* Name and document */}
-          <div className="flex flex-col">
-            <span className="text-[#f9fafb] font-medium">
+          <div>
+            <p className="text-[#f9fafb] font-medium" style={{ fontSize: '15px' }}>
               {student.nombreCompleto}
-            </span>
-            <span className="text-[#6b7280] text-sm">
-              {student.documentoIdentidad}
-            </span>
+            </p>
+            <p className="text-[#9ca3af] text-[13px] mt-0.5">
+              DNI: {student.documentoIdentidad}
+            </p>
           </div>
         </div>
       </GlassTableCell>
@@ -118,17 +116,33 @@ export function AttendanceRow({
         />
       </GlassTableCell>
 
-      {/* OBSERVACIÓN column */}
+      {/* OBSERVACIÓN column - Per Figma styling */}
       <GlassTableCell>
-        <GlassInput
+        <input 
           type="text"
-          placeholder="Agregar observación..."
           value={localObservation}
           onChange={(e) => setLocalObservation(e.target.value)}
           onBlur={handleBlur}
           disabled={isUpdating}
-          className="min-w-[200px]"
+          placeholder="Agregar nota..."
           aria-label={`Observación para ${student.nombreCompleto}`}
+          className="
+            w-full 
+            px-3 py-2 
+            backdrop-blur-xl 
+            bg-[rgba(30,30,36,0.4)] 
+            border border-[rgba(255,255,255,0.08)] 
+            focus:border-[#c93448] 
+            focus:bg-[rgba(30,30,36,0.6)] 
+            rounded-lg 
+            text-[#f9fafb] 
+            text-[13px]
+            placeholder-[#6b7280] 
+            outline-none 
+            transition-all duration-200
+            disabled:opacity-50
+            min-w-[200px]
+          "
         />
       </GlassTableCell>
     </GlassTableRow>

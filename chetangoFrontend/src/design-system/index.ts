@@ -11,6 +11,8 @@ export * from './tokens/typography';
 
 // Atoms
 export { Badge } from './atoms/Badge';
+export { Chip } from './atoms/Chip';
+export { FloatingBadge } from './atoms/FloatingBadge';
 export { GlassButton } from './atoms/GlassButton';
 export { GlassInput } from './atoms/GlassInput';
 export { GlassPanel } from './atoms/GlassPanel';
@@ -36,6 +38,7 @@ export {
 
 // Molecules
 export { StatCard } from './molecules/StatCard';
+export { StatCardMini } from './molecules/StatCardMini';
 export { Calendar, type CalendarProps } from './molecules/Calendar';
 export {
   GlassTable,

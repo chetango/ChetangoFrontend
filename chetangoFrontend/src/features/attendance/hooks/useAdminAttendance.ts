@@ -161,6 +161,15 @@ export function useAdminAttendance(): UseAdminAttendanceReturn {
       // Determine new state (toggle)
       const newPresente = student.asistencia.estado !== 'Presente'
 
+      // DEBUG: Log toggle action
+      console.log('=== TOGGLE ATTENDANCE ===')
+      console.log('Student:', student.nombreCompleto)
+      console.log('Current estado:', student.asistencia.estado)
+      console.log('idAsistencia:', student.asistencia.idAsistencia)
+      console.log('New presente:', newPresente)
+      console.log('Will use:', student.asistencia.idAsistencia ? 'UPDATE (PUT)' : 'REGISTER (POST)')
+      console.log('========================')
+
       // Set updating state
       dispatch(setUpdatingStudent({ studentId, isUpdating: true }))
 

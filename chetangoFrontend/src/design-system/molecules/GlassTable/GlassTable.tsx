@@ -9,19 +9,23 @@ function cn(...inputs: ClassValue[]) {
 interface GlassTableProps extends React.HTMLAttributes<HTMLTableElement> {
   /** Container className for the scrollable wrapper */
   containerClassName?: string;
+  /** Whether to show the glass container styling (default: true) */
+  showContainer?: boolean;
 }
 
 const GlassTable = React.forwardRef<HTMLTableElement, GlassTableProps>(
-  ({ className, containerClassName, ...props }, ref) => (
+  ({ className, containerClassName, showContainer = true, ...props }, ref) => (
     <div
       className={cn(
         'relative w-full overflow-x-auto',
-        // Glass container styling
-        'backdrop-blur-xl',
-        'bg-[rgba(26,26,32,0.5)]',
-        'border border-[rgba(255,255,255,0.1)]',
-        'rounded-xl',
-        'shadow-[0_8px_32px_rgba(0,0,0,0.3)]',
+        // Glass container styling - only if showContainer is true
+        showContainer && [
+          'backdrop-blur-xl',
+          'bg-[rgba(26,26,32,0.5)]',
+          'border border-[rgba(255,255,255,0.1)]',
+          'rounded-xl',
+          'shadow-[0_8px_32px_rgba(0,0,0,0.3)]',
+        ],
         containerClassName
       )}
     >
@@ -42,8 +46,8 @@ const GlassTableHeader = React.forwardRef<
   <thead
     ref={ref}
     className={cn(
-      '[&_tr]:border-b [&_tr]:border-[rgba(255,255,255,0.1)]',
-      'bg-[rgba(255,255,255,0.03)]',
+      '[&_tr]:border-b [&_tr]:border-[rgba(255,255,255,0.08)]',
+      'bg-[rgba(255,255,255,0.02)]',
       className
     )}
     {...props}
@@ -88,10 +92,11 @@ const GlassTableRow = React.forwardRef<
   <tr
     ref={ref}
     className={cn(
-      'border-b border-[rgba(255,255,255,0.08)]',
+      'border-b border-[rgba(255,255,255,0.05)]',
       'transition-colors duration-200',
+      'group',
       // Hover state
-      'hover:bg-[rgba(255,255,255,0.05)]',
+      'hover:bg-[rgba(255,255,255,0.03)]',
       // Selected state
       'data-[state=selected]:bg-[rgba(201,52,72,0.1)]',
       className
@@ -108,8 +113,8 @@ const GlassTableHead = React.forwardRef<
   <th
     ref={ref}
     className={cn(
-      'h-12 px-4 text-left align-middle font-medium',
-      'text-[#9ca3af] text-xs uppercase tracking-wider',
+      'px-8 py-5 text-left align-middle font-medium',
+      'text-[#9ca3af] text-[12px] uppercase tracking-[0.1em]',
       'whitespace-nowrap',
       '[&:has([role=checkbox])]:pr-0',
       '[&>[role=checkbox]]:translate-y-[2px]',
@@ -127,7 +132,7 @@ const GlassTableCell = React.forwardRef<
   <td
     ref={ref}
     className={cn(
-      'p-4 align-middle',
+      'px-8 py-6 align-middle',
       'text-[#d1d5db]',
       'whitespace-nowrap',
       '[&:has([role=checkbox])]:pr-0',

@@ -11,6 +11,7 @@ import {
   GlassTableRow,
 } from '@/design-system/molecules/GlassTable'
 import { AttendanceRow } from '../AttendanceRow'
+import { AttendanceCardMobile } from '../AttendanceRow/AttendanceCardMobile'
 import type { StudentAttendance } from '../../../types/attendanceTypes'
 
 interface AttendanceTableProps {
@@ -23,11 +24,12 @@ interface AttendanceTableProps {
 
 /**
  * Table component for displaying attendance records
- * - Columns: ALUMNO, PAQUETE, ASISTENCIA, OBSERVACIÓN
- * - Uses AttendanceRow for each student
+ * - Desktop: Table layout with columns ALUMNO, PAQUETE, ASISTENCIA, OBSERVACIÓN
+ * - Mobile: Card layout with stacked information
+ * - Uses AttendanceRow for desktop, AttendanceCardMobile for mobile
  * - Handles empty state when no students match search
  *
- * Requirements: 3.1, 6.4
+ * Requirements: 3.1, 6.4, 7.1, 7.2
  */
 export function AttendanceTable({
   students,
@@ -42,21 +44,19 @@ export function AttendanceTable({
       <div
         className="
           flex flex-col items-center justify-center
-          py-16
-          backdrop-blur-xl
-          bg-[rgba(26,26,32,0.5)]
-          border border-[rgba(255,255,255,0.1)]
-          rounded-xl
+          py-12 sm:py-16
         "
+        role="status"
+        aria-live="polite"
       >
-        <Search className="w-12 h-12 text-[#6b7280] mb-4" />
-        <p className="text-[#9ca3af] text-lg">
+        <Search className="w-10 h-10 sm:w-12 sm:h-12 text-[#6b7280] mb-4" aria-hidden="true" />
+        <p className="text-[#9ca3af] text-base sm:text-lg text-center px-4">
           {searchTerm
             ? 'No se encontraron estudiantes'
             : 'No hay estudiantes en esta clase'}
         </p>
         {searchTerm && (
-          <p className="text-[#6b7280] text-sm mt-2">
+          <p className="text-[#6b7280] text-sm mt-2 text-center px-4">
             Intenta con otro término de búsqueda
           </p>
         )}
@@ -65,18 +65,38 @@ export function AttendanceTable({
   }
 
   return (
-    <GlassTable>
-      <GlassTableHeader>
-        <GlassTableRow>
-          <GlassTableHead>ALUMNO</GlassTableHead>
-          <GlassTableHead>PAQUETE</GlassTableHead>
-          <GlassTableHead>ASISTENCIA</GlassTableHead>
-          <GlassTableHead>OBSERVACIÓN</GlassTableHead>
-        </GlassTableRow>
-      </GlassTableHeader>
-      <GlassTableBody>
+    <>
+      {/* Desktop Table Layout - Hidden on mobile */}
+      <div className="hidden md:block">
+        <GlassTable showContainer={false}>
+          <GlassTableHeader>
+            <GlassTableRow>
+              <GlassTableHead>ALUMNO</GlassTableHead>
+              <GlassTableHead>PAQUETE</GlassTableHead>
+              <GlassTableHead>ASISTENCIA</GlassTableHead>
+              <GlassTableHead>OBSERVACIÓN</GlassTableHead>
+            </GlassTableRow>
+          </GlassTableHeader>
+          <GlassTableBody>
+            {students.map((student) => (
+              <AttendanceRow
+                key={student.idAlumno}
+                student={student}
+                onToggleAttendance={() => onToggleAttendance(student.idAlumno)}
+                onObservationChange={(observation) =>
+                  onObservationChange(student.idAlumno, observation)
+                }
+                isUpdating={isUpdating[student.idAlumno] || false}
+              />
+            ))}
+          </GlassTableBody>
+        </GlassTable>
+      </div>
+
+      {/* Mobile Card Layout - Hidden on desktop */}
+      <div className="md:hidden divide-y divide-[rgba(255,255,255,0.08)]">
         {students.map((student) => (
-          <AttendanceRow
+          <AttendanceCardMobile
             key={student.idAlumno}
             student={student}
             onToggleAttendance={() => onToggleAttendance(student.idAlumno)}
@@ -86,7 +106,7 @@ export function AttendanceTable({
             isUpdating={isUpdating[student.idAlumno] || false}
           />
         ))}
-      </GlassTableBody>
-    </GlassTable>
+      </div>
+    </>
   )
 }

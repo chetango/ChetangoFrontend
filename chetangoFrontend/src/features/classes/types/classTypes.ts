@@ -1,5 +1,5 @@
 // ============================================
-// CLASS TYPES - CHETANGO ADMIN
+// CLASS TYPES - CHETANGO
 // ============================================
 
 // ============================================
@@ -8,7 +8,7 @@
 
 /**
  * GET /api/tipos-clase
- * Class type for dropdown selection
+ * Tipo de clase para dropdown
  */
 export interface TipoClaseDTO {
   id: string // Guid
@@ -17,7 +17,7 @@ export interface TipoClaseDTO {
 
 /**
  * GET /api/profesores
- * Professor for dropdown selection
+ * Profesor para dropdown (Admin only)
  */
 export interface ProfesorDTO {
   idProfesor: string // Guid
@@ -27,7 +27,7 @@ export interface ProfesorDTO {
 
 /**
  * GET /api/alumnos
- * Student for dropdown selection
+ * Alumno para dropdown
  */
 export interface AlumnoDTO {
   idAlumno: string // Guid
@@ -228,4 +228,111 @@ export function parseProfesoresResponse(data: unknown): ProfesorDTO[] {
     throw new Error('Expected array of ProfesorDTO')
   }
   return data.filter(isProfesorDTO)
+}
+
+// ============================================
+// PROFESOR VIEW TYPES
+// ============================================
+
+/**
+ * Alert type for profesor classes
+ */
+export interface ClaseAlerta {
+  tipo: 'cambio_horario' | 'cancelada' | 'baja_asistencia'
+  mensaje: string
+}
+
+/**
+ * Class type for profesor view
+ * Extended with profesor-specific fields
+ */
+export interface ClaseProfesor {
+  id: string
+  fecha: string
+  diaSemana: string
+  horaInicio: string
+  horaFin: string
+  nombre: string
+  tipo: 'Salón' | 'Escenario' | 'Privada' | string
+  estado: 'programada' | 'en_curso' | 'finalizada' | 'cancelada'
+  observaciones: string
+  capacidad: number
+  inscriptos: number
+  ubicacion: string
+  alerta?: ClaseAlerta
+  asistenciaReal?: number
+  porcentajeAsistencia?: number
+}
+
+// ============================================
+// ALUMNO VIEW TYPES
+// ============================================
+
+/**
+ * Class type for alumno view
+ * Extended with student-specific fields
+ */
+export interface ClaseAlumno {
+  id: string
+  fecha: string
+  diaSemana: string
+  horaInicio: string
+  horaFin: string
+  nombre: string
+  tipo: 'Salón' | 'Escenario' | 'Privada' | string
+  profesor: string
+  estado: 'programada' | 'en_curso' | 'finalizada' | 'reprogramada' | 'cancelada'
+  ubicacion: string
+  puedeReprogramar?: boolean
+  horasParaReprogramar?: number
+  minutosParaInicio?: number
+  resultado?: 'asistida' | 'ausente' | 'reprogramada'
+  descontada?: boolean
+}
+
+// ============================================
+// BADGE COLOR MAPPINGS
+// ============================================
+
+/**
+ * Badge variant type for estado display
+ */
+export type BadgeVariant = 'error' | 'info' | 'success' | 'none' | 'warning'
+
+/**
+ * Maps estado to badge variant for consistent styling
+ * Requirements: 5.9
+ */
+export const ESTADO_BADGE_MAP: Record<string, BadgeVariant> = {
+  hoy: 'error',
+  en_curso: 'error',
+  programada: 'info',
+  completada: 'success',
+  finalizada: 'success',
+  cancelada: 'none',
+  reprogramada: 'warning',
+}
+
+/**
+ * Gets badge variant for a given estado
+ */
+export function getEstadoBadgeVariant(estado: string): BadgeVariant {
+  return ESTADO_BADGE_MAP[estado] || 'info'
+}
+
+// ============================================
+// FILTER TYPES FOR PROFESOR
+// ============================================
+
+/**
+ * Filter options for profesor's historical classes
+ */
+export type FiltroAnterior = 'ultimos_7' | 'ultimos_30' | 'este_mes'
+
+/**
+ * Profesor classes filter state
+ */
+export interface ProfesorClassesFilters {
+  filtroAnterior: FiltroAnterior
+  showClasesAnteriores: boolean
 }

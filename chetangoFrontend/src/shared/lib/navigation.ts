@@ -83,7 +83,7 @@ export function hasAccessToRoute(path: string, activeRole: string | null): boole
   // Verificar rutas por rol activo
   if (path.startsWith('/admin')) return activeRole === 'admin'
   if (path.startsWith('/student')) return activeRole === 'alumno'
-  if (path.startsWith('/teacher')) return activeRole === 'profesor'
+  if (path.startsWith('/profesor')) return activeRole === 'profesor'
   
   return false
 }

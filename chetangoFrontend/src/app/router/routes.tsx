@@ -6,19 +6,23 @@ import { getDefaultRouteForRoles } from '@/shared/lib/navigation'
 // Componente simple que renderiza las rutas hijas
 const AdminOutlet = () => <Outlet />
 const StudentOutlet = () => <Outlet />
+const ProfesorOutlet = () => <Outlet />
 
 const LoginPage = lazy(() => import('@/pages').then(m => ({ default: m.LoginPage })))
 const AuthCallbackPage = lazy(() => import('@/pages').then(m => ({ default: m.AuthCallbackPage })))
 const MainLayoutWrapper = lazy(() => import('@/pages/layouts/MainLayoutWrapper').then(m => ({ default: m.MainLayoutWrapper })))
 const DashboardPage = lazy(() => import('@/pages').then(m => ({ default: m.DashboardPage })))
 const UsersPage = lazy(() => import('@/pages').then(m => ({ default: m.UsersPage })))
-const AttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.AttendancePage })))
 const ClassesPage = lazy(() => import('@/pages').then(m => ({ default: m.ClassesPage })))
 const ReportsPage = lazy(() => import('@/pages').then(m => ({ default: m.ReportsPage })))
 const NotFoundPage = lazy(() => import('@/pages').then(m => ({ default: m.NotFoundPage })))
-const AdminAttendanceCorrectionPage = lazy(() => import('@/pages').then(m => ({ default: m.AdminAttendanceCorrectionPage })))
+const AdminAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.AdminAttendancePage })))
 const AdminPackagesPage = lazy(() => import('@/pages').then(m => ({ default: m.AdminPackagesPage })))
 const AdminPaymentsPage = lazy(() => import('@/pages').then(m => ({ default: m.AdminPaymentsPage })))
+const ProfesorAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorAttendancePage })))
+const ProfesorClassesPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorClassesPage })))
+const StudentAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.StudentAttendancePage })))
+const StudentClassesPage = lazy(() => import('@/pages').then(m => ({ default: m.StudentClassesPage })))
 
 export type Meta = {
   public?: boolean
@@ -81,13 +85,24 @@ export const appRoutes: AppRoute[] = [
         meta: { anyRole: ['admin'] },
         children: [
           { index: true, element: <div>Admin Dashboard</div> },
-          { path: 'attendance', element: <AttendancePage /> },
-          { path: 'attendance/correction', element: <AdminAttendanceCorrectionPage /> },
+          { path: 'attendance', element: <AdminAttendancePage /> },
           { path: 'users', element: <UsersPage /> },
           { path: 'payments', element: <AdminPaymentsPage /> },
           { path: 'classes', element: <ClassesPage /> },
           { path: 'paquetes', element: <AdminPackagesPage /> },
           { path: 'reports', element: <ReportsPage /> },
+        ]
+      },
+      
+      // RUTAS DE PROFESOR
+      { 
+        path: 'profesor', 
+        element: <ProfesorOutlet />,
+        meta: { anyRole: ['profesor'] },
+        children: [
+          { index: true, element: <div>Profesor Dashboard</div> },
+          { path: 'attendance', element: <ProfesorAttendancePage /> },
+          { path: 'classes', element: <ProfesorClassesPage /> },
         ]
       },
       
@@ -98,7 +113,8 @@ export const appRoutes: AppRoute[] = [
         meta: { anyRole: ['alumno'] },
         children: [
           { index: true, element: <div>Student Dashboard</div> }, // TODO: Crear StudentDashboardPage
-          { path: 'attendance', element: <div>My Attendance</div> }, // TODO: Crear StudentAttendancePage
+          { path: 'attendance', element: <StudentAttendancePage /> },
+          { path: 'classes', element: <StudentClassesPage /> },
           { path: 'payments', element: <div>My Payments</div> }, // TODO: Crear StudentPaymentsPage
           { path: 'profile', element: <div>My Profile</div> }, // TODO: Crear StudentProfilePage
         ]

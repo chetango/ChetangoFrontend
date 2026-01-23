@@ -68,18 +68,18 @@ export const ROUTES = {
     PROFILE_EDIT: '/student/profile/edit',
   },
   
-  // RUTAS DE PROFESOR (FUTURO)
+  // RUTAS DE PROFESOR
   TEACHER: {
-    ROOT: '/teacher',
-    ATTENDANCE: '/teacher/attendance',
-    ATTENDANCE_REGISTER: '/teacher/attendance/register',
+    ROOT: '/profesor',
+    ATTENDANCE: '/profesor/attendance',
+    ATTENDANCE_REGISTER: '/profesor/attendance/register',
     
-    CLASSES: '/teacher/classes',
-    CLASSES_MY: '/teacher/classes/my',
-    CLASSES_SCHEDULE: '/teacher/classes/schedule',
+    CLASSES: '/profesor/classes',
+    CLASSES_MY: '/profesor/classes/my',
+    CLASSES_SCHEDULE: '/profesor/classes/schedule',
     
-    REPORTS: '/teacher/reports',
-    REPORTS_MY_CLASSES: '/teacher/reports/my-classes',
+    REPORTS: '/profesor/reports',
+    REPORTS_MY_CLASSES: '/profesor/reports/my-classes',
   },
   
   // RUTAS COMPARTIDAS (ACCESO SEGÚN ROL)
@@ -173,8 +173,8 @@ export const PROTECTED_ROUTES = {
     '/student/*',
   ],
   TEACHER_ONLY: [
-    '/teacher',
-    '/teacher/*',
+    '/profesor',
+    '/profesor/*',
   ],
   ALL_AUTHENTICATED: [
     ROUTES.DASHBOARD,
@@ -189,7 +189,7 @@ export const ROUTE_ACCESS = {
   requiresRole: (path: string): string[] | null => {
     if (path.startsWith('/admin')) return ['admin']
     if (path.startsWith('/student')) return ['alumno']
-    if (path.startsWith('/teacher')) return ['profesor']
+    if (path.startsWith('/profesor')) return ['profesor']
     return null
   },
   

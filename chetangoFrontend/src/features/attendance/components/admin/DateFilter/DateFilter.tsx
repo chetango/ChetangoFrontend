@@ -3,7 +3,7 @@
 // ============================================
 
 import { useState } from 'react'
-import { CalendarIcon } from 'lucide-react'
+import { Calendar as CalendarIcon } from 'lucide-react'
 import { Popover, PopoverTrigger, PopoverContent } from '@/design-system/atoms/Popover'
 import { Calendar } from '@/design-system/molecules/Calendar'
 import { Skeleton } from '@/design-system/atoms/Skeleton'
@@ -22,8 +22,9 @@ interface DateFilterProps {
  * - Restricts calendar to 7-day range (desde to hasta)
  * - Enables only dates in diasConClases array
  * - Uses glass input styling
+ * - Keyboard accessible with focus management
  *
- * Requirements: 1.2, 1.3, 1.4, 1.5
+ * Requirements: 1.2, 1.3, 1.4, 1.5, 7.3, 7.4
  */
 export function DateFilter({
   selectedDate,
@@ -59,47 +60,62 @@ export function DateFilter({
   }
 
   if (isLoading) {
-    return <Skeleton className="h-12 w-48" />
+    return (
+      <div>
+        <label className="block text-[#d1d5db] mb-2 text-[14px]">
+          <CalendarIcon className="w-4 h-4 inline mr-2" />
+          Fecha de la Clase
+        </label>
+        <Skeleton className="h-12 w-full" aria-label="Cargando selector de fecha" />
+      </div>
+    )
   }
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <button
-          type="button"
-          aria-label="Seleccionar fecha"
-          className={`
-            flex items-center gap-3
-            px-4 py-3
-            min-w-[180px]
-            backdrop-blur-xl
-            bg-[rgba(30,30,36,0.6)]
-            border border-[rgba(255,255,255,0.12)]
-            rounded-xl
-            text-[#f9fafb]
-            transition-all duration-300
-            shadow-[inset_0_2px_4px_rgba(0,0,0,0.3),0_1px_2px_rgba(255,255,255,0.05)]
-            hover:border-[rgba(255,255,255,0.25)]
-            focus:border-[#c93448]
-            focus:ring-2 focus:ring-[rgba(201,52,72,0.3)]
-            focus:outline-none
-            focus:shadow-[inset_0_2px_4px_rgba(0,0,0,0.3),0_0_0_3px_rgba(201,52,72,0.2)]
-          `}
-        >
-          <CalendarIcon className="w-5 h-5 text-[#6b7280]" />
-          <span className="text-sm">{formatDisplayDate(selectedDate)}</span>
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          selected={selectedDateObj}
-          onSelect={handleDateSelect}
-          fromDate={fromDate}
-          toDate={toDate}
-          enabledDates={enabledDates}
-          defaultMonth={selectedDateObj}
-        />
-      </PopoverContent>
-    </Popover>
+    <div role="group" aria-label="Filtro de fecha">
+      <label className="block text-[#d1d5db] mb-2 text-[14px]">
+        <CalendarIcon className="w-4 h-4 inline mr-2" />
+        Fecha de la Clase
+      </label>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            aria-label={`Fecha seleccionada: ${formatDisplayDate(selectedDate)}. Presiona para cambiar`}
+            aria-expanded={isOpen}
+            aria-haspopup="dialog"
+            className={`
+              w-full
+              flex items-center gap-3
+              px-4 py-3
+              backdrop-blur-xl
+              bg-[rgba(30,30,36,0.6)]
+              border border-[rgba(255,255,255,0.12)]
+              rounded-xl
+              text-[#f9fafb]
+              transition-all duration-300
+              shadow-[inset_0_2px_4px_rgba(0,0,0,0.3)]
+              hover:border-[rgba(255,255,255,0.25)]
+              focus:border-[#c93448]
+              focus:ring-2 focus:ring-[rgba(201,52,72,0.3)]
+              focus:outline-none
+            `}
+          >
+            <CalendarIcon className="w-5 h-5 text-[#6b7280]" aria-hidden="true" />
+            <span className="text-sm">{formatDisplayDate(selectedDate)}</span>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            selected={selectedDateObj}
+            onSelect={handleDateSelect}
+            fromDate={fromDate}
+            toDate={toDate}
+            enabledDates={enabledDates}
+            defaultMonth={selectedDateObj}
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }

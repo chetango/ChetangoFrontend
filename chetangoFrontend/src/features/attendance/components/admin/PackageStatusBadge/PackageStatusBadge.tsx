@@ -1,8 +1,9 @@
 // ============================================
-// PACKAGE STATUS BADGE COMPONENT
+// PACKAGE STATUS BADGE COMPONENT - Per Figma Design
 // ============================================
 
-import { Package, AlertCircle, Snowflake } from 'lucide-react'
+import { Package, AlertCircle, Snowflake, Sparkles } from 'lucide-react'
+import { Chip } from '@/design-system'
 import type { StudentPackage } from '../../../types/attendanceTypes'
 
 interface PackageStatusBadgeProps {
@@ -10,36 +11,23 @@ interface PackageStatusBadgeProps {
 }
 
 /**
- * Badge component displaying package status with appropriate styling
- * - Activo: green badge, package icon, description, progress bar
- * - Agotado: warning badge, alert icon, "Paquete Agotado"
- * - Congelado: blue badge, snowflake icon, "Paquete Congelado", helper text
- * - SinPaquete: gray badge, alert icon, "Sin paquete activo"
+ * Badge component displaying package status with Chip component
+ * Per Figma: Uses Chip variants for different states
  * 
- * Requirements: 3.3, 3.4, 3.5, 3.6
+ * - Activo: green chip with package icon + progress bar
+ * - Agotado: orange chip with alert icon + progress bar
+ * - Congelado: blue chip with snowflake icon + helper text
+ * - SinPaquete: gray chip with alert icon
  */
 export function PackageStatusBadge({ package: pkg }: PackageStatusBadgeProps) {
   // Handle null package or SinPaquete state
   if (!pkg || pkg.estado === 'SinPaquete') {
     return (
-      <div className="flex flex-col gap-1">
-        <span
-          className="
-            inline-flex items-center gap-2
-            px-3 py-1.5
-            backdrop-blur-xl
-            border
-            text-sm
-            rounded-lg
-            bg-[rgba(156,163,175,0.15)]
-            border-[rgba(156,163,175,0.4)]
-            text-[#d1d5db]
-            shadow-[0_4px_12px_rgba(156,163,175,0.2),inset_0_1px_1px_rgba(156,163,175,0.3)]
-          "
-        >
-          <AlertCircle className="w-4 h-4" />
-          <span>Sin paquete activo</span>
-        </span>
+      <div className="space-y-2" role="status" aria-label="Sin paquete activo">
+        <Chip variant="none" className="text-[13px]">
+          <AlertCircle className="w-3.5 h-3.5" />
+          Sin paquete activo
+        </Chip>
       </div>
     )
   }
@@ -51,33 +39,20 @@ export function PackageStatusBadge({ package: pkg }: PackageStatusBadgeProps) {
       : 0
 
     return (
-      <div className="flex flex-col gap-1.5">
-        <span
-          className="
-            inline-flex items-center gap-2
-            px-3 py-1.5
-            backdrop-blur-xl
-            border
-            text-sm
-            rounded-lg
-            bg-[rgba(52,211,153,0.15)]
-            border-[rgba(52,211,153,0.4)]
-            text-[#6ee7b7]
-            shadow-[0_4px_12px_rgba(52,211,153,0.2),inset_0_1px_1px_rgba(52,211,153,0.3)]
-          "
-        >
-          <Package className="w-4 h-4" />
-          <span>{pkg.descripcion || 'Paquete Activo'}</span>
-        </span>
+      <div className="space-y-2" role="status" aria-label={`Paquete activo: ${pkg.descripcion || 'Paquete Activo'}`}>
+        <Chip variant="active" className="text-[13px]">
+          <Package className="w-3.5 h-3.5" />
+          {pkg.descripcion || 'Paquete Activo'}
+        </Chip>
         {pkg.clasesTotales !== null && pkg.clasesUsadas !== null && (
-          <div className="flex items-center gap-2">
-            <div className="flex-1 h-1.5 bg-[rgba(255,255,255,0.1)] rounded-full overflow-hidden">
+          <div className="flex items-center gap-2 mt-2">
+            <div className="flex-1 h-1.5 bg-[rgba(255,255,255,0.08)] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#6ee7b7] rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-[#34d399] to-[#6ee7b7] rounded-full transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span className="text-xs text-[#9ca3af]">
+            <span className="text-[#9ca3af] text-[12px] whitespace-nowrap">
               {pkg.clasesUsadas}/{pkg.clasesTotales}
             </span>
           </div>
@@ -93,33 +68,20 @@ export function PackageStatusBadge({ package: pkg }: PackageStatusBadgeProps) {
       : 100
 
     return (
-      <div className="flex flex-col gap-1.5">
-        <span
-          className="
-            inline-flex items-center gap-2
-            px-3 py-1.5
-            backdrop-blur-xl
-            border
-            text-sm
-            rounded-lg
-            bg-[rgba(245,158,11,0.15)]
-            border-[rgba(245,158,11,0.4)]
-            text-[#fcd34d]
-            shadow-[0_4px_12px_rgba(245,158,11,0.2),inset_0_1px_1px_rgba(245,158,11,0.3)]
-          "
-        >
-          <AlertCircle className="w-4 h-4" />
-          <span>Paquete Agotado</span>
-        </span>
+      <div className="space-y-2" role="status" aria-label="Paquete agotado">
+        <Chip variant="depleted" className="text-[13px]">
+          <AlertCircle className="w-3.5 h-3.5" />
+          Paquete Agotado
+        </Chip>
         {pkg.clasesTotales !== null && pkg.clasesUsadas !== null && (
-          <div className="flex items-center gap-2">
-            <div className="flex-1 h-1.5 bg-[rgba(255,255,255,0.1)] rounded-full overflow-hidden">
+          <div className="flex items-center gap-2 mt-2">
+            <div className="flex-1 h-1.5 bg-[rgba(255,255,255,0.08)] rounded-full overflow-hidden">
               <div
-                className="h-full bg-[#fcd34d] rounded-full transition-all duration-300"
+                className="h-full bg-gradient-to-r from-[#f59e0b] to-[#fcd34d] rounded-full transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <span className="text-xs text-[#9ca3af]">
+            <span className="text-[#9ca3af] text-[12px] whitespace-nowrap">
               {pkg.clasesUsadas}/{pkg.clasesTotales}
             </span>
           </div>
@@ -131,31 +93,18 @@ export function PackageStatusBadge({ package: pkg }: PackageStatusBadgeProps) {
   // Congelado state
   if (pkg.estado === 'Congelado') {
     return (
-      <div className="flex flex-col gap-1">
-        <span
-          className="
-            inline-flex items-center gap-2
-            px-3 py-1.5
-            backdrop-blur-xl
-            border
-            text-sm
-            rounded-lg
-            bg-[rgba(59,130,246,0.15)]
-            border-[rgba(59,130,246,0.4)]
-            text-[#93c5fd]
-            shadow-[0_4px_12px_rgba(59,130,246,0.2),inset_0_1px_1px_rgba(59,130,246,0.3)]
-          "
-        >
-          <Snowflake className="w-4 h-4" />
-          <span>Paquete Congelado</span>
-        </span>
-        <span className="text-xs text-[#9ca3af] italic">
-          Si marcas presente, se reactivará automáticamente
-        </span>
+      <div role="status" aria-label="Paquete congelado">
+        <Chip variant="frozen" className="text-[13px]">
+          <Snowflake className="w-3.5 h-3.5" />
+          Paquete Congelado
+        </Chip>
+        <p className="text-[#93c5fd] text-[11px] mt-2 italic flex items-start gap-1">
+          <Sparkles className="w-3 h-3 flex-shrink-0 mt-0.5" />
+          <span>Si marcas presente, se reactivará automáticamente</span>
+        </p>
       </div>
     )
   }
 
-  // Fallback (should not reach here)
   return null
 }

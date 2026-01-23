@@ -9,3 +9,6 @@ export {
   filterClases,
   calculateStats,
 } from './useAdminClasses'
+
+export { useProfesorClasses } from './useProfesorClasses'
+export { useStudentClasses } from './useStudentClasses'

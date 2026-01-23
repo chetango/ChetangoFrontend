@@ -75,6 +75,20 @@ export function useAttendanceSummaryQuery(idClase: string | null) {
       const response = await httpClient.get<AttendanceSummaryResponse>(
         `/api/admin/asistencias/clase/${idClase}/resumen`
       )
+      
+      // DEBUG: Log the response to see package data and idAsistencia
+      console.log('=== ATTENDANCE SUMMARY RESPONSE ===')
+      console.log('Full response:', JSON.stringify(response.data, null, 2))
+      if (response.data.alumnos && response.data.alumnos.length > 0) {
+        console.log('First student data:', {
+          nombre: response.data.alumnos[0].nombreCompleto,
+          paquete: response.data.alumnos[0].paquete,
+          asistencia: response.data.alumnos[0].asistencia,
+          idAsistencia: response.data.alumnos[0].asistencia?.idAsistencia
+        })
+      }
+      console.log('===================================')
+      
       return response.data
     },
     enabled: !!idClase,
