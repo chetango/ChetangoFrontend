@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from 'react'
-import { useMsal } from '@azure/msal-react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
-import { setLoading, setInitialized, clearError } from '@/features/auth/store/authSlice'
 import { loginRequest, tokenRequest } from '@/features/auth/api/msalConfig'
+import { clearError, setInitialized, setLoading } from '@/features/auth/store/authSlice'
+import type { AuthContextType, SessionType } from '@/features/auth/types/authTypes'
 import { mapAccountToUser } from '@/features/auth/types/authTypes'
 import { useErrorHandler } from '@/shared/hooks/useErrorHandler'
-import type { SessionType, AuthContextType } from '@/features/auth/types/authTypes'
+import { useMsal } from '@azure/msal-react'
+import { useCallback, useEffect } from 'react'
 
 export const useAuth = (): AuthContextType => {
   const { instance, accounts, inProgress } = useMsal()
@@ -17,6 +17,17 @@ export const useAuth = (): AuthContextType => {
   useEffect(() => {
     if (inProgress === 'none' && !authState.isInitialized) {
       dispatch(setInitialized(true))
+    }
+    
+    // Timeout de seguridad: si después de 3 segundos no se inicializa, forzar inicialización
+    // Esto previene que la app se quede en "Cargando..." indefinidamente
+    if (!authState.isInitialized) {
+      const timeout = setTimeout(() => {
+        console.warn('[useAuth] Forcing initialization after timeout')
+        dispatch(setInitialized(true))
+      }, 3000)
+      
+      return () => clearTimeout(timeout)
     }
   }, [inProgress, authState.isInitialized, dispatch, accounts, instance])
 
