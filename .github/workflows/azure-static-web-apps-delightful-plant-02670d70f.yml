@@ -33,10 +33,13 @@ jobs:
         run: npm run build
         working-directory: chetangoFrontend
         env:
-          VITE_API_BASE_URL: https://api.corporacionchetango.com
-          VITE_AZURE_CLIENT_ID: d35c1d4d-9ddc-4a8b-bb89-1964b37ff573
-          VITE_AZURE_TENANT_ID: 8a57ec5a-e2e3-44ad-9494-77fbc7467251
-          VITE_AZURE_REDIRECT_URI: https://delightful-plant-02670d70f.1.azurestaticapps.net
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_ENTRA_CLIENT_ID: ${{ vars.VITE_AZURE_CLIENT_ID }}
+          VITE_ENTRA_TENANT_ID: ${{ vars.VITE_AZURE_TENANT_ID }}
+          VITE_ENTRA_AUTHORITY: https://chetangoprueba.ciamlogin.com/${{ vars.VITE_AZURE_TENANT_ID }}
+          VITE_ENTRA_REDIRECT_URI: ${{ vars.VITE_AZURE_REDIRECT_URI }}
+          VITE_ENTRA_POST_LOGOUT_REDIRECT_URI: ${{ vars.VITE_AZURE_REDIRECT_URI }}
+          VITE_ENTRA_SCOPES: openid,profile,email,api://${{ vars.VITE_AZURE_CLIENT_ID }}/access_as_user
       
       - name: Build And Deploy
         id: builddeploy
