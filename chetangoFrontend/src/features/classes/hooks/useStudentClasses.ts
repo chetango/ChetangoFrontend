@@ -4,27 +4,28 @@
 // Requirements: 3.3
 // ============================================
 
-import { useMemo, useCallback, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { useAuth } from '@/features/auth'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useUserProfileQuery } from '@/features/auth/api/profileQueries'
 import { httpClient } from '@/shared/api/httpClient'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import {
-  setReprogramarClaseId,
-  setSelectedClaseId,
-  selectStudentState,
+    selectStudentState,
+    setReprogramarClaseId,
+    setSelectedClaseId,
 } from '../store/classesSlice'
+import type { ClaseAlumno } from '../types/classTypes'
 import {
-  esHoy,
-  estaEnCurso,
-  formatearFecha,
-  getDiaSemana,
-  getHoyISO,
-  minutosParaInicio,
+    esHoy,
+    estaEnCurso,
+    formatearFecha,
+    getDiaSemana,
+    getHoyISO,
+    minutosParaInicio,
 } from '../utils/dateUtils'
 import { separateClasesByTime } from '../utils/filterUtils'
-import type { ClaseAlumno } from '../types/classTypes'
 
 // ============================================
 // API TYPES
@@ -125,8 +126,9 @@ export function useStudentClasses() {
   const { session } = useAuth()
   const studentState = useAppSelector(selectStudentState)
 
-  // Get alumno ID from session - fallback to empty string if not available
-  const alumnoId = (session.user as { alumnoId?: string })?.alumnoId || ''
+  // Get user profile to obtain alumnoId
+  const { data: profile } = useUserProfileQuery(session.isAuthenticated)
+  const alumnoId = profile?.idAlumno || ''
 
   // Local state for collapsible section
   const [showClasesAnteriores, setShowClasesAnteriores] = useState(false)
@@ -135,24 +137,25 @@ export function useStudentClasses() {
   // QUERIES
   // ============================================
 
-  // Fetch student's classes
-  // Note: This endpoint may need to be implemented in the backend
-  // For now, we'll use a placeholder that returns empty data
   const clasesQuery = useQuery({
     queryKey: studentClassesKeys.list(alumnoId),
     queryFn: async (): Promise<ClaseAlumnoDTO[]> => {
+      if (!alumnoId) {
+        return []
+      }
       try {
         const response = await httpClient.get<ClaseAlumnoDTO[]>(
           `/api/alumnos/${alumnoId}/clases`
         )
         return response.data
-      } catch {
-        // If endpoint doesn't exist, return empty array
+      } catch (error) {
+        console.error('Error fetching student classes:', error)
         return []
       }
     },
-    enabled: !!alumnoId,
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    enabled: !!alumnoId, // Only run query if alumnoId is available
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 1,
   })
 
   // ============================================

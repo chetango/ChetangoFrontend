@@ -4,24 +4,25 @@
 // Requirements: 3.1, 3.2, 3.3, 3.4, 4.1, 4.2, 4.3, 5.1, 6.1
 // ============================================
 
-import { useState, useCallback, useEffect } from 'react'
-import { Plus, RefreshCw, AlertCircle, Package } from 'lucide-react'
 import {
-  GlassPanel,
-  GlassButton,
-  Skeleton,
+    GlassButton,
+    GlassPanel,
+    Skeleton,
 } from '@/design-system'
-import { useAdminPackages } from '@/features/packages/hooks'
 import {
-  PackageStatsCards,
-  PackageFilters,
-  PackagesTable,
-  CreatePackageModal,
-  PackageDetailModal,
-  CongelarPaqueteDialog,
-  DescongelarPaqueteDialog,
+    ConfigurePackagesModal,
+    CongelarPaqueteDialog,
+    CreatePackageModal,
+    DescongelarPaqueteDialog,
+    PackageDetailModal,
+    PackageFilters,
+    PackagesTable,
+    PackageStatsCards,
 } from '@/features/packages/components'
-import type { PaqueteFormData, CongelacionDTO, PaqueteListItemDTO } from '@/features/packages/types/packageTypes'
+import { useAdminPackages } from '@/features/packages/hooks'
+import type { CongelacionDTO, PaqueteFormData, PaqueteListItemDTO } from '@/features/packages/types/packageTypes'
+import { AlertCircle, Package, Plus, RefreshCw } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 import styles from '../PageStyles.module.scss'
 
 // ============================================
@@ -176,7 +177,7 @@ function EmptyState({ hasFilters, onClearFilters, onCreatePackage }: EmptyStateP
         )}
         <GlassButton variant="primary" onClick={onCreatePackage}>
           <Plus className="w-4 h-4" />
-          <span>Crear Paquete</span>
+          <span>Asignar Paquete</span>
         </GlassButton>
       </div>
     </GlassPanel>
@@ -276,6 +277,7 @@ export default function AdminPackagesPage() {
   // Modal states
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+  const [isConfigModalOpen, setIsConfigModalOpen] = useState(false)
 
   // Congelar dialog state
   const [congelarDialog, setCongelarDialog] = useState<{
@@ -483,10 +485,16 @@ export default function AdminPackagesPage() {
             Administra los paquetes de clases de los alumnos
           </p>
         </div>
-        <GlassButton variant="primary" onClick={handleOpenCreateModal}>
-          <Plus className="w-4 h-4" />
-          <span>Crear Paquete</span>
-        </GlassButton>
+        <div className="flex gap-3">
+          <GlassButton variant="secondary" onClick={() => setIsConfigModalOpen(true)}>
+            <Package className="w-4 h-4" />
+            <span>Configurar Paquetes</span>
+          </GlassButton>
+          <GlassButton variant="primary" onClick={handleOpenCreateModal}>
+            <Plus className="w-4 h-4" />
+            <span>Asignar Paquete</span>
+          </GlassButton>
+        </div>
       </div>
 
       {/* Stats Cards - Requirements: 3.2, 3.3 */}
@@ -611,6 +619,14 @@ export default function AdminPackagesPage() {
           isSubmitting={isDescongelando}
         />
       )}
+
+      {/* Configure Packages Modal */}
+      <ConfigurePackagesModal
+        isOpen={isConfigModalOpen}
+        onClose={() => setIsConfigModalOpen(false)}
+        tiposPaquete={tiposPaquete}
+        isLoading={isCatalogsLoading}
+      />
     </div>
   )
 }

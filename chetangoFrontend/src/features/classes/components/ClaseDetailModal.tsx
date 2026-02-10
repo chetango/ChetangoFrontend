@@ -4,18 +4,20 @@
 // Requirements: 4.2, 4.3, 4.4
 // ============================================
 
+import { Badge, GlassButton, GlassPanel, Skeleton } from '@/design-system'
+import { getToday } from '@/shared/utils/dateTimeHelper'
+import { ArrowRight, Calendar, Clock, FileText, User, Users, X } from 'lucide-react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { X, Calendar, Clock, Users, User, FileText, ArrowRight } from 'lucide-react'
-import { GlassPanel, GlassButton, Badge, Skeleton } from '@/design-system'
 import { useClaseDetailQuery } from '../api/classQueries'
 import type { ClaseEstado } from '../types/classTypes'
 import {
-  formatTime,
-  calculateDuration,
-  getEstadoBadgeVariant,
-  getEstadoText,
-  calculateCapacityPercentage,
-  getCapacityBarColor,
+    calculateCapacityPercentage,
+    calculateDuration,
+    formatTime,
+    getCapacityBarColor,
+    getEstadoBadgeVariant,
+    getEstadoText,
 } from './ClaseCard'
 
 // ============================================
@@ -43,7 +45,7 @@ export interface ClaseDetailModalProps {
  * Requirements: 3.5
  */
 export function getClaseEstadoFromDate(fecha: string): ClaseEstado {
-  const hoy = new Date().toISOString().split('T')[0]
+  const hoy = getToday()
   const claseDate = fecha.split('T')[0]
 
   if (claseDate === hoy) return 'hoy'
@@ -112,6 +114,13 @@ export function ClaseDetailModal({
     error,
   } = useClaseDetailQuery(idClase || '', isOpen && !!idClase)
 
+  // Scroll to top when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [isOpen])
+
   // Don't render if not open
   if (!isOpen) return null
 
@@ -121,7 +130,7 @@ export function ClaseDetailModal({
   // Handle navigation to attendance page - Requirements: 4.4
   const handleNavigateToAttendance = () => {
     if (idClase) {
-      navigate(`/admin/asistencias?claseId=${idClase}`)
+      navigate(`/profesor/attendance?claseId=${idClase}`)
       onClose()
     }
   }
@@ -130,16 +139,16 @@ export function ClaseDetailModal({
   const canNavigateToAttendance = estado !== 'cancelada'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="absolute inset-0 z-[100] flex items-start justify-center pt-20 px-4 pb-8 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm -z-10"
         onClick={onClose}
       />
 
 
       {/* Modal */}
-      <GlassPanel className="relative z-10 w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
+      <GlassPanel className="relative z-10 w-full max-w-lg p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-white">Detalle de Clase</h2>
@@ -198,28 +207,54 @@ export function ClaseDetailModal({
               <span>{formatHorarioWithDuration(claseDetail.horaInicio, claseDetail.horaFin)}</span>
             </div>
 
-            {/* Profesor Principal - Requirements: 4.3 */}
-            <div className="flex items-center gap-3 text-gray-300">
-              <User className="w-5 h-5 text-gray-400 flex-shrink-0" />
-              <span>{claseDetail.nombreProfesor}</span>
-            </div>
-
-
-            {/* Monitores (if any) */}
-            {claseDetail.monitores && claseDetail.monitores.length > 0 && (
+            {/* Profesores con Roles - NUEVO SISTEMA */}
+            {claseDetail.profesores && claseDetail.profesores.length > 0 ? (
               <div className="flex items-start gap-3 text-gray-300">
                 <Users className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-gray-400 text-sm">Monitores:</span>
-                  <ul className="mt-1 space-y-1">
-                    {claseDetail.monitores.map((monitor) => (
-                      <li key={monitor.idProfesor} className="text-gray-300">
-                        {monitor.nombreProfesor}
+                <div className="flex-1">
+                  <span className="text-gray-400 text-sm">Profesores:</span>
+                  <ul className="mt-2 space-y-2">
+                    {claseDetail.profesores.map((profesor) => (
+                      <li key={profesor.idProfesor} className="flex items-start gap-2">
+                        <div>
+                          <div className="text-gray-200 font-medium">{profesor.nombreProfesor}</div>
+                          <div className="text-sm text-gray-400">
+                            {profesor.rolEnClase === 'Principal' ? '👨‍🏫 Profesor Principal' : '🎓 Monitor'}
+                          </div>
+                        </div>
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
+            ) : (
+              <>
+                {/* RETROCOMPATIBILIDAD: Sistema antiguo */}
+                <div className="flex items-center gap-3 text-gray-300">
+                  <User className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                  <div>
+                    <div className="text-gray-200">{claseDetail.nombreProfesor}</div>
+                    <div className="text-sm text-gray-400">👨‍🏫 Profesor Principal</div>
+                  </div>
+                </div>
+
+                {/* Monitores (if any) */}
+                {claseDetail.monitores && claseDetail.monitores.length > 0 && (
+                  <div className="flex items-start gap-3 text-gray-300">
+                    <Users className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-gray-400 text-sm">Monitores:</span>
+                      <ul className="mt-1 space-y-1">
+                        {claseDetail.monitores.map((monitor) => (
+                          <li key={monitor.idProfesor} className="text-gray-300">
+                            {monitor.nombreProfesor}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
             {/* Capacidad con Progress Bar - Requirements: 4.3 */}

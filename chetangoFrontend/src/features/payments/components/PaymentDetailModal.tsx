@@ -3,12 +3,12 @@
 // Requirements: 9.3, 9.4, 9.5, 9.6, 12.4
 // ============================================
 
-import { X, CreditCard, User, Package, Edit2 } from 'lucide-react'
-import { GlassPanel } from '@/design-system/atoms/GlassPanel'
 import { GlassButton } from '@/design-system/atoms/GlassButton'
+import { GlassPanel } from '@/design-system/atoms/GlassPanel'
 import { Skeleton } from '@/design-system/atoms/Skeleton'
-import { PackageStatusBadge } from './PackageStatusBadge'
+import { CreditCard, Edit2, Package, User, X } from 'lucide-react'
 import type { PagoDetalleDTO } from '../types/paymentTypes'
+import { PackageStatusBadge } from './PackageStatusBadge'
 
 interface PaymentDetailModalProps {
   pago: PagoDetalleDTO | undefined
@@ -52,15 +52,15 @@ export function PaymentDetailModal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="absolute inset-0 z-[100] flex items-start justify-center pt-20 px-4 pb-8 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm -z-10"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <GlassPanel className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
+      <GlassPanel className="relative z-10 w-full max-w-lg p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-[#f9fafb] text-xl font-semibold">
@@ -122,19 +122,32 @@ export function PaymentDetailModal({
             <section>
               <h3 className="text-[#9ca3af] text-sm uppercase tracking-wide mb-3 flex items-center gap-2">
                 <User className="w-4 h-4" />
-                Información del Alumno
+                {(() => {
+                  const uniqueAlumnos = Array.from(
+                    new Map(pago.paquetes.map(p => [p.idAlumno, p.nombreAlumno])).entries()
+                  )
+                  return uniqueAlumnos.length > 1 ? 'Información de Alumnos' : 'Información del Alumno'
+                })()}
               </h3>
               <div className="bg-white/5 rounded-lg p-4 space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-[#9ca3af]">Nombre</span>
-                  <span className="text-[#f9fafb]">{pago.nombreAlumno}</span>
-                </div>
-                {pago.correoAlumno && (
-                  <div className="flex justify-between">
-                    <span className="text-[#9ca3af]">Correo</span>
-                    <span className="text-[#f9fafb]">{pago.correoAlumno}</span>
-                  </div>
-                )}
+                {(() => {
+                  // Extraer alumnos únicos de los paquetes
+                  const uniqueAlumnos = Array.from(
+                    new Map(pago.paquetes.map(p => [p.idAlumno, p.nombreAlumno])).entries()
+                  )
+                  
+                  return uniqueAlumnos.map(([idAlumno, nombreAlumno]) => (
+                    <div key={idAlumno} className="pb-2 last:pb-0 border-b border-white/5 last:border-0">
+                      <div className="flex items-center gap-2 text-[#f9fafb] font-medium">
+                        <User className="w-4 h-4 text-[#c93448]" />
+                        {nombreAlumno}
+                      </div>
+                      <div className="text-xs text-[#9ca3af] mt-1 ml-6">
+                        {pago.paquetes.filter(p => p.idAlumno === idAlumno).length} paquete(s)
+                      </div>
+                    </div>
+                  ))
+                })()}
               </div>
             </section>
 
@@ -151,9 +164,15 @@ export function PaymentDetailModal({
                     className="bg-white/5 rounded-lg p-3"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[#f9fafb] font-medium">
-                        {paquete.nombreTipoPaquete}
-                      </span>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <User className="w-3 h-3 text-[#c93448]" />
+                          <span className="text-[#9ca3af] text-xs">{paquete.nombreAlumno}</span>
+                        </div>
+                        <span className="text-[#f9fafb] font-medium">
+                          {paquete.nombreTipoPaquete}
+                        </span>
+                      </div>
                       <PackageStatusBadge estado={paquete.estado} />
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-sm">

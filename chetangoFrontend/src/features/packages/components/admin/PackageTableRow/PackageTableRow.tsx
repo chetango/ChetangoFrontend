@@ -1,11 +1,13 @@
 // ============================================
 // PACKAGE TABLE ROW COMPONENT
+// Updated: Feb 6, 2026 - Added indicators for private classes
 // ============================================
 
-import { Eye, Snowflake, Sun } from 'lucide-react'
-import { GlassTableRow, GlassTableCell } from '@/design-system/molecules/GlassTable'
 import { Badge, GlassButton } from '@/design-system'
-import type { PaqueteListItemDTO, EstadoPaquete } from '../../../types/packageTypes'
+import { GlassTableCell, GlassTableRow } from '@/design-system/molecules/GlassTable'
+import { ClickableAvatar } from '@/features/users'
+import { Eye, Snowflake, Sun, User, Users } from 'lucide-react'
+import type { EstadoPaquete, PaqueteListItemDTO } from '../../../types/packageTypes'
 
 interface PackageTableRowProps {
   /** Package data to display */
@@ -84,6 +86,21 @@ export function formatDate(isoDate: string): string {
 }
 
 /**
+ * Check if package is private (for 1 or 2 persons)
+ */
+export function isPrivatePackage(nombreTipoPaquete: string): boolean {
+  return nombreTipoPaquete.toLowerCase().includes('privada')
+}
+
+/**
+ * Check if package is for 2 persons (couple)
+ */
+export function isTwoPersonsPackage(nombreTipoPaquete: string): boolean {
+  return nombreTipoPaquete.toLowerCase().includes('2 personas') || 
+         nombreTipoPaquete.toLowerCase().includes('2p')
+}
+
+/**
  * Gets the color class for the progress bar based on percentage
  */
 function getProgressBarColor(percentage: number): string {
@@ -118,51 +135,55 @@ export function PackageTableRow({
   const badgeVariant = getEstadoBadgeVariant(paquete.estado)
   const showCongelarButton = shouldShowCongelarButton(paquete.estado)
   const showDescongelarButton = shouldShowDescongelarButton(paquete.estado)
+  const isPrivate = isPrivatePackage(paquete.nombreTipoPaquete)
+  const isTwoPersons = isTwoPersonsPackage(paquete.nombreTipoPaquete)
 
   return (
     <GlassTableRow>
       {/* ALUMNO column - Requirements: 3.5 */}
       <GlassTableCell>
-        <div className="flex items-center gap-3">
-          {/* Avatar with initials */}
-          <div
-            className="
-              w-10 h-10
-              rounded-full
-              flex items-center justify-center
-              backdrop-blur-xl
-              bg-[rgba(201,52,72,0.2)]
-              border border-[rgba(201,52,72,0.4)]
-              text-[#f9fafb]
-              font-medium
-              text-sm
-              flex-shrink-0
-            "
-            aria-label={`Avatar de ${paquete.nombreAlumno}`}
-          >
-            {initials}
-          </div>
-          {/* Name and document */}
-          <div className="flex flex-col min-w-0">
-            <span className="text-[#f9fafb] font-medium truncate">
-              {paquete.nombreAlumno}
-            </span>
-            <span className="text-[#6b7280] text-sm truncate">
-              {paquete.documentoAlumno}
-            </span>
-          </div>
-        </div>
+        <ClickableAvatar
+          userId={paquete.idAlumno}
+          userType="alumno"
+          nombre={paquete.nombreAlumno}
+          secondaryText={paquete.documentoAlumno}
+          showInfo
+          size="md"
+        />
       </GlassTableCell>
 
       {/* PAQUETE column - Requirements: 3.6 */}
       <GlassTableCell>
-        <div className="flex flex-col">
-          <span className="text-[#f9fafb] font-medium">
-            {paquete.nombreTipoPaquete}
-          </span>
-          <span className="text-[#6b7280] text-sm">
-            {paquete.clasesDisponibles} clases
-          </span>
+        <div className="flex items-start gap-2">
+          {/* Icon indicator for private packages */}
+          {isPrivate && (
+            <div 
+              className={`
+                flex-shrink-0 mt-0.5
+                ${isTwoPersons ? 'text-blue-400' : 'text-purple-400'}
+              `}
+              title={isTwoPersons ? 'Paquete privado para 2 personas' : 'Paquete privado individual'}
+            >
+              {isTwoPersons ? <Users className="w-4 h-4" /> : <User className="w-4 h-4" />}
+            </div>
+          )}
+          <div className="flex flex-col min-w-0">
+            <span className="text-[#f9fafb] font-medium truncate">
+              {paquete.nombreTipoPaquete}
+            </span>
+            <span className="text-[#6b7280] text-sm">
+              {paquete.clasesDisponibles} clases
+            </span>
+            {/* Badge for private packages */}
+            {isPrivate && (
+              <span className={`
+                text-xs mt-1 inline-block
+                ${isTwoPersons ? 'text-blue-400' : 'text-purple-400'}
+              `}>
+                {isTwoPersons ? '👥 Pareja' : '👤 Individual'}
+              </span>
+            )}
+          </div>
         </div>
       </GlassTableCell>
 

@@ -4,9 +4,9 @@
 // Requirements: 9.1, 9.2, 9.4, 9.5
 // ============================================
 
-import { Loader2, Sun, Calendar, Clock } from 'lucide-react'
-import { X } from 'lucide-react'
-import { GlassPanel, GlassButton } from '@/design-system'
+import { GlassButton, GlassPanel } from '@/design-system'
+import { toLocalISOString } from '@/shared/utils/dateTimeHelper'
+import { Calendar, Clock, Loader2, Sun, X } from 'lucide-react'
 import type { CongelacionDTO } from '../../../types/packageTypes'
 
 // ============================================
@@ -83,7 +83,7 @@ export function calculateNuevaFechaVencimiento(
   const newDate = new Date(currentDate)
   newDate.setDate(newDate.getDate() + diasCongelados)
 
-  return newDate.toISOString()
+  return toLocalISOString(newDate)
 }
 
 /**

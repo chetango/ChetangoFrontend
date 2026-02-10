@@ -53,3 +53,13 @@ pids
 
 # Prettier cache
 .prettiercache
+
+# Test results and reports
+test-results/
+playwright-report/
+
+# Personal notes
+Loggin.txt
+dashboard-admin.txt
+dashboard-alum.txt
+dashboard-profe.txt

@@ -1,7 +1,7 @@
-import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
-import { Check, ChevronDown, ChevronUp } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
+import { Check, ChevronDown, ChevronUp } from 'lucide-react';
+import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 function cn(...inputs: ClassValue[]) {
@@ -105,7 +105,7 @@ const GlassSelectContent = React.forwardRef<
         'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2',
         'data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
         // Base styles
-        'relative z-50 max-h-96 min-w-[8rem] overflow-hidden',
+        'relative z-[150] max-h-96 min-w-[8rem] overflow-hidden',
         'rounded-xl',
         // Glass styling
         'backdrop-blur-2xl',
@@ -197,14 +197,6 @@ const GlassSelectSeparator = React.forwardRef<
 GlassSelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
 export {
-  GlassSelect,
-  GlassSelectGroup,
-  GlassSelectValue,
-  GlassSelectTrigger,
-  GlassSelectContent,
-  GlassSelectLabel,
-  GlassSelectItem,
-  GlassSelectSeparator,
-  GlassSelectScrollUpButton,
-  GlassSelectScrollDownButton,
+    GlassSelect, GlassSelectContent, GlassSelectGroup, GlassSelectItem, GlassSelectLabel, GlassSelectScrollDownButton, GlassSelectScrollUpButton, GlassSelectSeparator, GlassSelectTrigger, GlassSelectValue
 };
+

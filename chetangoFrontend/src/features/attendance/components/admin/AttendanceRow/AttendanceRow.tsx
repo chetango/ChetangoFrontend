@@ -2,11 +2,11 @@
 // ATTENDANCE ROW COMPONENT
 // ============================================
 
-import { useState, useEffect, useCallback } from 'react'
-import { GlassTableRow, GlassTableCell } from '@/design-system/molecules/GlassTable'
+import { GlassTableCell, GlassTableRow } from '@/design-system/molecules/GlassTable'
+import { useCallback, useEffect, useState } from 'react'
+import type { StudentAttendance } from '../../../types/attendanceTypes'
 import { AttendanceToggle } from '../AttendanceToggle'
 import { PackageStatusBadge } from '../PackageStatusBadge'
-import type { StudentAttendance } from '../../../types/attendanceTypes'
 
 interface AttendanceRowProps {
   student: StudentAttendance
@@ -68,6 +68,9 @@ export function AttendanceRow({
 
   const isPresent = student.asistencia.estado === 'Presente'
 
+  const isSharedPackage = student.paquete?.esCompartido || false
+  const sharedStudentNames = student.paquete?.nombresAlumnosCompartidos || []
+
   return (
     <GlassTableRow>
       {/* ALUMNO column */}
@@ -103,7 +106,15 @@ export function AttendanceRow({
 
       {/* PAQUETE column */}
       <GlassTableCell>
-        <PackageStatusBadge package={student.paquete} />
+        <div>
+          <PackageStatusBadge package={student.paquete} />
+          {isSharedPackage && sharedStudentNames.length > 0 && (
+            <p className="text-[#7c5af8] text-[11px] mt-2 italic flex items-center gap-1">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#7c5af8]" />
+              <span>Paquete compartido con: {sharedStudentNames.join(', ')}</span>
+            </p>
+          )}
+        </div>
       </GlassTableCell>
 
       {/* ASISTENCIA column */}

@@ -2,13 +2,50 @@
 // ATTENDANCE QUERIES - REACT QUERY HOOKS
 // ============================================
 
-import { useQuery } from '@tanstack/react-query'
 import { httpClient } from '@/shared/api/httpClient'
+import { useQuery } from '@tanstack/react-query'
 import type {
-  DateRangeResponse,
-  ClassesByDateResponse,
-  AttendanceSummaryResponse,
+    AttendanceSummaryResponse,
+    ClassesByDateResponse,
+    DateRangeResponse,
 } from '../types/attendanceTypes'
+
+// ============================================
+// TYPES
+// ============================================
+
+/**
+ * Backend response type before transformation
+ * Enums come as numbers from the backend
+ */
+interface AttendanceSummaryBackendResponse {
+  idClase: string
+  fecha: string
+  nombreClase: string
+  profesorPrincipal: string
+  alumnos: Array<{
+    idAlumno: string
+    nombreCompleto: string
+    documentoIdentidad: string
+    avatarIniciales: string
+    paquete: {
+      idPaquete: string | null
+      estado: number
+      descripcion: string | null
+      clasesTotales: number | null
+      clasesUsadas: number | null
+      clasesRestantes: number | null
+    } | null
+    asistencia: {
+      idAsistencia: string | null
+      estado: number
+      observacion: string | null
+    }
+  }>
+  presentes: number
+  ausentes: number
+  sinPaquete: number
+}
 
 // ============================================
 // QUERY KEYS
@@ -72,25 +109,62 @@ export function useAttendanceSummaryQuery(idClase: string | null) {
   return useQuery({
     queryKey: attendanceKeys.summary(idClase ?? ''),
     queryFn: async (): Promise<AttendanceSummaryResponse> => {
-      const response = await httpClient.get<AttendanceSummaryResponse>(
+      const response = await httpClient.get<AttendanceSummaryBackendResponse>(
         `/api/admin/asistencias/clase/${idClase}/resumen`
       )
       
-      // DEBUG: Log the response to see package data and idAsistencia
-      console.log('=== ATTENDANCE SUMMARY RESPONSE ===')
-      console.log('Full response:', JSON.stringify(response.data, null, 2))
-      if (response.data.alumnos && response.data.alumnos.length > 0) {
-        console.log('First student data:', {
-          nombre: response.data.alumnos[0].nombreCompleto,
-          paquete: response.data.alumnos[0].paquete,
-          asistencia: response.data.alumnos[0].asistencia,
-          idAsistencia: response.data.alumnos[0].asistencia?.idAsistencia
-        })
+      // Transform enum numbers to strings for frontend compatibility
+      const transformedData: AttendanceSummaryResponse = {
+        ...response.data,
+        alumnos: response.data.alumnos.map((alumno) => ({
+          ...alumno,
+          paquete: alumno.paquete ? {
+            ...alumno.paquete,
+            estado: transformPackageState(alumno.paquete.estado)
+          } : null,
+          asistencia: {
+            ...alumno.asistencia,
+            estado: transformAttendanceState(alumno.asistencia.estado)
+          }
+        }))
       }
-      console.log('===================================')
       
-      return response.data
+      return transformedData
     },
     enabled: !!idClase,
   })
+}
+
+// ============================================
+// TRANSFORMATION HELPERS
+// ============================================
+
+/**
+ * Transforms package state enum from backend (number) to frontend (string)
+ * Backend enum: 0=Activo, 1=Agotado, 2=Congelado, 3=SinPaquete
+ */
+function transformPackageState(estado: number | string): 'Activo' | 'Agotado' | 'Congelado' | 'SinPaquete' {
+  if (typeof estado === 'string') return estado as 'Activo' | 'Agotado' | 'Congelado' | 'SinPaquete'
+  
+  switch (estado) {
+    case 0: return 'Activo'
+    case 1: return 'Agotado'
+    case 2: return 'Congelado'
+    case 3: return 'SinPaquete'
+    default: return 'SinPaquete'
+  }
+}
+
+/**
+ * Transforms attendance state enum from backend (number) to frontend (string)
+ * Backend enum: 0=Ausente, 1=Presente
+ */
+function transformAttendanceState(estado: number | string): 'Ausente' | 'Presente' {
+  if (typeof estado === 'string') return estado as 'Ausente' | 'Presente'
+  
+  switch (estado) {
+    case 0: return 'Ausente'
+    case 1: return 'Presente'
+    default: return 'Ausente'
+  }
 }

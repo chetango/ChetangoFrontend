@@ -2,61 +2,44 @@
 // ADMIN PACKAGES COMPONENTS - BARREL EXPORT
 // ============================================
 
-export { PackageStatsCards, ESTADO_CARD_CONFIG, getEstadoColor } from './PackageStatsCards'
-export { PackageFilters, ESTADO_OPTIONS } from './PackageFilters'
-export { PackagesTable } from './PackagesTable'
+export { ConfigurePackagesModal } from './ConfigurePackagesModal'
 export {
-  PackageTableRow,
-  formatDate,
-  getEstadoBadgeVariant,
-  shouldShowCongelarButton,
-  shouldShowDescongelarButton,
-} from './PackageTableRow'
-export {
-  CreatePackageModal,
-  calculateFechaFin,
-  validateRequiredFields,
-  getTodayDate,
-  formatAlumnoDisplay,
-  formatTipoPaqueteDisplay,
+    CreatePackageModal,
+    calculateFechaFin, formatAlumnoDisplay,
+    formatTipoPaqueteDisplay, getTodayDate, validateRequiredFields
 } from './CreatePackageModal'
 export type { CreatePackageModalProps, FormErrors } from './CreatePackageModal'
+export { ESTADO_OPTIONS, PackageFilters } from './PackageFilters'
+export { PackagesTable } from './PackagesTable'
+export { ESTADO_CARD_CONFIG, PackageStatsCards, getEstadoColor } from './PackageStatsCards'
+export {
+    PackageTableRow,
+    formatDate,
+    getEstadoBadgeVariant,
+    shouldShowCongelarButton,
+    shouldShowDescongelarButton
+} from './PackageTableRow'
 
 // Package Detail Modal
 export {
-  PackageDetailModal,
-  getEstadoBadgeVariant as getDetailEstadoBadgeVariant,
-  formatDetailDate,
-  calculateConsumoPercentage,
-  getProgressBarColor,
-  ConsumptionHistoryItem,
-  formatHistorialDate,
-  formatTimeSpan,
-  formatHorario,
-  getDescontadaBadgeConfig,
+    ConsumptionHistoryItem, PackageDetailModal, calculateConsumoPercentage, formatDetailDate, formatHistorialDate, formatHorario, formatTimeSpan, getDescontadaBadgeConfig, getEstadoBadgeVariant as getDetailEstadoBadgeVariant, getProgressBarColor
 } from './PackageDetailModal'
 export type { PackageDetailModalProps } from './PackageDetailModal'
 
 // Congelar Paquete Dialog
 export {
-  CongelarPaqueteDialog,
-  getTodayDate as getCongelarTodayDate,
-  validateFechaInicio,
-  validateFechaFin,
-  validateCongelarForm,
-  calculateDaysCount,
+    CongelarPaqueteDialog, calculateDaysCount, getTodayDate as getCongelarTodayDate, validateCongelarForm, validateFechaFin, validateFechaInicio
 } from './CongelarPaqueteDialog'
 export type {
-  CongelarPaqueteDialogProps,
-  CongelarFormErrors,
-  CongelarFormData,
+    CongelarFormData, CongelarFormErrors, CongelarPaqueteDialogProps
 } from './CongelarPaqueteDialog'
 
 // Descongelar Paquete Dialog
 export {
-  DescongelarPaqueteDialog,
-  calculateDiasCongelados,
-  calculateNuevaFechaVencimiento,
-  formatDisplayDate as formatDescongelarDisplayDate,
+    DescongelarPaqueteDialog,
+    calculateDiasCongelados,
+    calculateNuevaFechaVencimiento,
+    formatDisplayDate as formatDescongelarDisplayDate
 } from './DescongelarPaqueteDialog'
 export type { DescongelarPaqueteDialogProps } from './DescongelarPaqueteDialog'
+

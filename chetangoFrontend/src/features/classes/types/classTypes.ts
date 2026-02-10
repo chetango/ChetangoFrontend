@@ -53,16 +53,30 @@ export interface ClaseListItemDTO {
   horaInicio: string // TimeSpan "HH:mm:ss"
   horaFin: string // TimeSpan "HH:mm:ss"
   tipoClase: string // Nombre del tipo
+  idProfesorPrincipal: string // Guid
+  nombreProfesor: string
   cupoMaximo: number
   totalAsistencias: number
+  estado: string // Programada, EnCurso, Completada, Cancelada
 }
 
 /**
  * Monitor information for a class
+ * DEPRECATED: Usar ProfesorClaseDTO en su lugar
  */
 export interface MonitorClaseDTO {
   idProfesor: string // Guid
   nombreProfesor: string
+}
+
+/**
+ * Profesor con su rol en una clase
+ * Sistema NUEVO para representar todos los profesores
+ */
+export interface ProfesorClaseDTO {
+  idProfesor: string // Guid
+  nombreProfesor: string
+  rolEnClase: 'Principal' | 'Monitor'
 }
 
 /**
@@ -75,12 +89,14 @@ export interface ClaseDetalleDTO {
   horaInicio: string // TimeSpan "HH:mm:ss"
   horaFin: string // TimeSpan "HH:mm:ss"
   tipoClase: string // Nombre del tipo
-  idProfesorPrincipal: string // Guid
-  nombreProfesor: string
+  idProfesorPrincipal: string | null // DEPRECATED: Usar profesores en su lugar
+  nombreProfesor: string // DEPRECATED: Usar profesores en su lugar
   cupoMaximo: number
   observaciones: string | null
   totalAsistencias: number
-  monitores: MonitorClaseDTO[]
+  monitores: MonitorClaseDTO[] // DEPRECATED: Usar profesores en su lugar
+  profesores: ProfesorClaseDTO[] // NUEVO: Lista completa de profesores con roles
+  estado: string // Programada, EnCurso, Completada, Cancelada
 }
 
 // ============================================
@@ -88,11 +104,31 @@ export interface ClaseDetalleDTO {
 // ============================================
 
 /**
+ * Profesor con rol para una clase
+ * Sistema NUEVO: múltiples profesores con roles individuales
+ */
+export interface ProfesorClaseRequest {
+  idProfesor: string // Guid
+  rolEnClase: 'Principal' | 'Monitor'
+}
+
+/**
  * POST /api/clases
  * Request body for creating a new class
+ * 
+ * SISTEMA DUAL:
+ * - NUEVO (recomendado): Usar campo "profesores" con roles
+ * - ANTIGUO (deprecado): Usar "idProfesorPrincipal" + "idsMonitores"
  */
 export interface CrearClaseRequest {
-  idProfesorPrincipal: string // Guid
+  // NUEVO: Sistema de múltiples profesores con roles
+  profesores?: ProfesorClaseRequest[]
+  
+  // ANTIGUO: Sistema legacy (mantener para retrocompatibilidad)
+  idProfesorPrincipal?: string // Guid
+  idsMonitores?: string[] // Array de Guids de profesores monitores
+  
+  // Datos comunes
   idTipoClase: string // Guid
   fecha: string // DateTime ISO 8601 (solo fecha)
   horaInicio: string // TimeSpan "HH:mm:ss"
@@ -158,14 +194,17 @@ export interface ClasesQueryParams {
 
 /**
  * Form data for creating/editing a class
+ * Usa el sistema NUEVO de múltiples profesores con roles
  */
 export interface ClaseFormData {
   fecha: string
   horaInicio: string
   horaFin: string
   idTipoClase: string
-  idProfesorPrincipal: string
-  monitores: string[] // Array of idProfesor
+  
+  // NUEVO: Sistema de múltiples profesores con roles
+  profesores: ProfesorClaseRequest[]
+  
   cupoMaximo: number
   observaciones: string
 }
