@@ -36,7 +36,7 @@ jobs:
           VITE_API_BASE_URL: https://api.corporacionchetango.com
           VITE_AZURE_CLIENT_ID: d35c1d4d-9ddc-4a8b-bb89-1964b37ff573
           VITE_AZURE_TENANT_ID: 8a57ec5a-e2e3-44ad-9494-77fbc7467251
-          VITE_AZURE_REDIRECT_URI: https://app.corporacionchetango.com
+          VITE_AZURE_REDIRECT_URI: https://delightful-plant-02670d70f.1.azurestaticapps.net
       
       - name: Build And Deploy
         id: builddeploy
@@ -47,7 +47,7 @@ jobs:
           action: "upload"
           app_location: "/chetangoFrontend/dist"
           api_location: ""
-          output_location: "dist"
+          output_location: ""
           skip_app_build: true
 
   close_pull_request_job:
@@ -61,4 +61,3 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHTFUL_PLANT_02670D70F }}
           action: "close"
-
