@@ -4,18 +4,19 @@
 // Requirements: 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9, 10.4
 // ============================================
 
-import { X, RefreshCw, Info, Package, User, Calendar } from 'lucide-react'
 import {
-  GlassPanel,
-  GlassButton,
-  Badge,
-  Skeleton,
-  SkeletonText,
-  SkeletonAvatar,
+    Badge,
+    GlassButton,
+    GlassPanel,
+    Skeleton,
+    SkeletonAvatar,
+    SkeletonText,
 } from '@/design-system'
+import { useModalScroll } from '@/shared/hooks'
+import { Calendar, Info, Package, RefreshCw, User, X } from 'lucide-react'
 import type {
-  PaqueteDetalleDTO,
-  EstadoPaquete,
+    EstadoPaquete,
+    PaqueteDetalleDTO,
 } from '../../../types/packageTypes'
 import { ConsumptionHistoryItem } from './ConsumptionHistoryItem'
 
@@ -166,6 +167,9 @@ export function PackageDetailModal({
   onRenovar,
   getInitials,
 }: PackageDetailModalProps) {
+  // Hook para manejar scroll del modal
+  const containerRef = useModalScroll(isOpen)
+
   // Don't render if not open
   if (!isOpen) return null
 
@@ -175,17 +179,22 @@ export function PackageDetailModal({
     : 0
   const progressBarColor = getProgressBarColor(percentage)
   const historial = paqueteDetail?.historialConsumo || []
+  const alumnosDelPago = paqueteDetail?.alumnosDelPago || []
+  const esCompartido = alumnosDelPago.length > 1
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div 
+      ref={containerRef}
+      className="absolute inset-0 z-[100] flex items-start justify-center pt-20 px-4 pb-8 overflow-y-auto"
+    >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm -z-10"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <GlassPanel className="relative z-10 w-full max-w-2xl mx-4 p-6 max-h-[90vh] overflow-y-auto">
+      <GlassPanel className="relative z-10 w-full max-w-2xl p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-white">Detalle del Paquete</h2>
@@ -210,38 +219,49 @@ export function PackageDetailModal({
               <div className="flex items-center gap-2 mb-3">
                 <User className="w-4 h-4 text-[#c93448]" />
                 <h3 className="text-sm font-medium text-[#9ca3af] uppercase tracking-wider">
-                  Información del Alumno
+                  {esCompartido ? 'Información de Alumnos' : 'Información del Alumno'}
                 </h3>
               </div>
-              <div className="flex items-center gap-4">
-                {/* Avatar with initials */}
-                <div
-                  className="
-                    w-14 h-14
-                    rounded-full
-                    flex items-center justify-center
-                    backdrop-blur-xl
-                    bg-[rgba(201,52,72,0.2)]
-                    border border-[rgba(201,52,72,0.4)]
-                    text-[#f9fafb]
-                    font-semibold
-                    text-lg
-                    flex-shrink-0
-                  "
-                  aria-label={`Avatar de ${paqueteDetail.nombreAlumno}`}
-                >
-                  {initials}
+              {esCompartido ? (
+                <div className="space-y-3">
+                  {alumnosDelPago.map((alumno) => (
+                    <div key={alumno.idAlumno} className="flex items-center gap-3">
+                      <User className="w-5 h-5 text-[#c93448] flex-shrink-0" />
+                      <span className="text-[#f9fafb] font-medium">{alumno.nombreAlumno}</span>
+                    </div>
+                  ))}
                 </div>
-                {/* Name and document */}
-                <div className="flex flex-col">
-                  <span className="text-[#f9fafb] font-semibold text-lg">
-                    {paqueteDetail.nombreAlumno}
-                  </span>
-                  <span className="text-[#9ca3af] text-sm">
-                    Documento: {paqueteDetail.idAlumno.substring(0, 8)}...
-                  </span>
+              ) : (
+                <div className="flex items-center gap-4">
+                  {/* Avatar with initials */}
+                  <div
+                    className="
+                      w-14 h-14
+                      rounded-full
+                      flex items-center justify-center
+                      backdrop-blur-xl
+                      bg-[rgba(201,52,72,0.2)]
+                      border border-[rgba(201,52,72,0.4)]
+                      text-[#f9fafb]
+                      font-semibold
+                      text-lg
+                      flex-shrink-0
+                    "
+                    aria-label={`Avatar de ${paqueteDetail.nombreAlumno}`}
+                  >
+                    {initials}
+                  </div>
+                  {/* Name and document */}
+                  <div className="flex flex-col">
+                    <span className="text-[#f9fafb] font-semibold text-lg">
+                      {paqueteDetail.nombreAlumno}
+                    </span>
+                    <span className="text-[#9ca3af] text-sm">
+                      Documento: {paqueteDetail.idAlumno.substring(0, 8)}...
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
             </section>
 
             {/* ============================================ */}

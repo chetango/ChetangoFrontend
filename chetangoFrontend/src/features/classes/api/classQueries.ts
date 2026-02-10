@@ -2,15 +2,15 @@
 // CLASS QUERIES - REACT QUERY HOOKS
 // ============================================
 
-import { useQuery } from '@tanstack/react-query'
 import { httpClient } from '@/shared/api/httpClient'
+import { useQuery } from '@tanstack/react-query'
 import type {
-  TipoClaseDTO,
-  ProfesorDTO,
-  ClaseDetalleDTO,
-  ClaseListItemDTO,
-  PaginatedResponse,
-  ClasesQueryParams,
+    ClaseDetalleDTO,
+    ClaseListItemDTO,
+    ClasesQueryParams,
+    PaginatedResponse,
+    ProfesorDTO,
+    TipoClaseDTO,
 } from '../types/classTypes'
 
 // ============================================
@@ -49,15 +49,23 @@ export function useTiposClaseQuery() {
 /**
  * Fetches all active professors for dropdowns (Admin only)
  * GET /api/profesores
+ * @param enabled - Si false, la query no se ejecuta (útil para condicionar por rol)
  * @returns Array of ProfesorDTO with idProfesor, nombreCompleto, tipoProfesor
  */
-export function useProfesoresQuery() {
+export function useProfesoresQuery(enabled = true) {
   return useQuery({
     queryKey: classKeys.profesores(),
     queryFn: async (): Promise<ProfesorDTO[]> => {
-      const response = await httpClient.get<ProfesorDTO[]>('/api/profesores')
-      return response.data
+      // Backend returns: { idProfesor: Guid, idUsuario: Guid, nombre: string, correo: string }
+      // Frontend expects: { idProfesor: string, nombreCompleto: string, tipoProfesor: 'Titular' | 'Monitor' }
+      const response = await httpClient.get<Array<{idProfesor: string, idUsuario: string, nombre: string, correo: string}>>('/api/profesores')
+      return response.data.map(p => ({
+        idProfesor: p.idProfesor,
+        nombreCompleto: p.nombre,
+        tipoProfesor: 'Titular' as const
+      }))
     },
+    enabled,
     staleTime: 5 * 60 * 1000, // 5 minutes - catalogs don't change often
   })
 }
@@ -85,8 +93,8 @@ export function useClasesByProfesorQuery(
       const queryParams = new URLSearchParams()
       if (params.fechaDesde) queryParams.append('fechaDesde', params.fechaDesde)
       if (params.fechaHasta) queryParams.append('fechaHasta', params.fechaHasta)
-      if (params.pagina) queryParams.append('pagina', params.pagina.toString())
-      if (params.tamanoPagina) queryParams.append('tamanoPagina', params.tamanoPagina.toString())
+      if (params.pagina) queryParams.append('pageNumber', params.pagina.toString())
+      if (params.tamanoPagina) queryParams.append('pageSize', params.tamanoPagina.toString())
 
       const queryString = queryParams.toString()
       const url = `/api/profesores/${idProfesor}/clases${queryString ? `?${queryString}` : ''}`

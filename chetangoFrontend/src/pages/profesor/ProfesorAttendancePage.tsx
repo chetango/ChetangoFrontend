@@ -2,40 +2,41 @@
 // PROFESOR ATTENDANCE PAGE - CHETANGO
 // ============================================
 
-import { useState, useMemo } from 'react'
 import {
-  GlassPanel,
-  Toaster,
-  Skeleton,
-  SkeletonAvatar,
-  SkeletonText,
-  AmbientGlows,
-  TypographyBackdrop,
-  GlassOrb,
-  FloatingParticle,
-  CreativeAnimations,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Calendar as CalendarComponent,
+    AmbientGlows,
+    Calendar as CalendarComponent,
+    CreativeAnimations,
+    FloatingParticle,
+    GlassOrb,
+    GlassPanel,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+    Skeleton,
+    SkeletonAvatar,
+    SkeletonText,
+    Toaster,
+    TypographyBackdrop,
 } from '@/design-system'
-import { useAuth, useUserProfileQuery } from '@/features/auth'
-import { useProfesorAttendance } from '@/features/attendance/hooks/useProfesorAttendance'
 import {
-  ClassSelectorProfesor,
-  AttendanceToggleProfesor,
-  PackageStatusBadgeProfesor,
+    AttendanceToggleProfesor,
+    ClassSelectorProfesor,
+    PackageStatusBadgeProfesor,
 } from '@/features/attendance/components/profesor'
+import { useProfesorAttendance } from '@/features/attendance/hooks/useProfesorAttendance'
+import { useAuth, useUserProfileQuery } from '@/features/auth'
 import { ErrorState } from '@/shared/components'
+import { getToday } from '@/shared/utils/dateTimeHelper'
 import {
-  Calendar,
-  Package,
-  Clock,
-  Users,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
+    AlertCircle,
+    Calendar,
+    CheckCircle2,
+    Clock,
+    Package,
+    Users,
+    XCircle,
 } from 'lucide-react'
+import { useMemo, useState } from 'react'
 
 // ============================================
 // HELPER FUNCTIONS
@@ -60,8 +61,7 @@ function formatearFecha(dateString: string): string {
  * Checks if a date is today
  */
 function isToday(dateString: string): boolean {
-  const today = new Date()
-  const todayString = today.toISOString().split('T')[0]
+  const todayString = getToday()
   return dateString === todayString
 }
 
@@ -81,14 +81,10 @@ function formatearHoy(): string {
 }
 
 /**
- * Formats time from HH:mm:ss to 12h format (e.g., "5:00 PM")
+ * Formats time from HH:mm:ss to HH:mm (24h format)
  */
-function formatearHora12(hora24: string): string {
-  const [hours, minutes] = hora24.split(':')
-  const h = parseInt(hours, 10)
-  const ampm = h >= 12 ? 'PM' : 'AM'
-  const h12 = h % 12 || 12
-  return `${h12}:${minutes} ${ampm}`
+function formatearHora24(hora24: string): string {
+  return hora24.substring(0, 5)
 }
 
 /**
@@ -128,8 +124,7 @@ const ProfesorAttendancePage = () => {
   
   // State for selected date
   const [selectedDate, setSelectedDate] = useState<string>(() => {
-    const today = new Date()
-    return today.toISOString().split('T')[0]
+    return getToday()
   })
   
   // State for calendar popover
@@ -186,7 +181,10 @@ const ProfesorAttendancePage = () => {
   // Handle calendar date selection
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
-      const dateStr = date.toISOString().split('T')[0]
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      const dateStr = `${year}-${month}-${day}`
       setSelectedDate(dateStr)
       setIsCalendarOpen(false)
     }
@@ -510,7 +508,7 @@ function ClaseInfoCard({ clase, isEnCurso, totalAlumnos, presentes, ausentes }: 
             <div className="flex items-center gap-2 text-[#d1d5db]">
               <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#9ca3af] flex-shrink-0" aria-hidden="true" />
               <span className="text-sm sm:text-[15px]">
-                {formatearHora12(clase.horaInicio)} - {formatearHora12(clase.horaFin)}
+                {formatearHora24(clase.horaInicio)} - {formatearHora24(clase.horaFin)}
               </span>
             </div>
           </div>

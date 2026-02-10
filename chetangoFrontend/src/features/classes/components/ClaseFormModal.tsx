@@ -4,24 +4,32 @@
 // Requirements: 5.1, 5.2, 5.4, 5.7, 6.1, 6.2, 10.3
 // ============================================
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { X, Calendar, Clock, Users, FileText, Loader2 } from 'lucide-react'
 import {
-  GlassPanel,
-  GlassButton,
-  GlassInput,
-  GlassSelect,
-  GlassSelectTrigger,
-  GlassSelectValue,
-  GlassSelectContent,
-  GlassSelectItem,
+    GlassButton,
+    GlassInput,
+    GlassPanel,
+    GlassSelect,
+    GlassSelectContent,
+    GlassSelectItem,
+    GlassSelectTrigger,
+    GlassSelectValue,
 } from '@/design-system'
+import { useModalScroll } from '@/shared/hooks'
+import { getToday } from '@/shared/utils/dateTimeHelper'
+import { Calendar, Clock, FileText, Loader2, Plus, Trash2, Users, X } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 import type {
-  TipoClaseDTO,
-  ProfesorDTO,
-  ClaseFormData,
-  ClaseDetalleDTO,
+    ClaseDetalleDTO,
+    ClaseFormData,
+    ProfesorClaseRequest,
+    ProfesorDTO,
+    TipoClaseDTO,
 } from '../types/classTypes'
+import {
+    formatearFechaParaInput,
+    formatearHoraParaInput,
+    validarProfesores,
+} from '../utils/claseHelpers'
 
 // ============================================
 // TYPES
@@ -46,6 +54,8 @@ export interface ClaseFormModalProps {
   mode?: 'create' | 'edit'
   /** Initial data for edit mode */
   initialData?: ClaseDetalleDTO | null
+  /** Prefill data for create mode */
+  prefillData?: Partial<ClaseFormData>
 }
 
 export interface FormErrors {
@@ -54,6 +64,7 @@ export interface FormErrors {
   horaFin?: string
   idTipoClase?: string
   idProfesorPrincipal?: string
+  profesores?: string
   cupoMaximo?: string
   general?: string
 }
@@ -94,52 +105,71 @@ export function isValidTimeRange(horaInicio: string, horaFin: string): boolean {
  * Gets today's date in YYYY-MM-DD format
  */
 export function getTodayDate(): string {
-  return new Date().toISOString().split('T')[0]
-}
-
-/**
- * Formats time from HH:mm:ss to HH:mm
- */
-function formatTimeForInput(time: string): string {
-  if (!time) return ''
-  return time.substring(0, 5)
-}
-
-/**
- * Formats date from ISO 8601 to YYYY-MM-DD
- */
-function formatDateForInput(date: string): string {
-  if (!date) return ''
-  return date.split('T')[0]
+  return getToday()
 }
 
 // ============================================
 // INITIAL FORM STATE
 // ============================================
 
-const getInitialFormData = (initialData?: ClaseDetalleDTO | null): ClaseFormData => {
+const getInitialFormData = (
+  initialData?: ClaseDetalleDTO | null,
+  prefillData?: Partial<ClaseFormData>
+): ClaseFormData => {
   if (initialData) {
+    // Usar el nuevo sistema de profesores si está disponible
+    let profesores: ProfesorClaseRequest[] = []
+    
+    if (initialData.profesores && initialData.profesores.length > 0) {
+      // NUEVO: Usar el campo profesores directamente
+      profesores = initialData.profesores.map(p => ({
+        idProfesor: p.idProfesor,
+        rolEnClase: p.rolEnClase as 'Principal' | 'Monitor'
+      }))
+    } else {
+      // RETROCOMPATIBILIDAD: Convertir del sistema antiguo
+      if (initialData.idProfesorPrincipal) {
+        profesores.push({
+          idProfesor: initialData.idProfesorPrincipal,
+          rolEnClase: 'Principal'
+        })
+      }
+      
+      // Agregar monitores del sistema antiguo
+      if (initialData.monitores && initialData.monitores.length > 0) {
+        initialData.monitores.forEach(monitor => {
+          profesores.push({
+            idProfesor: monitor.idProfesor,
+            rolEnClase: 'Monitor'
+          })
+        })
+      }
+    }
+    
     return {
-      fecha: formatDateForInput(initialData.fecha),
-      horaInicio: formatTimeForInput(initialData.horaInicio),
-      horaFin: formatTimeForInput(initialData.horaFin),
+      fecha: formatearFechaParaInput(initialData.fecha),
+      horaInicio: formatearHoraParaInput(initialData.horaInicio),
+      horaFin: formatearHoraParaInput(initialData.horaFin),
       idTipoClase: '', // Will need to be resolved from tipoClase name
-      idProfesorPrincipal: initialData.idProfesorPrincipal,
-      monitores: initialData.monitores?.map((m) => m.idProfesor) || [],
+      profesores: profesores,
       cupoMaximo: initialData.cupoMaximo,
       observaciones: initialData.observaciones || '',
     }
   }
 
-  return {
+  const baseData: ClaseFormData = {
     fecha: '',
     horaInicio: '',
     horaFin: '',
     idTipoClase: '',
-    idProfesorPrincipal: '',
-    monitores: [],
+    profesores: [],
     cupoMaximo: 10,
     observaciones: '',
+  }
+
+  return {
+    ...baseData,
+    ...(prefillData || {}),
   }
 }
 
@@ -170,10 +200,13 @@ export function ClaseFormModal({
   isSubmitting = false,
   mode = 'create',
   initialData = null,
+  prefillData,
 }: ClaseFormModalProps) {
+  const containerRef = useModalScroll(isOpen)
+
   // Form state
   const [formData, setFormData] = useState<ClaseFormData>(() =>
-    getInitialFormData(initialData)
+    getInitialFormData(initialData, prefillData)
   )
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
@@ -181,7 +214,7 @@ export function ClaseFormModal({
   // Reset form when modal opens/closes or mode changes
   useEffect(() => {
     if (isOpen) {
-      const newFormData = getInitialFormData(initialData)
+      const newFormData = getInitialFormData(initialData, prefillData)
 
       // If editing, resolve tipoClase name to ID
       if (initialData && tiposClase.length > 0) {
@@ -197,13 +230,7 @@ export function ClaseFormModal({
       setErrors({})
       setTouched({})
     }
-  }, [isOpen, initialData, tiposClase])
-
-  // Filter profesores to show only Titular for main professor
-  const titularProfesores = useMemo(
-    () => profesores.filter((p) => p.tipoProfesor === 'Titular'),
-    [profesores]
-  )
+  }, [isOpen, initialData, prefillData, tiposClase])
 
   // Validate form
   const validateForm = useCallback((): FormErrors => {
@@ -226,8 +253,10 @@ export function ClaseFormModal({
       newErrors.idTipoClase = 'El tipo de clase es requerido'
     }
 
-    if (!formData.idProfesorPrincipal) {
-      newErrors.idProfesorPrincipal = 'El profesor es requerido'
+    // Validación de profesores (sistema nuevo)
+    const validacionProfesores = validarProfesores(formData.profesores)
+    if (!validacionProfesores.valido) {
+      newErrors.idProfesorPrincipal = validacionProfesores.mensaje
     }
 
     if (!formData.cupoMaximo || formData.cupoMaximo < 1) {
@@ -258,12 +287,37 @@ export function ClaseFormModal({
 
   // Handle field change
   const handleChange = useCallback(
-    (field: keyof ClaseFormData, value: string | number | string[]) => {
+    (field: keyof ClaseFormData, value: string | number | string[] | ProfesorClaseRequest[]) => {
       setFormData((prev) => ({ ...prev, [field]: value }))
       setTouched((prev) => ({ ...prev, [field]: true }))
     },
     []
   )
+  
+  // Manejar agregar/quitar profesores
+  const agregarProfesor = useCallback(() => {
+    setFormData(prev => ({
+      ...prev,
+      profesores: [...prev.profesores, { idProfesor: '', rolEnClase: 'Monitor' }]
+    }))
+  }, [])
+  
+  const eliminarProfesor = useCallback((index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      profesores: prev.profesores.filter((_, i) => i !== index)
+    }))
+  }, [])
+  
+  const actualizarProfesor = useCallback((index: number, campo: 'idProfesor' | 'rolEnClase', valor: string) => {
+    setFormData(prev => ({
+      ...prev,
+      profesores: prev.profesores.map((p, i) => 
+        i === index ? { ...p, [campo]: valor } : p
+      )
+    }))
+    setTouched(prev => ({ ...prev, profesores: true }))
+  }, [])
 
   // Handle blur for validation
   const handleBlur = useCallback((field: string) => {
@@ -316,29 +370,36 @@ export function ClaseFormModal({
   const submitButtonText = mode === 'create' ? 'Crear Clase' : 'Guardar Cambios'
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-[100] pt-20 overflow-y-auto"
+    >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/70 backdrop-blur-md -z-10"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <GlassPanel className="relative z-10 w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white">{modalTitle}</h2>
-          <GlassButton
-            variant="icon"
-            onClick={onClose}
-            disabled={isSubmitting}
-            className="!p-2"
-          >
-            <X className="w-5 h-5" />
-          </GlassButton>
-        </div>
+      <div className="relative flex items-start justify-center p-4 min-h-full">
+        <GlassPanel className="relative w-full max-w-lg flex flex-col my-8 overflow-hidden">
+          {/* Header */}
+          <div className="p-6 pb-4 flex-shrink-0">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-semibold text-white">{modalTitle}</h2>
+              <GlassButton
+                variant="icon"
+                onClick={onClose}
+                disabled={isSubmitting}
+                className="!p-2"
+              >
+                <X className="w-5 h-5" />
+              </GlassButton>
+            </div>
+          </div>
 
-        {/* Form */}
+          {/* Form - Scrollable */}
+          <div className="flex-1 overflow-y-auto px-6 pb-6">{/* Form content unchanged */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* General Error */}
           {errors.general && (
@@ -428,46 +489,103 @@ export function ClaseFormModal({
             )}
           </div>
 
-          {/* Profesor Principal - Requirements: 5.2, 5.8 */}
+          {/* Profesores con Roles - NUEVO SISTEMA */}
           <div>
-            <label className="block text-gray-300 mb-2 text-sm">
-              Profesor Principal <span className="text-red-400">*</span>
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-gray-300 text-sm">
+                Profesores <span className="text-red-400">*</span>
+              </label>
+              <GlassButton
+                type="button"
+                variant="secondary"
+                onClick={agregarProfesor}
+                disabled={isCatalogsLoading}
+                className="!py-1 !px-3 !text-sm flex items-center gap-1"
+              >
+                <Plus className="w-4 h-4" />
+                Agregar Profesor
+              </GlassButton>
+            </div>
+            
             {isCatalogsLoading ? (
               <div className="h-12 bg-white/5 rounded-xl animate-pulse" />
             ) : (
-              <GlassSelect
-                value={formData.idProfesorPrincipal}
-                onValueChange={(value) =>
-                  handleChange('idProfesorPrincipal', value)
-                }
-              >
-                <GlassSelectTrigger
-                  className={
-                    touched.idProfesorPrincipal && errors.idProfesorPrincipal
-                      ? 'border-red-500'
-                      : ''
-                  }
-                >
-                  <GlassSelectValue placeholder="Seleccionar profesor" />
-                </GlassSelectTrigger>
-                <GlassSelectContent>
-                  {titularProfesores.map((profesor) => (
-                    <GlassSelectItem
-                      key={profesor.idProfesor}
-                      value={profesor.idProfesor}
+              <div className="space-y-3">
+                {formData.profesores.length === 0 ? (
+                  <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center text-gray-400 text-sm">
+                    No hay profesores agregados. Haz clic en "Agregar Profesor" para comenzar.
+                  </div>
+                ) : (
+                  formData.profesores.map((profesor, index) => (
+                    <div
+                      key={index}
+                      className="flex gap-2 items-start p-3 rounded-xl bg-white/5 border border-white/10"
                     >
-                      {profesor.nombreCompleto}
-                    </GlassSelectItem>
-                  ))}
-                </GlassSelectContent>
-              </GlassSelect>
+                      {/* Selector de Profesor */}
+                      <div className="flex-1">
+                        <GlassSelect
+                          value={profesor.idProfesor}
+                          onValueChange={(value) => actualizarProfesor(index, 'idProfesor', value)}
+                        >
+                          <GlassSelectTrigger className="w-full">
+                            <GlassSelectValue placeholder="Seleccionar profesor" />
+                          </GlassSelectTrigger>
+                          <GlassSelectContent>
+                            {profesores.map((prof) => (
+                              <GlassSelectItem
+                                key={prof.idProfesor}
+                                value={prof.idProfesor}
+                                disabled={formData.profesores.some((p, i) => i !== index && p.idProfesor === prof.idProfesor)}
+                              >
+                                {prof.nombreCompleto}
+                              </GlassSelectItem>
+                            ))}
+                          </GlassSelectContent>
+                        </GlassSelect>
+                      </div>
+                      
+                      {/* Selector de Rol */}
+                      <div className="w-32">
+                        <GlassSelect
+                          value={profesor.rolEnClase}
+                          onValueChange={(value) => actualizarProfesor(index, 'rolEnClase', value as 'Principal' | 'Monitor')}
+                        >
+                          <GlassSelectTrigger className="w-full">
+                            <GlassSelectValue />
+                          </GlassSelectTrigger>
+                          <GlassSelectContent>
+                            <GlassSelectItem value="Principal">Principal</GlassSelectItem>
+                            <GlassSelectItem value="Monitor">Monitor</GlassSelectItem>
+                          </GlassSelectContent>
+                        </GlassSelect>
+                      </div>
+                      
+                      {/* Botón Eliminar */}
+                      <GlassButton
+                        type="button"
+                        variant="icon"
+                        onClick={() => eliminarProfesor(index)}
+                        className="!p-2 text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </GlassButton>
+                    </div>
+                  ))
+                )}
+              </div>
             )}
-            {touched.idProfesorPrincipal && errors.idProfesorPrincipal && (
+            
+            {/* Mensaje de error */}
+            {touched.profesores && errors.idProfesorPrincipal && (
               <p className="text-red-400 text-sm mt-1">
                 {errors.idProfesorPrincipal}
               </p>
             )}
+            
+            {/* Info Helper */}
+            <p className="text-gray-400 text-xs mt-2">
+              Debe haber al menos un profesor con rol "Principal". Puedes agregar varios profesores principales y monitores.
+            </p>
           </div>
 
           {/* Cupo Máximo - Requirements: 5.2 */}
@@ -549,7 +667,9 @@ export function ClaseFormModal({
             </GlassButton>
           </div>
         </form>
+        </div>
       </GlassPanel>
+      </div>
     </div>
   )
 }

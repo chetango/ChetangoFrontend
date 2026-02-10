@@ -4,10 +4,10 @@
 // Requirements: 3.4, 3.5, 3.6, 6.6, 7.5, 12.1, 12.2
 // ============================================
 
+import { Badge, GlassButton, GlassPanel } from '@/design-system'
+import { ArrowRight, CheckCircle, Clock, Edit2, Users, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { Clock, Users, Edit2, X, ArrowRight } from 'lucide-react'
-import { GlassPanel, Badge, GlassButton } from '@/design-system'
-import type { ClaseListItemDTO, ClaseEstado } from '../types/classTypes'
+import type { ClaseEstado, ClaseListItemDTO } from '../types/classTypes'
 
 // ============================================
 // TYPES
@@ -24,6 +24,8 @@ export interface ClaseCardProps {
   onEdit?: (idClase: string) => void
   /** Callback when cancel button is clicked */
   onCancel?: (idClase: string) => void
+  /** Callback when complete button is clicked */
+  onComplete?: (idClase: string) => void
   /** Callback when view detail is clicked */
   onViewDetail?: (idClase: string) => void
   /** Whether the card is in loading state */
@@ -139,6 +141,7 @@ export function ClaseCard({
   nombreProfesor,
   onEdit,
   onCancel,
+  onComplete,
   onViewDetail,
   isLoading = false,
 }: ClaseCardProps) {
@@ -154,11 +157,12 @@ export function ClaseCard({
   const canEdit = estado === 'hoy' || estado === 'programada'
   const canCancel = estado === 'hoy' || estado === 'programada'
   const canNavigateToAttendance = estado !== 'cancelada'
+  const canComplete = clase.estado !== 'Completada' && clase.estado !== 'Cancelada'
 
   // Handle navigation to attendance page
   // Requirements: 12.1, 12.2
   const handleNavigateToAttendance = () => {
-    navigate(`/admin/asistencias?claseId=${clase.idClase}`)
+    navigate(`/admin/attendance?claseId=${clase.idClase}`)
   }
 
   // Opacity for cancelled classes
@@ -177,7 +181,7 @@ export function ClaseCard({
   }
 
   return (
-    <GlassPanel hover={canEdit} className={`p-4 ${cardOpacity}`}>
+    <GlassPanel hover={canEdit} className={`p-4 min-w-[380px] ${cardOpacity}`}>
       {/* Header: Tipo + Estado Badge */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
@@ -250,6 +254,20 @@ export function ClaseCard({
 
         {/* Spacer */}
         <div className="flex-1" />
+
+        {/* Complete Button */}
+        {canComplete && onComplete && (
+          <GlassButton
+            variant="secondary"
+            size="sm"
+            onClick={() => onComplete(clase.idClase)}
+            title="Completar clase y generar pagos"
+            className="text-xs flex items-center gap-1 !bg-emerald-500/20 !border-emerald-500/40 hover:!bg-emerald-500/30"
+          >
+            <CheckCircle className="w-3 h-3" />
+            <span>Completar</span>
+          </GlassButton>
+        )}
 
         {/* Edit Button - Requirements: 6.6 */}
         {canEdit && onEdit && (

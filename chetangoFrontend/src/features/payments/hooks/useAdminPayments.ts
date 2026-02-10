@@ -2,34 +2,35 @@
 // USE ADMIN PAYMENTS HOOK - CHETANGO ADMIN
 // ============================================
 
-import { useState, useMemo, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
+import { toLocalISOString } from '@/shared/utils/dateTimeHelper'
+import { useCallback, useMemo, useState } from 'react'
 import {
-  useMetodosPagoQuery,
-  useEstadisticasQuery,
-  useAlumnosForPaymentsQuery,
-  useTiposPaqueteForPaymentsQuery,
-  usePagosByAlumnoQuery,
-  usePagoDetailQuery,
-} from '../api/paymentQueries'
-import {
-  useCreatePagoMutation,
-  useUpdatePagoMutation,
+    useCreatePagoMutation,
+    useUpdatePagoMutation,
 } from '../api/paymentMutations'
 import {
-  setSearchTerm,
-  setSelectedAlumno,
-  setActiveTab,
-  clearSelection,
+    useAlumnosForPaymentsQuery,
+    useEstadisticasQuery,
+    useMetodosPagoQuery,
+    usePagoDetailQuery,
+    usePagosByAlumnoQuery,
+    useTiposPaqueteForPaymentsQuery,
+} from '../api/paymentQueries'
+import {
+    clearSelection,
+    setActiveTab,
+    setSearchTerm,
+    setSelectedAlumno,
 } from '../store/paymentsSlice'
 import type {
-  PagoFormData,
-  SelectedPaquete,
-  CrearPagoRequest,
-  PaymentsStats,
-  AlumnoDTO,
-  PagoDetalleDTO,
-  TipoPaqueteDTO,
+    AlumnoDTO,
+    CrearPagoRequest,
+    PagoDetalleDTO,
+    PagoFormData,
+    PaymentsStats,
+    SelectedPaquete,
+    TipoPaqueteDTO,
 } from '../types/paymentTypes'
 
 // ============================================
@@ -143,8 +144,8 @@ export function useAdminPayments() {
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1)
     const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0)
     return {
-      fechaDesde: firstDay.toISOString(),
-      fechaHasta: lastDay.toISOString(),
+      fechaDesde: toLocalISOString(firstDay),
+      fechaHasta: toLocalISOString(lastDay),
     }
   }, [])
 

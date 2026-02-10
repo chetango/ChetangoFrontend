@@ -2,16 +2,16 @@
 // ATTENDANCE SLICE - CHETANGO ADMIN
 // ============================================
 
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
 import type { AttendanceUIState } from '@/features/attendance/types/attendanceTypes'
+import { getToday } from '@/shared/utils/dateTimeHelper'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 /**
  * Get today's date in YYYY-MM-DD format
  */
 const getTodayDate = (): string => {
-  const today = new Date()
-  return today.toISOString().split('T')[0]
+  return getToday()
 }
 
 // Initial state for attendance UI

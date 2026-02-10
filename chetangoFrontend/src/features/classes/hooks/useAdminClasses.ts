@@ -3,35 +3,41 @@
 // Main hook for admin classes page integration
 // ============================================
 
-import { useState, useMemo, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
+import { useCallback, useMemo, useState } from 'react'
 import {
-  useTiposClaseQuery,
-  useProfesoresQuery,
-  useClasesByProfesorQuery,
-  useClaseDetailQuery,
-} from '../api/classQueries'
-import {
-  useCreateClaseMutation,
-  useUpdateClaseMutation,
-  useDeleteClaseMutation,
+    useCreateClaseMutation,
+    useDeleteClaseMutation,
+    useUpdateClaseMutation,
 } from '../api/classMutations'
 import {
-  setSearchTerm,
-  setFilterProfesor,
-  setFilterTipo,
-  setFilterFecha,
-  setSelectedClaseId,
-  clearFilters,
+    useClaseDetailQuery,
+    useClasesByProfesorQuery,
+    useProfesoresQuery,
+    useTiposClaseQuery,
+} from '../api/classQueries'
+import {
+    clearFilters,
+    setFilterFecha,
+    setFilterProfesor,
+    setFilterTipo,
+    setSearchTerm,
+    setSelectedClaseId,
 } from '../store/classesSlice'
 import type {
-  ClaseFormData,
-  CrearClaseRequest,
-  EditarClaseRequest,
-  ClaseListItemDTO,
-  ClaseEstado,
-  ClasesQueryParams,
+    ClaseEstado,
+    ClaseFormData,
+    ClaseListItemDTO,
+    ClasesQueryParams,
+    CrearClaseRequest,
+    EditarClaseRequest,
 } from '../types/classTypes'
+import {
+    calcularDuracionMinutos,
+    encontrarProfesorPrincipal,
+    formatearFechaHoraISO,
+    formatearHoraConSegundos,
+} from '../utils/claseHelpers'
 
 // ============================================
 // HELPER FUNCTIONS
@@ -226,15 +232,22 @@ export function useAdminClasses() {
   /**
    * Creates a new class
    * Requirements: 5.3
+   * Usa el NUEVO formato de múltiples profesores con roles
    */
   const handleCreateClase = useCallback(
     async (formData: ClaseFormData) => {
       const request: CrearClaseRequest = {
-        idProfesorPrincipal: formData.idProfesorPrincipal,
+        // NUEVO: Sistema de múltiples profesores con roles
+        profesores: formData.profesores.map(p => ({
+          idProfesor: p.idProfesor,
+          rolEnClase: p.rolEnClase
+        })),
+        
+        // Datos comunes
         idTipoClase: formData.idTipoClase,
-        fecha: formData.fecha + 'T00:00:00',
-        horaInicio: formData.horaInicio + ':00',
-        horaFin: formData.horaFin + ':00',
+        fecha: formatearFechaHoraISO(formData.fecha, '00:00'),
+        horaInicio: formatearHoraConSegundos(formData.horaInicio),
+        horaFin: formatearHoraConSegundos(formData.horaFin),
         cupoMaximo: formData.cupoMaximo,
         observaciones: formData.observaciones || undefined,
       }
@@ -250,16 +263,17 @@ export function useAdminClasses() {
    */
   const handleUpdateClase = useCallback(
     async (idClase: string, formData: ClaseFormData) => {
-      // Calculate duration in minutes
-      const [startHour, startMin] = formData.horaInicio.split(':').map(Number)
-      const [endHour, endMin] = formData.horaFin.split(':').map(Number)
-      const duracionMinutos = endHour * 60 + endMin - (startHour * 60 + startMin)
+      // Obtener el profesor principal del array
+      const profesorPrincipal = encontrarProfesorPrincipal(formData.profesores)
+      if (!profesorPrincipal) {
+        throw new Error('No se encontró un profesor principal')
+      }
 
       const request: EditarClaseRequest = {
         idTipoClase: formData.idTipoClase,
-        idProfesor: formData.idProfesorPrincipal,
-        fechaHoraInicio: `${formData.fecha}T${formData.horaInicio}:00`,
-        duracionMinutos,
+        idProfesor: profesorPrincipal.idProfesor,
+        fechaHoraInicio: formatearFechaHoraISO(formData.fecha, formData.horaInicio),
+        duracionMinutos: calcularDuracionMinutos(formData.horaInicio, formData.horaFin),
         cupoMaximo: formData.cupoMaximo,
         observaciones: formData.observaciones || undefined,
       }

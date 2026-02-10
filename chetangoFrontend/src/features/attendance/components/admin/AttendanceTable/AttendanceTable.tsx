@@ -2,23 +2,23 @@
 // ATTENDANCE TABLE COMPONENT
 // ============================================
 
-import { Search } from 'lucide-react'
 import {
-  GlassTable,
-  GlassTableHeader,
-  GlassTableBody,
-  GlassTableHead,
-  GlassTableRow,
+    GlassTable,
+    GlassTableBody,
+    GlassTableHead,
+    GlassTableHeader,
+    GlassTableRow,
 } from '@/design-system/molecules/GlassTable'
+import { Search } from 'lucide-react'
+import type { StudentAttendance } from '../../../types/attendanceTypes'
 import { AttendanceRow } from '../AttendanceRow'
 import { AttendanceCardMobile } from '../AttendanceRow/AttendanceCardMobile'
-import type { StudentAttendance } from '../../../types/attendanceTypes'
 
 interface AttendanceTableProps {
   students: StudentAttendance[]
   searchTerm: string
-  onToggleAttendance: (studentId: string) => void
-  onObservationChange: (studentId: string, observation: string) => void
+  onToggleAttendance: (studentId: string, idPaquete: string | null) => void
+  onObservationChange: (studentId: string, idPaquete: string | null, observation: string) => void
   isUpdating: Record<string, boolean>
 }
 
@@ -80,11 +80,11 @@ export function AttendanceTable({
           <GlassTableBody>
             {students.map((student) => (
               <AttendanceRow
-                key={student.idAlumno}
+                key={`${student.idAlumno}-${student.paquete?.idPaquete}`}
                 student={student}
-                onToggleAttendance={() => onToggleAttendance(student.idAlumno)}
+                onToggleAttendance={() => onToggleAttendance(student.idAlumno, student.paquete?.idPaquete ?? null)}
                 onObservationChange={(observation) =>
-                  onObservationChange(student.idAlumno, observation)
+                  onObservationChange(student.idAlumno, student.paquete?.idPaquete ?? null, observation)
                 }
                 isUpdating={isUpdating[student.idAlumno] || false}
               />
@@ -97,11 +97,11 @@ export function AttendanceTable({
       <div className="md:hidden divide-y divide-[rgba(255,255,255,0.08)]">
         {students.map((student) => (
           <AttendanceCardMobile
-            key={student.idAlumno}
+            key={`${student.idAlumno}-${student.paquete?.idPaquete}`}
             student={student}
-            onToggleAttendance={() => onToggleAttendance(student.idAlumno)}
+            onToggleAttendance={() => onToggleAttendance(student.idAlumno, student.paquete?.idPaquete ?? null)}
             onObservationChange={(observation) =>
-              onObservationChange(student.idAlumno, observation)
+              onObservationChange(student.idAlumno, student.paquete?.idPaquete ?? null, observation)
             }
             isUpdating={isUpdating[student.idAlumno] || false}
           />

@@ -3,15 +3,12 @@
 // ============================================
 
 // Re-export shared types from packages
-export type {
-  AlumnoDTO,
-  TipoPaqueteDTO,
-  EstadoPaquete,
-  EstadoPaqueteId,
-} from '@/features/packages/types/packageTypes'
 export {
-  ESTADO_PAQUETE_MAP,
-  ESTADO_PAQUETE_COLORS,
+    ESTADO_PAQUETE_COLORS, ESTADO_PAQUETE_MAP
+} from '@/features/packages/types/packageTypes'
+export type {
+    AlumnoDTO, EstadoPaquete,
+    EstadoPaqueteId, TipoPaqueteDTO
 } from '@/features/packages/types/packageTypes'
 
 // ============================================
@@ -93,6 +90,8 @@ export interface PagoListItemDTO {
  */
 export interface PaquetePagoDTO {
   idPaquete: string // Guid
+  idAlumno: string // Guid
+  nombreAlumno: string
   nombreTipoPaquete: string
   clasesDisponibles: number
   clasesUsadas: number
@@ -108,9 +107,9 @@ export interface PaquetePagoDTO {
  */
 export interface PagoDetalleDTO {
   idPago: string // Guid
-  idAlumno: string // Guid
-  nombreAlumno: string
-  correoAlumno: string
+  idAlumno: string | null // Guid - null para pagos compartidos
+  nombreAlumno: string | null
+  correoAlumno: string | null
   fechaPago: string // DateTime ISO 8601
   montoTotal: number
   idMetodoPago: string // Guid

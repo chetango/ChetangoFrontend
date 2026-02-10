@@ -4,24 +4,25 @@
 // Requirements: 5.1, 5.2, 5.3, 5.5, 5.6, 5.7, 10.1, 10.3
 // ============================================
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { X, Calendar, FileText, Loader2, User, Package } from 'lucide-react'
 import {
-  GlassPanel,
-  GlassButton,
-  GlassInput,
-  GlassSelect,
-  GlassSelectTrigger,
-  GlassSelectValue,
-  GlassSelectContent,
-  GlassSelectItem,
-  Skeleton,
-  SkeletonText,
+    GlassButton,
+    GlassInput,
+    GlassPanel,
+    GlassSelect,
+    GlassSelectContent,
+    GlassSelectItem,
+    GlassSelectTrigger,
+    GlassSelectValue,
+    Skeleton,
+    SkeletonText,
 } from '@/design-system'
+import { getToday, toLocalDateString } from '@/shared/utils/dateTimeHelper'
+import { Calendar, FileText, Loader2, Package, User, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type {
-  AlumnoDTO,
-  TipoPaqueteDTO,
-  PaqueteFormData,
+    AlumnoDTO,
+    PaqueteFormData,
+    TipoPaqueteDTO,
 } from '../../../types/packageTypes'
 
 // ============================================
@@ -64,7 +65,7 @@ export interface FormErrors {
  * Gets today's date in YYYY-MM-DD format
  */
 export function getTodayDate(): string {
-  return new Date().toISOString().split('T')[0]
+  return getToday()
 }
 
 /**
@@ -82,7 +83,7 @@ export function calculateFechaFin(fechaInicio: string, diasVigencia: number): st
   const endDate = new Date(startDate)
   endDate.setDate(endDate.getDate() + diasVigencia)
   
-  return endDate.toISOString().split('T')[0]
+  return toLocalDateString(endDate)
 }
 
 /**
@@ -113,7 +114,7 @@ export function validateRequiredFields(formData: PaqueteFormData): FormErrors {
  * Requirements: 2.5
  */
 export function formatAlumnoDisplay(alumno: AlumnoDTO): string {
-  return `${alumno.nombreCompleto} - ${alumno.documentoIdentidad}`
+  return `${alumno.nombre} - ${alumno.numeroDocumento || 'Sin documento'}`
 }
 
 /**
@@ -121,7 +122,7 @@ export function formatAlumnoDisplay(alumno: AlumnoDTO): string {
  * Requirements: 2.6
  */
 export function formatTipoPaqueteDisplay(tipo: TipoPaqueteDTO): string {
-  return `${tipo.nombre} (${tipo.clasesDisponibles} clases)`
+  return `${tipo.nombre} (${tipo.numeroClases} clases)`
 }
 
 // ============================================
@@ -178,7 +179,7 @@ export function CreatePackageModal({
 
   // Get selected tipo paquete for auto-calculation
   const selectedTipoPaquete = useMemo(() => {
-    return tiposPaquete.find((t) => t.id === formData.idTipoPaquete)
+    return tiposPaquete.find((t) => t.idTipoPaquete === formData.idTipoPaquete)
   }, [tiposPaquete, formData.idTipoPaquete])
 
   // Reset form when modal opens/closes
@@ -248,7 +249,8 @@ export function CreatePackageModal({
     try {
       await onSubmit(formData)
       onClose()
-    } catch {
+    } catch (error) {
+      console.error('[CreatePackageModal] Error al crear paquete:', error)
       setErrors((prev) => ({
         ...prev,
         general: 'Error al crear el paquete. Intenta de nuevo.',
@@ -262,18 +264,18 @@ export function CreatePackageModal({
   const isFormValid = Object.keys(validateForm()).length === 0
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="absolute inset-0 z-[100] flex items-start justify-center pt-20 px-4 pb-8 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm -z-10"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <GlassPanel className="relative z-10 w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
+      <GlassPanel className="relative z-10 w-full max-w-lg p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white">Crear Paquete</h2>
+          <h2 className="text-xl font-semibold text-white">Asignar Paquete</h2>
           <GlassButton
             variant="icon"
             onClick={onClose}
@@ -361,7 +363,7 @@ export function CreatePackageModal({
                 </GlassSelectTrigger>
                 <GlassSelectContent>
                   {tiposPaquete.map((tipo) => (
-                    <GlassSelectItem key={tipo.id} value={tipo.id}>
+                    <GlassSelectItem key={tipo.idTipoPaquete} value={tipo.idTipoPaquete}>
                       {formatTipoPaqueteDisplay(tipo)}
                     </GlassSelectItem>
                   ))}

@@ -2,10 +2,10 @@
 // ATTENDANCE DETAIL MODAL COMPONENT - STUDENT VIEW
 // ============================================
 
-import { useEffect, useCallback } from 'react'
-import { X, CheckCircle2, Info } from 'lucide-react'
+import { CheckCircle2, Info, X } from 'lucide-react'
+import { useCallback, useEffect } from 'react'
 import type { AsistenciaRecord } from '../../../types/studentTypes'
-import { getEstadoInfo, getTipoInfo, formatearHora12 } from '../AttendanceHistoryCard'
+import { formatearHora12, getEstadoInfo, getTipoInfo } from '../AttendanceHistoryCard'
 
 interface AttendanceDetailModalProps {
   /** Attendance record to display, null if modal is closed */
@@ -111,7 +111,7 @@ export function AttendanceDetailModal({ record, isOpen, onClose }: AttendanceDet
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-start justify-center p-4 pt-20 bg-black/60 backdrop-blur-sm overflow-y-auto"
       onClick={onClose}
       role="dialog"
       aria-modal="true"

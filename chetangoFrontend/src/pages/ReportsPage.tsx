@@ -1,14 +1,358 @@
 // ============================================
 // REPORTS PAGE - CHETANGO
+// Main reports dashboard with all report cards
+// Requirements: 3.7, 3.8, 8.5, 9.3, 10.1
 // ============================================
 
+import { GlassPanel, StatCard } from '@/design-system'
+import {
+    useAlumnosReport,
+    useAsistenciasReport,
+    useClasesReport,
+    useIngresosReport,
+    usePaquetesReport,
+} from '@/features/reports/api/reportQueries'
+import {
+    AttendanceReportModal,
+    DateRangeFilterComponent,
+    PackagesReportModal,
+    ReportCard
+} from '@/features/reports/components'
+import { ClassesReportModal } from '@/features/reports/components/ClassesReportModal'
+import { IncomeReportModal } from '@/features/reports/components/IncomeReportModal'
+import { StudentsReportModal } from '@/features/reports/components/StudentsReportModal'
+import { getAvailableReports, REPORT_ICONS } from '@/features/reports/config/reportsConfig'
+import type { DateRangeFilter, ReportType } from '@/features/reports/types/reportTypes'
+import {
+    exportAttendanceExcel,
+    exportClassesExcel,
+    exportIncomeExcel,
+    exportPackagesExcel,
+    exportStudentsExcel
+} from '@/features/reports/utils/excelGenerator'
+import {
+    exportAttendancePDF,
+    exportClassesPDF,
+    exportIncomePDF,
+    exportPackagesPDF,
+    exportStudentsPDF
+} from '@/features/reports/utils/pdfGenerator'
+import { AlertCircle, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
 import styles from './PageStyles.module.scss'
 
+// ============================================
+// COMPONENT
+// ============================================
+
 const ReportsPage = () => {
+  const [dateFilter, setDateFilter] = useState<DateRangeFilter>({
+    preset: 'month',
+    fechaDesde: undefined,
+    fechaHasta: undefined,
+  })
+
+  const [selectedReport, setSelectedReport] = useState<ReportType | null>(null)
+  const [isExporting, setIsExporting] = useState(false)
+
+  const availableReports = getAvailableReports()
+
+  // ============================================
+  // FETCH REPORTS DATA
+  // ============================================
+
+  const { data: alumnosData, isLoading: isLoadingAlumnos } = useAlumnosReport(dateFilter, {
+    enabled: selectedReport === 'alumnos',
+  })
+
+  const { data: clasesData, isLoading: isLoadingClases } = useClasesReport(dateFilter, {
+    enabled: selectedReport === 'clases',
+  })
+
+  const { data: ingresosData, isLoading: isLoadingIngresos } = useIngresosReport(dateFilter, {
+    enabled: selectedReport === 'ingresos',
+  })
+
+  const { data: paquetesData, isLoading: isLoadingPaquetes } = usePaquetesReport(dateFilter, {
+    enabled: selectedReport === 'paquetes',
+  })
+
+  const { data: asistenciasData, isLoading: isLoadingAsistencias } = useAsistenciasReport(dateFilter, {
+    enabled: selectedReport === 'asistencias',
+  })
+
+  // ============================================
+  // HANDLERS
+  // ============================================
+
+  const handleViewReport = (reportType: ReportType) => {
+    console.log('Opening report:', reportType)
+    setSelectedReport(reportType)
+  }
+
+  const handleCloseModal = () => {
+    setSelectedReport(null)
+    setIsExporting(false)
+  }
+
+  // Export handlers
+  const handleExportStudentsPDF = async () => {
+    if (!alumnosData) return
+    setIsExporting(true)
+    try {
+      exportStudentsPDF(alumnosData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportStudentsExcel = async () => {
+    if (!alumnosData) return
+    setIsExporting(true)
+    try {
+      exportStudentsExcel(alumnosData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportClassesPDF = async () => {
+    if (!clasesData) return
+    setIsExporting(true)
+    try {
+      exportClassesPDF(clasesData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportClassesExcel = async () => {
+    if (!clasesData) return
+    setIsExporting(true)
+    try {
+      exportClassesExcel(clasesData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportIncomePDF = async () => {
+    if (!ingresosData) return
+    setIsExporting(true)
+    try {
+      exportIncomePDF(ingresosData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportIncomeExcel = async () => {
+    if (!ingresosData) return
+    setIsExporting(true)
+    try {
+      exportIncomeExcel(ingresosData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportPackagesPDF = async () => {
+    if (!paquetesData) return
+    setIsExporting(true)
+    try {
+      exportPackagesPDF(paquetesData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportPackagesExcel = async () => {
+    if (!paquetesData) return
+    setIsExporting(true)
+    try {
+      exportPackagesExcel(paquetesData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportAttendancePDF = async () => {
+    if (!asistenciasData) return
+    setIsExporting(true)
+    try {
+      exportAttendancePDF(asistenciasData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  const handleExportAttendanceExcel = async () => {
+    if (!asistenciasData) return
+    setIsExporting(true)
+    try {
+      exportAttendanceExcel(asistenciasData)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  // ============================================
+  // RENDER
+  // ============================================
+
   return (
     <div className={styles['page-container']}>
-      <h1 className={styles['page-title']}>Reportes - Chetango</h1>
-      <p className={styles['page-description']}>Generación de reportes y estadísticas</p>
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className={styles['page-title']}>📊 Reportes - Chetango</h1>
+        <p className={styles['page-description']}>
+          Consulta estadísticas detalladas y exporta reportes del sistema
+        </p>
+      </div>
+
+      {/* Global Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <StatCard
+          label="Reportes Disponibles"
+          value={availableReports.length}
+          icon={<TrendingUp className="w-5 h-5" />}
+          trend="+2 nuevos"
+          variant="primary"
+        />
+        <StatCard
+          label="Período Seleccionado"
+          value={dateFilter.preset === 'month' ? 'Este Mes' : 'Personalizado'}
+          icon={<TrendingUp className="w-5 h-5" />}
+          variant="secondary"
+        />
+        <StatCard
+          label="Última Actualización"
+          value="Hoy"
+          icon={<TrendingUp className="w-5 h-5" />}
+          variant="accent"
+        />
+      </div>
+
+      {/* Date Filter */}
+      <GlassPanel className="p-6 mb-6">
+        <h2 className="text-lg font-semibold text-white mb-4">
+          Filtros Globales
+        </h2>
+        <DateRangeFilterComponent
+          value={dateFilter}
+          onChange={setDateFilter}
+          showLabel={true}
+        />
+        <p className="text-gray-400 text-sm mt-3">
+          Los filtros se aplicarán a todos los reportes que consultes
+        </p>
+      </GlassPanel>
+
+      {/* Reports Grid */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-white mb-4">
+          Reportes Disponibles
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {availableReports.map((report) => {
+            const Icon = REPORT_ICONS[report.icon as keyof typeof REPORT_ICONS]
+            
+            return (
+              <ReportCard
+                key={report.id}
+                id={report.id}
+                title={report.title}
+                description={report.description}
+                icon={Icon}
+                color={report.color}
+                stats={[
+                  { label: 'Estado', value: 'Activo' },
+                  { label: 'Formato', value: 'PDF/Excel' },
+                ]}
+                onView={handleViewReport}
+              />
+            )
+          })}
+        </div>
+      </div>
+
+      {/* Help Section */}
+      <GlassPanel className="p-6">
+        <div className="flex items-start gap-4">
+          <div className="
+            w-10 h-10 flex-shrink-0
+            flex items-center justify-center
+            rounded-lg
+            bg-blue-500/20
+            text-blue-400
+          ">
+            <AlertCircle className="w-5 h-5" />
+          </div>
+          <div>
+            <h3 className="text-white font-semibold mb-2">
+              ¿Cómo usar los reportes?
+            </h3>
+            <ul className="text-gray-400 text-sm space-y-1">
+              <li>• Selecciona el período de fechas que deseas consultar</li>
+              <li>• Haz clic en "Ver Reporte" en cualquier tarjeta</li>
+              <li>• Aplica filtros específicos dentro de cada reporte</li>
+              <li>• Exporta los datos a PDF o Excel según necesites</li>
+            </ul>
+          </div>
+        </div>
+      </GlassPanel>
+
+      {/* Report Modals */}
+      <StudentsReportModal
+        isOpen={selectedReport === 'alumnos'}
+        onClose={handleCloseModal}
+        data={alumnosData || null}
+        isLoading={isLoadingAlumnos}
+        onExportPDF={handleExportStudentsPDF}
+        onExportExcel={handleExportStudentsExcel}
+        isExporting={isExporting}
+      />
+
+      <ClassesReportModal
+        isOpen={selectedReport === 'clases'}
+        onClose={handleCloseModal}
+        data={clasesData || null}
+        isLoading={isLoadingClases}
+        onExportPDF={handleExportClassesPDF}
+        onExportExcel={handleExportClassesExcel}
+        isExporting={isExporting}
+      />
+
+      <IncomeReportModal
+        isOpen={selectedReport === 'ingresos'}
+        onClose={handleCloseModal}
+        data={ingresosData || null}
+        isLoading={isLoadingIngresos}
+        onExportPDF={handleExportIncomePDF}
+        onExportExcel={handleExportIncomeExcel}
+        isExporting={isExporting}
+      />
+
+      <PackagesReportModal
+        isOpen={selectedReport === 'paquetes'}
+        onClose={handleCloseModal}
+        data={paquetesData || null}
+        isLoading={isLoadingPaquetes}
+        onExportPDF={handleExportPackagesPDF}
+        onExportExcel={handleExportPackagesExcel}
+        isExporting={isExporting}
+      />
+
+      <AttendanceReportModal
+        isOpen={selectedReport === 'asistencias'}
+        onClose={handleCloseModal}
+        data={asistenciasData || null}
+        isLoading={isLoadingAsistencias}
+        onExportPDF={handleExportAttendancePDF}
+        onExportExcel={handleExportAttendanceExcel}
+        isExporting={isExporting}
+      />
     </div>
   )
 }

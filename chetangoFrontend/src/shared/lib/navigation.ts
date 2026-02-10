@@ -3,26 +3,31 @@
 // ============================================
 
 import { ROUTES } from '@/shared/constants/routes'
+import { BarChart3, Calendar, CheckCircle2, ClipboardCheck, DollarSign, Home, Package, User, Users, Wallet } from 'lucide-react'
 
 export interface NavItem {
   label: string
   path: string
-  icon?: string
+  icon?: any
   roles?: string[]
 }
 
 // Definición de elementos de navegación por rol
 const NAVIGATION_ITEMS: NavItem[] = [
-  // Elementos comunes
-  { label: 'Dashboard', path: ROUTES.DASHBOARD, roles: ['admin', 'alumno', 'profesor'] },
+  // Dashboard por rol
+  { label: 'Dashboard', path: ROUTES.ADMIN.ROOT, icon: Home, roles: ['admin'] },
+  { label: 'Dashboard', path: ROUTES.TEACHER.ROOT, icon: Home, roles: ['profesor'] },
+  { label: 'Dashboard', path: ROUTES.STUDENT.ROOT, icon: Home, roles: ['alumno'] },
   
   // Elementos de Admin
-  { label: 'Usuarios', path: ROUTES.ADMIN.USERS, roles: ['admin'] },
-  { label: 'Asistencia', path: ROUTES.ADMIN.ATTENDANCE, roles: ['admin'] },
-  { label: 'Pagos', path: ROUTES.ADMIN.PAYMENTS, roles: ['admin'] },
-  { label: 'Clases', path: ROUTES.ADMIN.CLASSES, roles: ['admin'] },
-  { label: 'Paquetes', path: ROUTES.ADMIN.PACKAGES, roles: ['admin'] },
-  { label: 'Reportes', path: ROUTES.ADMIN.REPORTS, roles: ['admin'] },
+  { label: 'Asistencias', path: ROUTES.ADMIN.ATTENDANCE, icon: CheckCircle2, roles: ['admin'] },
+  { label: 'Pagos Alumnos', path: ROUTES.ADMIN.PAYMENTS, icon: DollarSign, roles: ['admin'] },
+  { label: 'Clases', path: ROUTES.ADMIN.CLASSES, icon: Calendar, roles: ['admin'] },
+  { label: 'Paquetes', path: ROUTES.ADMIN.PACKAGES, icon: Package, roles: ['admin'] },
+  { label: 'Nómina Profesores', path: ROUTES.ADMIN.PAYROLL, icon: Wallet, roles: ['admin'] },
+  { label: 'Usuarios', path: ROUTES.ADMIN.USERS, icon: Users, roles: ['admin'] },
+  { label: 'Reportes', path: ROUTES.ADMIN.REPORTS, icon: BarChart3, roles: ['admin'] },
+  { label: 'Mi Perfil', path: ROUTES.ADMIN.PROFILE, icon: User, roles: ['admin'] },
   
   // Elementos de Estudiante
   { label: 'Mi Asistencia', path: ROUTES.STUDENT.ATTENDANCE, roles: ['alumno'] },
@@ -30,10 +35,12 @@ const NAVIGATION_ITEMS: NavItem[] = [
   { label: 'Mis Clases', path: ROUTES.STUDENT.CLASSES, roles: ['alumno'] },
   { label: 'Mi Perfil', path: ROUTES.STUDENT.PROFILE, roles: ['alumno'] },
   
-  // Elementos de Profesor (futuro)
-  { label: 'Registrar Asistencia', path: ROUTES.TEACHER.ATTENDANCE, roles: ['profesor'] },
-  { label: 'Mis Clases', path: ROUTES.TEACHER.CLASSES, roles: ['profesor'] },
-  { label: 'Mis Reportes', path: ROUTES.TEACHER.REPORTS, roles: ['profesor'] },
+  // Elementos de Profesor
+  { label: 'Registrar Asistencia', path: ROUTES.TEACHER.ATTENDANCE, icon: ClipboardCheck, roles: ['profesor'] },
+  { label: 'Mis Clases', path: ROUTES.TEACHER.CLASSES, icon: Calendar, roles: ['profesor'] },
+  { label: 'Mis Pagos', path: ROUTES.TEACHER.PAYMENTS, icon: Wallet, roles: ['profesor'] },
+  { label: 'Mis Reportes', path: ROUTES.TEACHER.REPORTS, icon: BarChart3, roles: ['profesor'] },
+  { label: 'Mi Perfil', path: ROUTES.TEACHER.PROFILE, icon: User, roles: ['profesor'] },
 ]
 
 /**

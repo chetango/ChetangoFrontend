@@ -1,7 +1,8 @@
-import { lazy, useEffect } from 'react'
-import { useNavigate, Outlet } from 'react-router-dom'
 import { useAuth } from '@/features/auth'
 import { getDefaultRouteForRoles } from '@/shared/lib/navigation'
+import { lazy, useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { RootLayout } from './RootLayout'
 
 // Componente simple que renderiza las rutas hijas
 const AdminOutlet = () => <Outlet />
@@ -19,10 +20,21 @@ const NotFoundPage = lazy(() => import('@/pages').then(m => ({ default: m.NotFou
 const AdminAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.AdminAttendancePage })))
 const AdminPackagesPage = lazy(() => import('@/pages').then(m => ({ default: m.AdminPackagesPage })))
 const AdminPaymentsPage = lazy(() => import('@/pages').then(m => ({ default: m.AdminPaymentsPage })))
+const AdminPayrollPage = lazy(() => import('@/pages/admin/AdminPayrollPage').then(m => ({ default: m.default })))
+const AdminProfilePage = lazy(() => import('@/pages/admin/AdminProfilePage').then(m => ({ default: m.default })))
+const NotificationsPage = lazy(() => import('@/pages/admin/NotificationsPage').then(m => ({ default: m.default })))
+const UserDetailPage = lazy(() => import('@/pages').then(m => ({ default: m.UserDetailPage })))
+const ProfesorDashboardPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorDashboardPage })))
 const ProfesorAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorAttendancePage })))
 const ProfesorClassesPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorClassesPage })))
+const ProfesorPaymentsPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorPaymentsPage })))
+const ProfesorProfilePage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorProfilePage })))
+const ProfesorReportsPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorReportsPage })))
+const StudentDashboardPage = lazy(() => import('@/pages').then(m => ({ default: m.StudentDashboardPage })))
 const StudentAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.StudentAttendancePage })))
 const StudentClassesPage = lazy(() => import('@/pages').then(m => ({ default: m.StudentClassesPage })))
+const StudentProfilePage = lazy(() => import('@/pages').then(m => ({ default: m.StudentProfilePage })))
+const StudentPaymentsPage = lazy(() => import('@/pages').then(m => ({ default: m.StudentPaymentsPage })))
 
 export type Meta = {
   public?: boolean
@@ -58,25 +70,44 @@ const RootRedirect = () => {
   return <div>Redirigiendo...</div>
 }
 
-export const appRoutes: AppRoute[] = [
-  { 
-    path: '/login', 
-    element: <LoginPage />, 
-    meta: { public: true, onlyGuests: true, redirectTo: '/dashboard' } 
-  },
-  { 
-    path: '/auth-callback', 
-    element: <AuthCallbackPage />, 
-    meta: { public: true } 
-  },
+// Componente para redirect desde /dashboard según rol
+const DashboardRedirect = () => {
+  const { session } = useAuth()
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    if (session.user?.roles) {
+      const defaultRoute = getDefaultRouteForRoles(session.user.roles)
+      navigate(defaultRoute, { replace: true })
+    }
+  }, [session.user?.roles, navigate])
+  
+  return <div>Redirigiendo...</div>
+}
 
+export const appRoutes: AppRoute[] = [
   {
     path: '/',
-    element: <MainLayoutWrapper />,
-    meta: { auth: true },
+    element: <RootLayout />,
     children: [
-      { index: true, element: <RootRedirect /> },
-      { path: 'dashboard', element: <DashboardPage /> },
+      { 
+        path: 'login', 
+        element: <LoginPage />, 
+        meta: { public: true, onlyGuests: true, redirectTo: '/dashboard' } 
+      },
+      { 
+        path: 'auth-callback', 
+        element: <AuthCallbackPage />, 
+        meta: { public: true } 
+      },
+
+      {
+        path: '/',
+        element: <MainLayoutWrapper />,
+        meta: { auth: true },
+        children: [
+          { index: true, element: <RootRedirect /> },
+          { path: 'dashboard', element: <DashboardRedirect /> },
       
       // RUTAS DE ADMIN
       { 
@@ -84,13 +115,17 @@ export const appRoutes: AppRoute[] = [
         element: <AdminOutlet />,
         meta: { anyRole: ['admin'] },
         children: [
-          { index: true, element: <div>Admin Dashboard</div> },
+          { index: true, element: <DashboardPage /> },
           { path: 'attendance', element: <AdminAttendancePage /> },
           { path: 'users', element: <UsersPage /> },
+          { path: 'users/:id', element: <UserDetailPage /> },
           { path: 'payments', element: <AdminPaymentsPage /> },
+          { path: 'payroll', element: <AdminPayrollPage /> },
           { path: 'classes', element: <ClassesPage /> },
           { path: 'paquetes', element: <AdminPackagesPage /> },
           { path: 'reports', element: <ReportsPage /> },
+          { path: 'profile', element: <AdminProfilePage /> },
+          { path: 'notifications', element: <NotificationsPage /> },
         ]
       },
       
@@ -100,9 +135,12 @@ export const appRoutes: AppRoute[] = [
         element: <ProfesorOutlet />,
         meta: { anyRole: ['profesor'] },
         children: [
-          { index: true, element: <div>Profesor Dashboard</div> },
+          { index: true, element: <ProfesorDashboardPage /> },
           { path: 'attendance', element: <ProfesorAttendancePage /> },
           { path: 'classes', element: <ProfesorClassesPage /> },
+          { path: 'payments', element: <ProfesorPaymentsPage /> },
+          { path: 'reports', element: <ProfesorReportsPage /> },
+          { path: 'profile', element: <ProfesorProfilePage /> },
         ]
       },
       
@@ -112,19 +150,21 @@ export const appRoutes: AppRoute[] = [
         element: <StudentOutlet />,
         meta: { anyRole: ['alumno'] },
         children: [
-          { index: true, element: <div>Student Dashboard</div> }, // TODO: Crear StudentDashboardPage
+          { index: true, element: <StudentDashboardPage /> },
           { path: 'attendance', element: <StudentAttendancePage /> },
           { path: 'classes', element: <StudentClassesPage /> },
-          { path: 'payments', element: <div>My Payments</div> }, // TODO: Crear StudentPaymentsPage
-          { path: 'profile', element: <div>My Profile</div> }, // TODO: Crear StudentProfilePage
+          { path: 'payments', element: <StudentPaymentsPage /> },
+          { path: 'profile', element: <StudentProfilePage /> },
         ]
       },
       
       // RUTAS COMPARTIDAS
       { path: 'profile', element: <div>Profile Page</div> }, // TODO: Crear ProfilePage
       { path: 'notifications', element: <div>Notifications</div> }, // TODO: Crear NotificationsPage
-    ],
-  },
+        ],
+      },
 
-  { path: '*', element: <NotFoundPage />, meta: { public: true } },
+      { path: '*', element: <NotFoundPage />, meta: { public: true } },
+    ]
+  }
 ]

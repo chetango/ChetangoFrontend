@@ -3,34 +3,34 @@
 // Per Figma Design: admin assistance.txt
 // ============================================
 
-import { useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
 import {
-  GlassPanel,
-  Toaster,
-  Skeleton,
-  SkeletonAvatar,
-  SkeletonText,
-  AmbientGlows,
-  TypographyBackdrop,
-  GlassOrb,
-  FloatingParticle,
-  CreativeAnimations,
-  FloatingBadge,
-  StatCardMini,
+    AmbientGlows,
+    CreativeAnimations,
+    FloatingBadge,
+    FloatingParticle,
+    GlassOrb,
+    GlassPanel,
+    Skeleton,
+    SkeletonAvatar,
+    SkeletonText,
+    StatCardMini,
+    Toaster,
+    TypographyBackdrop,
 } from '@/design-system'
+import {
+    AttendanceTable,
+    ClassSelector,
+    DateFilter,
+    StatsSummaryBottom,
+    StudentSearch,
+} from '@/features/attendance/components/admin'
 import { useAdminAttendance } from '@/features/attendance/hooks/useAdminAttendance'
 import { useAttendanceSearch } from '@/features/attendance/hooks/useAttendanceSearch'
-import {
-  DateFilter,
-  ClassSelector,
-  StudentSearch,
-  AttendanceTable,
-  StatsSummaryBottom,
-} from '@/features/attendance/components/admin'
 import { calculateAttendanceStats } from '@/features/attendance/utils/attendanceUtils'
 import { ERROR_MESSAGES, type ApiError } from '@/shared/api/interceptors'
-import { Users, CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, Users } from 'lucide-react'
+import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 /**
  * Admin Attendance Page
@@ -244,8 +244,8 @@ const AdminAttendancePage = () => {
                   <AttendanceTable
                     students={filteredStudents}
                     searchTerm={searchTerm}
-                    onToggleAttendance={toggleAttendance}
-                    onObservationChange={updateObservation}
+                    onToggleAttendance={(studentId, idPaquete) => toggleAttendance(studentId, idPaquete)}
+                    onObservationChange={(studentId, idPaquete, observation) => updateObservation(studentId, idPaquete, observation)}
                     isUpdating={isUpdatingAttendance}
                   />
                 )

@@ -2,8 +2,8 @@
 // PACKAGE STATS CARDS COMPONENT
 // ============================================
 
-import { CheckCircle2, XCircle, Snowflake, AlertCircle } from 'lucide-react'
-import type { PackagesStats, EstadoPaquete } from '../../../types/packageTypes'
+import { AlertCircle, CheckCircle2, Snowflake, XCircle } from 'lucide-react'
+import type { EstadoPaquete, PackagesStats } from '../../../types/packageTypes'
 
 interface PackageStatsCardsProps {
   stats: PackagesStats
@@ -88,22 +88,6 @@ export function PackageStatsCards({ stats }: PackageStatsCardsProps) {
 
   return (
     <div className="relative">
-      {/* Floating total badge */}
-      <div
-        className="
-          absolute -top-3 -right-3 z-10
-          flex items-center justify-center
-          w-12 h-12
-          rounded-full
-          backdrop-blur-xl
-          bg-[rgba(201,52,72,0.2)]
-          border border-[rgba(201,52,72,0.4)]
-          shadow-[0_4px_12px_rgba(201,52,72,0.3)]
-        "
-      >
-        <span className="text-[#f9fafb] font-bold text-lg">{stats.total}</span>
-      </div>
-
       {/* Stats cards grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
         {statsData.map(({ estado, count }) => {
