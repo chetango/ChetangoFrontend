@@ -21,6 +21,8 @@ export interface DashboardAlumnoResponse {
   eventosProximos: EventoProximo[]
 }
 
+export type { EventoProximo }
+
 /**
  * Información del paquete activo del alumno
  */

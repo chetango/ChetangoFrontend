@@ -38,7 +38,7 @@ export function ConfigurePackagesModal({
   isOpen,
   onClose,
   tiposPaquete,
-  isLoading = false,
+  // isLoading = false, // Not used yet
 }: ConfigurePackagesModalProps) {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState<TipoPaqueteForm>({

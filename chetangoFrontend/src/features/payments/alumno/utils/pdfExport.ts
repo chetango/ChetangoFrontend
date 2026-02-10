@@ -13,8 +13,8 @@ export const exportarPagoPDF = async (pago: PagoDetalle) => {
 
   // Configuración de colores
   const primaryColor: [number, number, number] = [201, 52, 72] // #c93448
-  const darkBg: [number, number, number] = [26, 26, 46] // #1a1a2e
-  const lightText: [number, number, number] = [249, 250, 251] // #f9fafb
+  // const darkBg: [number, number, number] = [26, 26, 46] // #1a1a2e
+  // const lightText: [number, number, number] = [249, 250, 251] // #f9fafb
 
   // Header con logo y título
   doc.setFillColor(...primaryColor)

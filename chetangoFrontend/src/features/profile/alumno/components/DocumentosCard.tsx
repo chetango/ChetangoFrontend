@@ -10,18 +10,20 @@ import type { DocumentoDescargable } from '../types/profile.types'
 // Datos estáticos mientras se implementa el backend
 const documentos: DocumentoDescargable[] = [
   {
+    id: '1',
     tipo: 'credencial',
     nombre: 'Credencial Digital',
     descripcion: 'Tu credencial de alumno en formato PDF',
     url: '/api/alumnos/me/documentos/credencial',
-    fechaGeneracion: toLocalISOString(),
+    fechaEmision: toLocalISOString(),
   },
   {
+    id: '2',
     tipo: 'recibo',
     nombre: 'Último Recibo de Pago',
     descripcion: 'Recibo de tu última compra de paquete',
     url: '/api/alumnos/me/documentos/ultimo-recibo',
-    fechaGeneracion: toLocalISOString(),
+    fechaEmision: toLocalISOString(),
   },
 ]
 

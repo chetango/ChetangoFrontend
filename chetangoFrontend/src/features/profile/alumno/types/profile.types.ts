@@ -49,7 +49,7 @@ export interface PaqueteHistorial {
   fechaActivacion: string
   fechaVencimiento: string
   estado: 'activo' | 'agotado' | 'vencido' | 'congelado'
-  monto: number
+  monto?: number
 }
 
 /**

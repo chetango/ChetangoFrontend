@@ -39,17 +39,6 @@ const ESTADO_ASISTENCIA = {
   JUSTIFICADA: 3,
 } as const
 
-/**
- * Package state enum values (from backend)
- * 0=Activo, 1=Agotado, 2=Congelado, 3=SinPaquete
- */
-const ESTADO_PAQUETE_ENUM = {
-  ACTIVO: 0,
-  AGOTADO: 1,
-  CONGELADO: 2,
-  SIN_PAQUETE: 3,
-} as const
-
 // ============================================
 // MUTATION TYPES
 // ============================================

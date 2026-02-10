@@ -2,12 +2,12 @@
 // PROPERTY-BASED TESTS - STATS SUMMARY
 // ============================================
 
-import { describe, it, expect, afterEach } from 'vitest'
+import { cleanup, render } from '@testing-library/react'
 import * as fc from 'fast-check'
-import { render, cleanup } from '@testing-library/react'
+import { afterEach, describe, expect, it } from 'vitest'
 import { StatsSummary } from '../components/admin/StatsSummary'
+import type { PackageState, StudentAttendance } from '../types/attendanceTypes'
 import { calculateAttendanceStats } from '../utils/attendanceUtils'
-import type { StudentAttendance, PackageState } from '../types/attendanceTypes'
 
 // Arbitrary for generating valid StudentAttendance objects
 const packageStateArb: fc.Arbitrary<PackageState> = fc.constantFrom(
@@ -24,11 +24,15 @@ const studentAttendanceArb: fc.Arbitrary<StudentAttendance> = fc.record({
   avatarIniciales: fc.string({ minLength: 2, maxLength: 2 }),
   paquete: fc.option(
     fc.record({
+      idPaquete: fc.option(fc.uuid(), { nil: null }),
       estado: packageStateArb,
       descripcion: fc.option(fc.string(), { nil: null }),
       clasesTotales: fc.option(fc.integer({ min: 1, max: 20 }), { nil: null }),
       clasesUsadas: fc.option(fc.integer({ min: 0, max: 20 }), { nil: null }),
       clasesRestantes: fc.option(fc.integer({ min: 0, max: 20 }), { nil: null }),
+      esCompartido: fc.boolean(),
+      idsAlumnosCompartidos: fc.option(fc.array(fc.uuid(), { maxLength: 3 }), { nil: null }),
+      nombresAlumnosCompartidos: fc.option(fc.array(fc.string(), { maxLength: 3 }), { nil: null }),
     }),
     { nil: null }
   ),

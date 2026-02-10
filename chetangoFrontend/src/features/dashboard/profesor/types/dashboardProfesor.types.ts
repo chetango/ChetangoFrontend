@@ -69,5 +69,5 @@ export interface QuickAction {
   path: string
 }
 
-export type { ChartData, ChartDataset }
+export type { ChartData }
 

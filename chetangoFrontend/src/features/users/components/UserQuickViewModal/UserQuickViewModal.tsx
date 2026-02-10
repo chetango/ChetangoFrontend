@@ -228,7 +228,6 @@ export function UserQuickViewModal() {
                 <GlassButton
                   onClick={handleViewFullProfile}
                   variant="primary"
-                  fullWidth
                 >
                   <ExternalLink size={16} />
                   Ver perfil completo

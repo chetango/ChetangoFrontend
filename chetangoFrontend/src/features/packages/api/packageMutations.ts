@@ -210,7 +210,7 @@ export function useCreateTipoPaqueteMutation() {
 
     onSuccess: () => {
       toast.success('Tipo de paquete creado exitosamente')
-      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete })
+      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete() })
     },
 
     onError: (error: ApiError) => {
@@ -235,7 +235,7 @@ export function useUpdateTipoPaqueteMutation() {
 
     onSuccess: () => {
       toast.success('Tipo de paquete actualizado exitosamente')
-      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete })
+      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete() })
     },
 
     onError: (error: ApiError) => {
@@ -263,7 +263,7 @@ export function useToggleTipoPaqueteActivoMutation() {
 
     onSuccess: (data) => {
       toast.success(data.activo ? 'Tipo de paquete activado' : 'Tipo de paquete desactivado')
-      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete })
+      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete() })
     },
 
     onError: (error: ApiError) => {

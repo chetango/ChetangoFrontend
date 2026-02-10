@@ -245,7 +245,7 @@ export function useProfesorAttendance(
               ? ['Activo', 'Agotado', 'Congelado', 'SinPaquete'][asistencia.estadoPaquete]
               : asistencia.estadoPaquete
           ),
-          idAsistencia: asistencia.idAsistencia || undefined,
+          idAsistencia: asistencia.idAsistencia || null,
         })
       )
       setLocalEstudiantes(estudiantes)

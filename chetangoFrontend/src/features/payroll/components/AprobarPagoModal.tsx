@@ -2,6 +2,7 @@
 // MODAL APROBAR PAGO CON AJUSTES - NÓMINA
 // ============================================
 
+import { formatCurrency } from '@/features/reports/utils/dateHelpers'
 import { DollarSign, TrendingDown, TrendingUp, X } from 'lucide-react'
 import { useState } from 'react'
 import type { ProfesorClase } from '../types/payroll.types'

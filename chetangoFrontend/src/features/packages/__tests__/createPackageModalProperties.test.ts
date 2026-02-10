@@ -2,16 +2,16 @@
 // PROPERTY-BASED TESTS - CREATE PACKAGE MODAL
 // ============================================
 
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
+import { describe, expect, it } from 'vitest'
 import {
-  calculateFechaFin,
-  validateRequiredFields,
-  getTodayDate,
-  formatAlumnoDisplay,
-  formatTipoPaqueteDisplay,
+    calculateFechaFin,
+    formatAlumnoDisplay,
+    formatTipoPaqueteDisplay,
+    getTodayDate,
+    validateRequiredFields,
 } from '../components/admin/CreatePackageModal'
-import type { PaqueteFormData, AlumnoDTO, TipoPaqueteDTO } from '../types/packageTypes'
+import type { AlumnoDTO, PaqueteFormData, TipoPaqueteDTO } from '../types/packageTypes'
 
 // ============================================
 // ARBITRARIES FOR GENERATING TEST DATA
@@ -42,20 +42,23 @@ const diasVigenciaArb: fc.Arbitrary<number> = fc.integer({ min: 1, max: 365 })
  */
 const alumnoArb: fc.Arbitrary<AlumnoDTO> = fc.record({
   idAlumno: fc.uuid(),
-  nombreCompleto: fc.string({ minLength: 1, maxLength: 100 }),
-  documentoIdentidad: fc.stringMatching(/^[0-9A-Za-z]{5,20}$/),
-  correo: fc.option(fc.emailAddress(), { nil: undefined }),
+  idUsuario: fc.uuid(),
+  nombre: fc.string({ minLength: 1, maxLength: 100 }),
+  correo: fc.emailAddress(),
+  numeroDocumento: fc.stringMatching(/^[0-9A-Za-z]{5,20}$/),
+  telefono: fc.option(fc.string({ minLength: 7, maxLength: 15 }), { nil: undefined }),
 })
 
 /**
  * Generate valid TipoPaqueteDTO objects
  */
 const tipoPaqueteArb: fc.Arbitrary<TipoPaqueteDTO> = fc.record({
-  id: fc.uuid(),
+  idTipoPaquete: fc.uuid(),
   nombre: fc.string({ minLength: 1, maxLength: 50 }),
-  clasesDisponibles: fc.integer({ min: 1, max: 100 }),
+  numeroClases: fc.integer({ min: 1, max: 100 }),
   diasVigencia: fc.integer({ min: 1, max: 365 }),
   precio: fc.float({ min: 0, max: 100000, noNaN: true }),
+  activo: fc.boolean(),
 })
 
 // ============================================
@@ -351,11 +354,11 @@ describe('getTodayDate', () => {
 })
 
 describe('formatAlumnoDisplay', () => {
-  it('should format alumno as nombreCompleto - documentoIdentidad', () => {
+  it('should format alumno as nombre - numeroDocumento', () => {
     fc.assert(
       fc.property(alumnoArb, (alumno) => {
         const display = formatAlumnoDisplay(alumno)
-        const expected = `${alumno.nombreCompleto} - ${alumno.documentoIdentidad}`
+        const expected = `${alumno.nombre} - ${alumno.numeroDocumento}`
         expect(display).toBe(expected)
         return true
       }),
@@ -365,11 +368,11 @@ describe('formatAlumnoDisplay', () => {
 })
 
 describe('formatTipoPaqueteDisplay', () => {
-  it('should format tipo paquete as nombre (clasesDisponibles clases)', () => {
+  it('should format tipo paquete as nombre (numeroClases clases)', () => {
     fc.assert(
       fc.property(tipoPaqueteArb, (tipo) => {
         const display = formatTipoPaqueteDisplay(tipo)
-        const expected = `${tipo.nombre} (${tipo.clasesDisponibles} clases)`
+        const expected = `${tipo.nombre} (${tipo.numeroClases} clases)`
         expect(display).toBe(expected)
         return true
       }),

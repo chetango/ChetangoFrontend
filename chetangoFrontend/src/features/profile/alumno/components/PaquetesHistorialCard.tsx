@@ -91,7 +91,7 @@ export const PaquetesHistorialCard = () => {
                     </span>
                   </td>
                   <td className="py-4 px-2 text-[#f9fafb] font-medium">
-                    ${paquete.precio.toLocaleString('es-AR')}
+                    ${paquete.monto?.toLocaleString('es-AR') ?? '0'}
                   </td>
                   <td className="py-4 px-2">
                     <span

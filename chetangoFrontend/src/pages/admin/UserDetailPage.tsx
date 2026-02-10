@@ -246,13 +246,13 @@ export function UserDetailPage() {
             <div className={styles.actionsGrid}>
               {userType === 'alumno' && (
                 <>
-                  <GlassButton variant="primary" size="md" fullWidth onClick={handleRegisterPayment} icon={<DollarSign size={18} />}>
+                  <GlassButton variant="primary" size="md" onClick={handleRegisterPayment} icon={<DollarSign size={18} />}>
                     Registrar Pago
                   </GlassButton>
-                  <GlassButton variant="secondary" size="md" fullWidth onClick={handleAssignPackage} icon={<Package size={18} />}>
+                  <GlassButton variant="secondary" size="md" onClick={handleAssignPackage} icon={<Package size={18} />}>
                     Asignar Paquete
                   </GlassButton>
-                  <GlassButton variant="secondary" size="md" fullWidth onClick={handleRegisterAttendance} icon={<ClipboardList size={18} />}>
+                  <GlassButton variant="secondary" size="md" onClick={handleRegisterAttendance} icon={<ClipboardList size={18} />}>
                     Registrar Asistencia
                   </GlassButton>
                 </>
@@ -260,13 +260,13 @@ export function UserDetailPage() {
               
               {userType === 'profesor' && (
                 <>
-                  <GlassButton variant="primary" size="md" fullWidth onClick={handleAssignClass} icon={<Calendar size={18} />}>
+                  <GlassButton variant="primary" size="md" onClick={handleAssignClass} icon={<Calendar size={18} />}>
                     Asignar Clase
                   </GlassButton>
-                  <GlassButton variant="secondary" size="md" fullWidth onClick={handleViewPayroll} icon={<DollarSign size={18} />}>
+                  <GlassButton variant="secondary" size="md" onClick={handleViewPayroll} icon={<DollarSign size={18} />}>
                     Ver Nómina
                   </GlassButton>
-                  <GlassButton variant="secondary" size="md" fullWidth onClick={handleViewSchedule} icon={<Clock size={18} />}>
+                  <GlassButton variant="secondary" size="md" onClick={handleViewSchedule} icon={<Clock size={18} />}>
                     Ver Horario
                   </GlassButton>
                 </>

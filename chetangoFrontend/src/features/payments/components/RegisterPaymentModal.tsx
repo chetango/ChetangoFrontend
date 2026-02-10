@@ -170,6 +170,7 @@ export const RegisterPaymentModal = ({
       paquetes: [
         ...(prev.paquetes || []),
         {
+          idAlumno: selectedAlumno?.idAlumno || '', // Include idAlumno from selectedAlumno
           idTipoPaquete: '',
           clasesDisponibles: 0,
           valorPaquete: 0,
@@ -190,7 +191,9 @@ export const RegisterPaymentModal = ({
 
   const handlePackageTypeChange = (index: number, selectedTipo: PackageType) => {
     const newPaquetes = [...(formData.paquetes || [])]
+    const alumnoForPackage = alumnosPorPaquete[index] || selectedAlumno
     newPaquetes[index] = {
+      idAlumno: alumnoForPackage?.idAlumno || '',
       idTipoPaquete: selectedTipo.idTipoPaquete,
       clasesDisponibles: selectedTipo.numeroClases,
       valorPaquete: selectedTipo.precio,
@@ -206,6 +209,7 @@ export const RegisterPaymentModal = ({
           paquetes: [
             ...newPaquetes,
             {
+              idAlumno: alumnoForPackage?.idAlumno || '',
               idTipoPaquete: selectedTipo.idTipoPaquete,
               clasesDisponibles: selectedTipo.numeroClases,
               valorPaquete: 0, // Segundo paquete en $0

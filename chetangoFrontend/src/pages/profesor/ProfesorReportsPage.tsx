@@ -112,7 +112,6 @@ const ProfesorReportsPage = () => {
         <DateRangeFilterComponent
           value={dateFilter}
           onChange={setDateFilter}
-          showPresets
         />
       </GlassPanel>
 
@@ -222,8 +221,8 @@ const ProfesorReportsPage = () => {
                 </h3>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={clasesData.desgloseporTipo.map(item => ({
-                    tipo: item.tipoClase,
-                    total: item.total
+                    tipo: item.nombreTipoClase,
+                    total: item.cantidadClases
                   }))}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                     <XAxis dataKey="tipo" stroke="#9ca3af" />

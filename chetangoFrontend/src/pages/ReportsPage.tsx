@@ -216,20 +216,16 @@ const ReportsPage = () => {
           label="Reportes Disponibles"
           value={availableReports.length}
           icon={<TrendingUp className="w-5 h-5" />}
-          trend="+2 nuevos"
-          variant="primary"
         />
         <StatCard
           label="Período Seleccionado"
           value={dateFilter.preset === 'month' ? 'Este Mes' : 'Personalizado'}
           icon={<TrendingUp className="w-5 h-5" />}
-          variant="secondary"
         />
         <StatCard
           label="Última Actualización"
           value="Hoy"
           icon={<TrendingUp className="w-5 h-5" />}
-          variant="accent"
         />
       </div>
 

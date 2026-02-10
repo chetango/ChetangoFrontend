@@ -2,10 +2,10 @@
 // PROPERTY-BASED TESTS - STUDENT LIST FIELD COMPLETENESS
 // ============================================
 
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
-import type { StudentAttendance, StudentPackage, PackageState, AttendanceRecord } from '../types/attendanceTypes'
-import type { EstudianteProfesor, EstadoPaqueteProfesor } from '../types/profesorTypes'
+import { describe, expect, it } from 'vitest'
+import type { AttendanceRecord, PackageState, StudentAttendance, StudentPackage } from '../types/attendanceTypes'
+import type { EstadoPaqueteProfesor, EstudianteProfesor } from '../types/profesorTypes'
 
 // ============================================
 // VALIDATION FUNCTIONS
@@ -118,11 +118,15 @@ const packageStateArb: fc.Arbitrary<PackageState> = fc.constantFrom(
  * Arbitrary for generating valid StudentPackage objects
  */
 const studentPackageArb: fc.Arbitrary<StudentPackage> = fc.record({
+  idPaquete: fc.option(fc.uuid(), { nil: null }),
   estado: packageStateArb,
   descripcion: fc.option(fc.string({ minLength: 1, maxLength: 100 }), { nil: null }),
   clasesTotales: fc.option(fc.integer({ min: 1, max: 50 }), { nil: null }),
   clasesUsadas: fc.option(fc.integer({ min: 0, max: 50 }), { nil: null }),
   clasesRestantes: fc.option(fc.integer({ min: 0, max: 50 }), { nil: null }),
+  esCompartido: fc.boolean(),
+  idsAlumnosCompartidos: fc.option(fc.array(fc.uuid(), { maxLength: 3 }), { nil: null }),
+  nombresAlumnosCompartidos: fc.option(fc.array(fc.string({ minLength: 1, maxLength: 50 }), { maxLength: 3 }), { nil: null }),
 })
 
 /**

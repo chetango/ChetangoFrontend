@@ -126,10 +126,10 @@ export function PackageTableRow({
   onViewDetail,
   onCongelar,
   onDescongelar,
-  getInitials,
+  // getInitials, // Commented: not used in current render logic
   getConsumoPercentage,
 }: PackageTableRowProps) {
-  const initials = getInitials(paquete.nombreAlumno)
+  // const initials = getInitials(paquete.nombreAlumno) // Removed: not used in render
   const percentage = getConsumoPercentage(paquete)
   const progressBarColor = getProgressBarColor(percentage)
   const badgeVariant = getEstadoBadgeVariant(paquete.estado)

@@ -14,7 +14,7 @@ const UsersPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editUserId, setEditUserId] = useState<string | null>(null)
   const [filters, setFilters] = useState<UserFilters>({
-    page: 1,
+    pageNumber: 1,
     pageSize: 10,
     estado: 'activo', // Solo mostrar usuarios activos por defecto
   })
@@ -23,7 +23,7 @@ const UsersPage = () => {
   const deleteUserMutation = useDeleteUserMutation()
   
   // Solo cargar detalles del usuario si estamos editando
-  const { data: userDetail, isLoading: isLoadingDetail } = useUserDetailQuery(editUserId || '')
+  const { data: userDetail } = useUserDetailQuery(editUserId || '')
   
   // Abrir modal de edición si se navega con editUserId en el state
   React.useEffect(() => {
@@ -44,15 +44,15 @@ const UsersPage = () => {
   }, [userDetail])
 
   const handleSearch = (searchTerm: string) => {
-    setFilters((prev) => ({ ...prev, searchTerm, page: 1 }))
+    setFilters((prev) => ({ ...prev, busqueda: searchTerm, pageNumber: 1 }))
   }
 
   const handleRoleFilter = (rol?: UserRole) => {
-    setFilters((prev) => ({ ...prev, rol, page: 1 }))
+    setFilters((prev) => ({ ...prev, rol, pageNumber: 1 }))
   }
 
   const handleStatusFilter = (estado?: UserStatus) => {
-    setFilters((prev) => ({ ...prev, estado, page: 1 }))
+    setFilters((prev) => ({ ...prev, estado, pageNumber: 1 }))
   }
 
   const handleCreateUser = () => {
@@ -63,7 +63,7 @@ const UsersPage = () => {
   const handleEditUser = (idUsuario: string) => {
     console.log('DEBUG - Abriendo modal de edición para usuario:', idUsuario)
     // Buscar el usuario en la lista actual para ver sus datos
-    const usuarioEnLista = data?.usuarios.find(u => u.idUsuario === idUsuario)
+    const usuarioEnLista = data?.items.find(u => u.idUsuario === idUsuario)
     console.log('DEBUG - Usuario en lista:', usuarioEnLista)
     console.log('DEBUG - Roles del usuario:', usuarioEnLista?.roles)
     setEditUserId(idUsuario)
@@ -91,7 +91,11 @@ const UsersPage = () => {
     }
   }
 
-  const getRoleBadge = (rol: UserRole) => {
+  const getRoleBadge = (roles: UserRole[]) => {
+    if (!roles?.length) {
+      return <span className="text-[#9ca3af] text-sm">Sin rol</span>
+    }
+    const rol = roles[0]
     const styles = {
       admin: 'bg-[rgba(139,92,246,0.15)] text-[#a78bfa] border-[rgba(139,92,246,0.3)]',
       profesor: 'bg-[rgba(59,130,246,0.15)] text-[#60a5fa] border-[rgba(59,130,246,0.3)]',
@@ -152,7 +156,7 @@ const UsersPage = () => {
 
         {/* Role Filter */}
         <select
-          onChange={(e) => handleRoleFilter(e.target.value as UserRole | undefined)}
+          onChange={(e) => handleRoleFilter(e.target.value ? (e.target.value as UserRole) : undefined)}
           className="px-4 py-3 rounded-lg bg-[rgba(64,64,64,0.2)] border border-[rgba(64,64,64,0.3)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
         >
           <option value="">Todos los roles</option>
@@ -163,7 +167,7 @@ const UsersPage = () => {
 
         {/* Status Filter */}
         <select
-          onChange={(e) => handleStatusFilter(e.target.value as UserStatus | undefined)}
+          onChange={(e) => handleStatusFilter(e.target.value ? (e.target.value as UserStatus) : undefined)}
           className="px-4 py-3 rounded-lg bg-[rgba(64,64,64,0.2)] border border-[rgba(64,64,64,0.3)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
         >
           <option value="">Todos los estados</option>
@@ -215,16 +219,16 @@ const UsersPage = () => {
                     </div>
                   </td>
                 </tr>
-              ) : data?.usuarios.length === 0 ? (
+              ) : data?.items.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-[#9ca3af]">
                     No se encontraron usuarios
                   </td>
                 </tr>
               ) : (
-                data?.usuarios.map((user) => (
+                data?.items.map((user) => (
                   <tr
-                    key={user.usuarioId}
+                    key={user.idUsuario}
                     className="border-b border-[rgba(64,64,64,0.3)] hover:bg-[rgba(255,255,255,0.02)] transition-colors"
                   >
                     <td className="px-6 py-4">
@@ -241,7 +245,7 @@ const UsersPage = () => {
                         <p className="text-[#9ca3af] text-sm">{user.telefono}</p>
                       </div>
                     </td>
-                    <td className="px-6 py-4">{getRoleBadge(user.rol)}</td>
+                    <td className="px-6 py-4">{getRoleBadge(user.roles)}</td>
                     <td className="px-6 py-4">{getStatusBadge(user.estado)}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
@@ -288,12 +292,12 @@ const UsersPage = () => {
         {data && data.totalPages > 1 && (
           <div className="px-6 py-4 border-t border-[rgba(64,64,64,0.3)] flex items-center justify-between">
             <p className="text-[#9ca3af] text-sm">
-              Mostrando {data.usuarios.length} de {data.totalItems} usuarios
+              Mostrando {data.items.length} de {data.totalCount} usuarios
             </p>
             <div className="flex gap-2">
               <button
-                onClick={() => setFilters((prev) => ({ ...prev, page: (prev.page || 1) - 1 }))}
-                disabled={filters.page === 1}
+                onClick={() => setFilters((prev) => ({ ...prev, pageNumber: (prev.pageNumber || 1) - 1 }))}
+                disabled={filters.pageNumber === 1}
                 className="px-4 py-2 rounded-lg bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] text-[#f9fafb] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
                 Anterior
@@ -304,7 +308,7 @@ const UsersPage = () => {
                     key={page}
                     onClick={() => setFilters((prev) => ({ ...prev, page }))}
                     className={`w-10 h-10 rounded-lg transition-all ${
-                      page === filters.page
+                      page === filters.pageNumber
                         ? 'bg-[#c93448] text-white'
                         : 'bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] text-[#f9fafb]'
                     }`}
@@ -314,8 +318,8 @@ const UsersPage = () => {
                 ))}
               </div>
               <button
-                onClick={() => setFilters((prev) => ({ ...prev, page: (prev.page || 1) + 1 }))}
-                disabled={filters.page === data.totalPages}
+                onClick={() => setFilters((prev) => ({ ...prev, pageNumber: (prev.pageNumber || 1) + 1 }))}
+                disabled={filters.pageNumber === data.totalPages}
                 className="px-4 py-2 rounded-lg bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] text-[#f9fafb] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
               >
                 Siguiente

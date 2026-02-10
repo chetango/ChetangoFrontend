@@ -62,9 +62,15 @@ export const useAdminSeguridadQuery = () => {
       // Mock data
       const mockSeguridad: SeguridadInfo = {
         ultimoCambioPassword: new Date().toISOString(),
-        autenticacionDosFactor: false,
         sesionesActivas: 1,
-        ultimoAcceso: new Date().toISOString(),
+        historialAccesos: [
+          {
+            fecha: new Date().toISOString(),
+            dispositivo: 'Web',
+            navegador: 'Edge',
+            ip: '127.0.0.1',
+          },
+        ],
       }
       
       return mockSeguridad

@@ -53,11 +53,11 @@ export const PendingPaymentCard = ({
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         <div className="w-12 h-12 rounded-full bg-[rgba(201,52,72,0.15)] border-2 border-[rgba(201,52,72,0.3)] flex items-center justify-center text-[#c93448] font-semibold text-lg overflow-hidden">
-          {payment.fotoAlumno ? (
+          {/* {payment.fotoAlumno ? (
             <img src={payment.fotoAlumno} alt={payment.nombreAlumno} className="w-full h-full object-cover" />
-          ) : (
-            payment.nombreAlumno.charAt(0).toUpperCase()
-          )}
+          ) : ( */}
+            {payment.nombreAlumno.charAt(0).toUpperCase()}
+          {/* )} */}
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-[#f9fafb] font-medium truncate">{payment.nombreAlumno}</h3>

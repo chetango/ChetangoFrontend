@@ -2,11 +2,11 @@
 // PROPERTY-BASED TESTS - ATTENDANCE TOGGLE PERSISTENCE
 // ============================================
 
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { cleanup, fireEvent, render } from '@testing-library/react'
 import * as fc from 'fast-check'
-import { render, cleanup, fireEvent } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { AttendanceTable } from '../components/admin/AttendanceTable'
-import type { StudentAttendance, PackageState } from '../types/attendanceTypes'
+import type { PackageState, StudentAttendance } from '../types/attendanceTypes'
 
 /**
  * **Feature: admin-attendance-correction, Property 6: Attendance toggle persistence**
@@ -35,11 +35,15 @@ describe('Property 6: Attendance toggle persistence', () => {
     avatarIniciales: fc.string({ minLength: 2, maxLength: 2 }).filter((s) => /^[A-Za-z]{2}$/.test(s)),
     paquete: fc.option(
       fc.record({
+        idPaquete: fc.option(fc.uuid(), { nil: null }),
         estado: packageStateArb,
         descripcion: fc.option(fc.string({ minLength: 1, maxLength: 30 }), { nil: null }),
         clasesTotales: fc.option(fc.integer({ min: 1, max: 20 }), { nil: null }),
         clasesUsadas: fc.option(fc.integer({ min: 0, max: 20 }), { nil: null }),
         clasesRestantes: fc.option(fc.integer({ min: 0, max: 20 }), { nil: null }),
+        esCompartido: fc.boolean(),
+        idsAlumnosCompartidos: fc.option(fc.array(fc.uuid(), { maxLength: 3 }), { nil: null }),
+        nombresAlumnosCompartidos: fc.option(fc.array(fc.string({ minLength: 1, maxLength: 30 }), { maxLength: 3 }), { nil: null }),
       }),
       { nil: null }
     ),

@@ -37,7 +37,7 @@ const MainLayout = ({
   user, 
   onLogout, 
   navigationItems = [], 
-  roleSelector,
+  // roleSelector, // Commented: not used in current implementation
   onOpenRenovacion,
   onOpenClasePrivada 
 }: MainLayoutProps) => {

@@ -2,17 +2,17 @@
 // PACKAGE FILTERS COMPONENT - CHETANGO ADMIN
 // ============================================
 
-import { useState, useEffect, useCallback } from 'react'
-import { Search, Filter, Package } from 'lucide-react'
 import {
-  GlassInput,
-  GlassSelect,
-  GlassSelectTrigger,
-  GlassSelectValue,
-  GlassSelectContent,
-  GlassSelectItem,
-  Skeleton,
+    GlassInput,
+    GlassSelect,
+    GlassSelectContent,
+    GlassSelectItem,
+    GlassSelectTrigger,
+    GlassSelectValue,
+    Skeleton,
 } from '@/design-system'
+import { Filter, Package, Search } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 import type { TipoPaqueteDTO } from '../../../types/packageTypes'
 
 // ============================================
@@ -116,7 +116,7 @@ export function PackageFilters({
     { value: 'todos', label: 'Todos los tipos' },
     ...tiposPaquete.map((tipo) => ({
       value: tipo.nombre,
-      label: `${tipo.nombre} (${tipo.clasesDisponibles} clases)`,
+      label: `${tipo.nombre} (${tipo.numeroClases} clases)`,
     })),
   ]
 

@@ -28,7 +28,7 @@ const AdminPaymentsPage = () => {
   const { data: verifiedPayments, isLoading: loadingVerified, refetch: refetchVerified } = useVerifiedPaymentsQuery()
   const { data: stats, refetch: refetchStats } = usePaymentStatsQuery()
   const { data: allVerifiedPayments, isLoading: loadingRecent, refetch: refetchAllVerified } = useAllVerifiedPaymentsQuery()
-  const { data: paymentDetail, isLoading: isLoadingDetail } = usePaymentDetailQuery(selectedPayment?.idPago || null)
+  const { data: paymentDetail, isLoading: isLoadingDetail } = usePaymentDetailQuery(selectedPayment?.idPago || '')
 
   const handleVerifyClick = (payment: Payment) => {
     setSelectedPayment(payment)

@@ -116,8 +116,8 @@ export function filterAlumnosBySearch(
   const lowerSearch = searchTerm.toLowerCase()
   return alumnos.filter(
     (a) =>
-      a.nombreCompleto.toLowerCase().includes(lowerSearch) ||
-      a.documentoIdentidad.toLowerCase().includes(lowerSearch)
+      a.nombre.toLowerCase().includes(lowerSearch) ||
+      (a.numeroDocumento?.toLowerCase().includes(lowerSearch) ?? false)
   )
 }
 
@@ -338,10 +338,10 @@ export function useAdminPayments() {
           if (!tipoPaquete) return null
 
           return {
-            idTipoPaquete: tipoPaquete.id,
+            idTipoPaquete: tipoPaquete.idTipoPaquete,
             nombre: tipoPaquete.nombre,
             precio: tipoPaquete.precio,
-            clasesDisponibles: tipoPaquete.clasesDisponibles,
+            clasesDisponibles: tipoPaquete.numeroClases,
           }
         })
         .filter((p): p is SelectedPaquete => p !== null)

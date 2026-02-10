@@ -8,6 +8,7 @@ import type {
     ClaseProfesor,
     ClaseRealizada,
     LiquidacionDetalle,
+    LiquidacionMensual,
     ResumenProfesor,
 } from '../types/payroll.types';
 

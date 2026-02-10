@@ -35,6 +35,9 @@ interface AttendanceSummaryBackendResponse {
       clasesTotales: number | null
       clasesUsadas: number | null
       clasesRestantes: number | null
+      esCompartido?: boolean
+      idsAlumnosCompartidos?: string[] | null
+      nombresAlumnosCompartidos?: string[] | null
     } | null
     asistencia: {
       idAsistencia: string | null
@@ -120,7 +123,10 @@ export function useAttendanceSummaryQuery(idClase: string | null) {
           ...alumno,
           paquete: alumno.paquete ? {
             ...alumno.paquete,
-            estado: transformPackageState(alumno.paquete.estado)
+            estado: transformPackageState(alumno.paquete.estado),
+            esCompartido: alumno.paquete.esCompartido ?? false,
+            idsAlumnosCompartidos: alumno.paquete.idsAlumnosCompartidos ?? null,
+            nombresAlumnosCompartidos: alumno.paquete.nombresAlumnosCompartidos ?? null,
           } : null,
           asistencia: {
             ...alumno.asistencia,

@@ -2,8 +2,8 @@
 // PROPERTY-BASED TESTS - CLASS MUTATIONS
 // ============================================
 
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
+import { describe, expect, it } from 'vitest'
 import type { CrearClaseRequest, EditarClaseRequest } from '../types/classTypes'
 
 // ============================================
@@ -183,14 +183,16 @@ describe('Property 10: Create Clase Request Format', () => {
     )
   })
 
-  it('should have idProfesorPrincipal as a valid UUID string', () => {
+  it('should have idProfesorPrincipal as a valid UUID string when provided', () => {
     fc.assert(
       fc.property(crearClaseRequestArb, (request) => {
-        expect(typeof request.idProfesorPrincipal).toBe('string')
-        expect(request.idProfesorPrincipal.length).toBeGreaterThan(0)
-        // UUID format check
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-        expect(uuidRegex.test(request.idProfesorPrincipal)).toBe(true)
+        if (request.idProfesorPrincipal !== undefined) {
+          expect(typeof request.idProfesorPrincipal).toBe('string')
+          expect(request.idProfesorPrincipal.length).toBeGreaterThan(0)
+          // UUID format check
+          const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+          expect(uuidRegex.test(request.idProfesorPrincipal)).toBe(true)
+        }
         return true
       }),
       { numRuns: 100 }

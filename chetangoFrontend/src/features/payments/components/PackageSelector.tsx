@@ -39,8 +39,8 @@ export function PackageSelector({
   onToggle,
   formatCurrency,
   isLoading = false,
-  idSegundoAlumno,
-  nombreSegundoAlumno,
+  // idSegundoAlumno, // Reserved for future use
+  // nombreSegundoAlumno, // Reserved for future use
 }: PackageSelectorProps) {
   const isSelected = (id: string) =>
     selectedPaquetes.some((p) => p.idTipoPaquete === id)
@@ -59,10 +59,10 @@ export function PackageSelector({
 
   const handleToggle = (tipo: TipoPaqueteDTO) => {
     const paquete: SelectedPaquete = {
-      idTipoPaquete: tipo.id,
+      idTipoPaquete: tipo.idTipoPaquete,
       nombre: tipo.nombre,
       precio: tipo.precio,
-      clasesDisponibles: tipo.clasesDisponibles,
+      clasesDisponibles: tipo.numeroClases,
     }
     onToggle(paquete)
   }
@@ -124,12 +124,12 @@ export function PackageSelector({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-60 overflow-y-auto">
         {tiposPaquete.map((tipo) => {
-          const selected = isSelected(tipo.id)
+          const selected = isSelected(tipo.idTipoPaquete)
           const isTwoPersons = isForTwoPersons(tipo.nombre)
           
           return (
             <button
-              key={tipo.id}
+              key={tipo.idTipoPaquete}
               onClick={() => handleToggle(tipo)}
               className={`
                 relative p-3 rounded-lg text-left transition-all
@@ -170,7 +170,7 @@ export function PackageSelector({
                     </p>
                   )}
                   <p className="text-[#9ca3af] text-sm">
-                    {tipo.clasesDisponibles} clases
+                    {tipo.numeroClases} clases
                   </p>
                   <p className="text-[#34d399] font-semibold mt-1">
                     {formatCurrency(tipo.precio)}

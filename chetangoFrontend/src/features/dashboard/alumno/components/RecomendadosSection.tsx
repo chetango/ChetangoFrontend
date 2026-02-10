@@ -37,7 +37,7 @@ export const RecomendadosSection = ({ paquete }: RecomendadosSectionProps) => {
   const generarCodigo = useGenerarCodigoReferido()
 
   // Queries
-  const { data: miCodigo, isLoading: loadingCodigo } = useMiCodigoReferido()
+  const { data: miCodigo } = useMiCodigoReferido()
 
   const handleSolicitarRenovacion = async () => {
     setLoadingCard('renovar')
@@ -45,7 +45,7 @@ export const RecomendadosSection = ({ paquete }: RecomendadosSectionProps) => {
       await solicitarRenovacion.mutateAsync({
         idTipoPaqueteDeseado: null,
         mensajeAlumno: paquete 
-          ? `Quiero renovar mi paquete ${paquete.tipoPaquete}. Me quedan ${paquete.clasesRestantes} clases.`
+          ? `Quiero renovar mi paquete ${paquete.tipo}. Me quedan ${paquete.clasesRestantes} clases.`
           : 'Quiero renovar mi paquete'
       })
     } finally {

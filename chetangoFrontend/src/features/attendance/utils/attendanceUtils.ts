@@ -3,13 +3,13 @@
 // ============================================
 
 import type {
-  StudentAttendance,
-  AttendanceStats,
-  DateRangeResponse,
-  ClassesByDateResponse,
-  AttendanceSummaryResponse,
-  UpdateAttendanceRequest,
-  RegisterAttendanceRequest,
+    AttendanceStats,
+    AttendanceSummaryResponse,
+    ClassesByDateResponse,
+    DateRangeResponse,
+    RegisterAttendanceRequest,
+    StudentAttendance,
+    UpdateAttendanceRequest,
 } from '../types/attendanceTypes'
 
 /**
@@ -266,11 +266,15 @@ function transformStudentAttendance(data: unknown): StudentAttendance {
  * Transforms a StudentPackage object
  */
 function transformStudentPackage(data: unknown): {
+  idPaquete: string | null
   estado: 'Activo' | 'Agotado' | 'Congelado' | 'SinPaquete'
   descripcion: string | null
   clasesTotales: number | null
   clasesUsadas: number | null
   clasesRestantes: number | null
+  esCompartido: boolean
+  idsAlumnosCompartidos: string[] | null
+  nombresAlumnosCompartidos: string[] | null
 } {
   if (!data || typeof data !== 'object') {
     throw new Error('Invalid StudentPackage: data must be an object')
@@ -284,11 +288,15 @@ function transformStudentPackage(data: unknown): {
   }
 
   return {
+    idPaquete: typeof obj.idPaquete === 'string' ? obj.idPaquete : null,
     estado: obj.estado as 'Activo' | 'Agotado' | 'Congelado' | 'SinPaquete',
     descripcion: typeof obj.descripcion === 'string' ? obj.descripcion : null,
     clasesTotales: typeof obj.clasesTotales === 'number' ? obj.clasesTotales : null,
     clasesUsadas: typeof obj.clasesUsadas === 'number' ? obj.clasesUsadas : null,
     clasesRestantes: typeof obj.clasesRestantes === 'number' ? obj.clasesRestantes : null,
+    esCompartido: typeof obj.esCompartido === 'boolean' ? obj.esCompartido : false,
+    idsAlumnosCompartidos: Array.isArray(obj.idsAlumnosCompartidos) ? obj.idsAlumnosCompartidos : null,
+    nombresAlumnosCompartidos: Array.isArray(obj.nombresAlumnosCompartidos) ? obj.nombresAlumnosCompartidos : null,
   }
 }
 
