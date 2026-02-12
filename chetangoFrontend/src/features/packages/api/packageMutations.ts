@@ -2,17 +2,17 @@
 // PACKAGE MUTATIONS - REACT QUERY HOOKS
 // ============================================
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { httpClient } from '@/shared/api/httpClient'
-import { toast } from 'sonner'
-import { packageKeys } from './packageQueries'
 import type { ApiError } from '@/shared/api/interceptors'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import type {
-  CrearPaqueteRequest,
-  CrearPaqueteResponse,
-  EditarPaqueteRequest,
-  CongelarPaqueteRequest,
+    CongelarPaqueteRequest,
+    CrearPaqueteRequest,
+    CrearPaqueteResponse,
+    EditarPaqueteRequest,
 } from '../types/packageTypes'
+import { packageKeys } from './packageQueries'
 
 // ============================================
 // MUTATION TYPES
@@ -169,6 +169,106 @@ export function useDescongelarPaqueteMutation() {
       if (!error.handled) {
         const message = error.message || 'Error al descongelar el paquete'
         toast.error(message)
+      }
+    },
+  })
+}
+
+// ============================================
+// TIPO PAQUETE MUTATIONS
+// ============================================
+
+interface CrearTipoPaqueteParams {
+  nombre: string
+  numeroClases: number
+  precio: number
+  diasVigencia: number
+  descripcion?: string
+}
+
+interface ActualizarTipoPaqueteParams {
+  idTipoPaquete: string
+  nombre: string
+  numeroClases: number
+  precio: number
+  diasVigencia: number
+  descripcion?: string
+}
+
+/**
+ * Creates a new package type
+ * POST /api/tipos-paquete
+ */
+export function useCreateTipoPaqueteMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation<{ id: string }, ApiError, CrearTipoPaqueteParams>({
+    mutationFn: async (data: CrearTipoPaqueteParams) => {
+      const response = await httpClient.post<{ id: string }>('/api/tipos-paquete', data)
+      return response.data
+    },
+
+    onSuccess: () => {
+      toast.success('Tipo de paquete creado exitosamente')
+      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete() })
+    },
+
+    onError: (error: ApiError) => {
+      if (!error.handled) {
+        toast.error(error.message || 'Error al crear tipo de paquete')
+      }
+    },
+  })
+}
+
+/**
+ * Updates a package type
+ * PUT /api/tipos-paquete/{id}
+ */
+export function useUpdateTipoPaqueteMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation<void, ApiError, ActualizarTipoPaqueteParams>({
+    mutationFn: async ({ idTipoPaquete, ...data }: ActualizarTipoPaqueteParams) => {
+      await httpClient.put(`/api/tipos-paquete/${idTipoPaquete}`, data)
+    },
+
+    onSuccess: () => {
+      toast.success('Tipo de paquete actualizado exitosamente')
+      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete() })
+    },
+
+    onError: (error: ApiError) => {
+      if (!error.handled) {
+        toast.error(error.message || 'Error al actualizar tipo de paquete')
+      }
+    },
+  })
+}
+
+/**
+ * Toggles package type active status
+ * PATCH /api/tipos-paquete/{id}/toggle-active
+ */
+export function useToggleTipoPaqueteActivoMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation<{ activo: boolean }, ApiError, string>({
+    mutationFn: async (idTipoPaquete: string) => {
+      const response = await httpClient.patch<{ activo: boolean }>(
+        `/api/tipos-paquete/${idTipoPaquete}/toggle-active`
+      )
+      return response.data
+    },
+
+    onSuccess: (data) => {
+      toast.success(data.activo ? 'Tipo de paquete activado' : 'Tipo de paquete desactivado')
+      queryClient.invalidateQueries({ queryKey: packageKeys.tiposPaquete() })
+    },
+
+    onError: (error: ApiError) => {
+      if (!error.handled) {
+        toast.error(error.message || 'Error al cambiar estado del tipo de paquete')
       }
     },
   })

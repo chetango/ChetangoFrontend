@@ -3,13 +3,13 @@
 // Requirements: 4.1, 4.2, 4.3, 4.4, 4.7, 4.8, 4.9, 4.10, 13.7
 // ============================================
 
-import { useState, useEffect, useCallback } from 'react'
-import { Search, QrCode, User } from 'lucide-react'
-import { GlassPanel } from '@/design-system/atoms/GlassPanel'
-import { GlassInput } from '@/design-system/atoms/GlassInput'
 import { GlassButton } from '@/design-system/atoms/GlassButton'
-import { QRScanner, type QRScannerStatus } from './QRScanner'
+import { GlassInput } from '@/design-system/atoms/GlassInput'
+import { GlassPanel } from '@/design-system/atoms/GlassPanel'
+import { QrCode, Search, User } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 import type { AlumnoDTO } from '../types/paymentTypes'
+import { QRScanner, type QRScannerStatus } from './QRScanner'
 
 interface AlumnoSearchTabsProps {
   activeTab: 'busqueda' | 'qr'
@@ -164,15 +164,17 @@ export function AlumnoSearchTabs({
                   className="w-full flex items-center gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-left"
                 >
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#c93448]/50 to-[#7c5af8]/50 flex items-center justify-center text-white text-sm font-medium">
-                    {getInitials(alumno.nombreCompleto)}
+                    {getInitials(alumno.nombre)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-[#f9fafb] font-medium truncate">
-                      {alumno.nombreCompleto}
+                      {alumno.nombre}
                     </p>
-                    <p className="text-[#9ca3af] text-sm truncate">
-                      {alumno.documentoIdentidad}
-                    </p>
+                    {alumno.numeroDocumento && (
+                      <p className="text-[#9ca3af] text-sm truncate">
+                        {alumno.numeroDocumento}
+                      </p>
+                    )}
                   </div>
                   <User className="w-4 h-4 text-[#6b7280]" />
                 </button>

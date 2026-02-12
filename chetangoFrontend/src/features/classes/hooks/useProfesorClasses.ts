@@ -4,26 +4,27 @@
 // Requirements: 3.2
 // ============================================
 
-import { useMemo, useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { useAuth } from '@/features/auth'
-import { useClasesByProfesorQuery, useClaseDetailQuery } from '../api/classQueries'
+import { useUserProfileQuery } from '@/features/auth/api/profileQueries'
+import { useCallback, useMemo } from 'react'
+import { useClaseDetailQuery, useClasesByProfesorQuery } from '../api/classQueries'
 import {
-  setFiltroAnterior,
-  toggleClasesAnteriores,
-  setResumenClaseId,
-  setSelectedClaseId,
-  selectProfesorState,
+    selectProfesorState,
+    setFiltroAnterior,
+    setResumenClaseId,
+    setSelectedClaseId,
+    toggleClasesAnteriores,
 } from '../store/classesSlice'
-import {
-  esHoy,
-  estaEnCurso,
-  formatearFecha,
-  getDiaSemana,
-  getHoyISO,
-} from '../utils/dateUtils'
-import { separateClasesByTime, filterClasesAnteriores } from '../utils/filterUtils'
 import type { ClaseListItemDTO, ClaseProfesor, FiltroAnterior } from '../types/classTypes'
+import {
+    esHoy,
+    estaEnCurso,
+    formatearFecha,
+    getDiaSemana,
+    getHoyISO,
+} from '../utils/dateUtils'
+import { filterClasesAnteriores, separateClasesByTime } from '../utils/filterUtils'
 
 // ============================================
 // HELPER FUNCTIONS
@@ -91,8 +92,9 @@ export function useProfesorClasses() {
   const { session } = useAuth()
   const profesorState = useAppSelector(selectProfesorState)
 
-  // Get profesor ID from session - fallback to empty string if not available
-  const profesorId = (session.user as { profesorId?: string })?.profesorId || ''
+  // Get user profile to obtain profesorId
+  const { data: profile } = useUserProfileQuery(session.isAuthenticated)
+  const profesorId = profile?.idProfesor || ''
 
   // ============================================
   // QUERIES

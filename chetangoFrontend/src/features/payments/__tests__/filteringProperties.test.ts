@@ -3,8 +3,8 @@
 // Feature: admin-payments-integration
 // ============================================
 
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
+import { describe, expect, it } from 'vitest'
 import { filterAlumnosBySearch } from '../hooks/useAdminPayments'
 import type { AlumnoDTO } from '../types/paymentTypes'
 
@@ -34,11 +34,13 @@ const alumnoArb: fc.Arbitrary<AlumnoDTO> = fc
     alphanumericStringArb(5, 15),
     fc.emailAddress()
   )
-  .map(([firstName, lastName, documento, correo]) => ({
+  .map(([firstName, lastName, numeroDoc, correo]) => ({
     idAlumno: crypto.randomUUID(),
-    nombreCompleto: `${firstName} ${lastName}`,
-    documentoIdentidad: documento,
+    idUsuario: crypto.randomUUID(),
+    nombre: `${firstName} ${lastName}`,
+    numeroDocumento: numeroDoc,
     correo,
+    telefono: undefined,
   }))
 
 // ============================================
@@ -50,11 +52,11 @@ const alumnoArb: fc.Arbitrary<AlumnoDTO> = fc
  * **Validates: Requirements 4.3**
  *
  * *For any* search term and list of alumnos, the filtered results SHALL include
- * only alumnos where `nombreCompleto.toLowerCase().includes(searchTerm.toLowerCase())`
- * OR `documentoIdentidad.toLowerCase().includes(searchTerm.toLowerCase())` is true.
+ * only alumnos where `nombre.toLowerCase().includes(searchTerm.toLowerCase())`
+ * OR `numeroDocumento?.toLowerCase().includes(searchTerm.toLowerCase())` is true.
  */
 describe('Property 3: Search Filter Behavior', () => {
-  it('should filter by nombreCompleto containing search term (case-insensitive)', () => {
+  it('should filter by nombre containing search term (case-insensitive)', () => {
     fc.assert(
       fc.property(
         fc.array(alumnoArb, { minLength: 1, maxLength: 30 }),
@@ -64,12 +66,12 @@ describe('Property 3: Search Filter Behavior', () => {
 
           // All filtered results should contain the search term in nombre or documento
           for (const a of filtered) {
-            const matchesNombre = a.nombreCompleto
+            const matchesNombre = a.nombre
               .toLowerCase()
               .includes(searchTerm.toLowerCase())
-            const matchesDocumento = a.documentoIdentidad
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase())
+            const matchesDocumento = a.numeroDocumento
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase()) || false
             expect(matchesNombre || matchesDocumento).toBe(true)
           }
 
@@ -81,7 +83,7 @@ describe('Property 3: Search Filter Behavior', () => {
   })
 
 
-  it('should filter by documentoIdentidad containing search term (case-insensitive)', () => {
+  it('should filter by numeroDocumento containing search term (case-insensitive)', () => {
     fc.assert(
       fc.property(
         fc.array(alumnoArb, { minLength: 1, maxLength: 30 }),
@@ -91,12 +93,12 @@ describe('Property 3: Search Filter Behavior', () => {
 
           // All filtered results should contain the search term in nombre or documento
           for (const a of filtered) {
-            const matchesNombre = a.nombreCompleto
+            const matchesNombre = a.nombre
               .toLowerCase()
               .includes(searchTerm.toLowerCase())
-            const matchesDocumento = a.documentoIdentidad
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase())
+            const matchesDocumento = a.numeroDocumento
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase()) || false
             expect(matchesNombre || matchesDocumento).toBe(true)
           }
 
@@ -146,12 +148,12 @@ describe('Property 3: Search Filter Behavior', () => {
 
           // All non-filtered results should NOT contain the search term
           for (const a of notFiltered) {
-            const matchesNombre = a.nombreCompleto
+            const matchesNombre = a.nombre
               .toLowerCase()
               .includes(searchTerm.toLowerCase())
-            const matchesDocumento = a.documentoIdentidad
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase())
+            const matchesDocumento = a.numeroDocumento
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase()) || false
             expect(matchesNombre || matchesDocumento).toBe(false)
           }
 
@@ -163,15 +165,15 @@ describe('Property 3: Search Filter Behavior', () => {
   })
 
 
-  it('should be case-insensitive for nombreCompleto', () => {
+  it('should be case-insensitive for nombre', () => {
     fc.assert(
       fc.property(
         fc.array(alumnoArb, { minLength: 1, maxLength: 20 }),
         (alumnos) => {
           // Pick a name from the list and search with different cases
           const targetAlumno = alumnos[0]
-          const searchLower = targetAlumno.nombreCompleto.substring(0, 3).toLowerCase()
-          const searchUpper = targetAlumno.nombreCompleto.substring(0, 3).toUpperCase()
+          const searchLower = targetAlumno.nombre.substring(0, 3).toLowerCase()
+          const searchUpper = targetAlumno.nombre.substring(0, 3).toUpperCase()
 
           const filteredLower = filterAlumnosBySearch(alumnos, searchLower)
           const filteredUpper = filterAlumnosBySearch(alumnos, searchUpper)
@@ -186,15 +188,15 @@ describe('Property 3: Search Filter Behavior', () => {
     )
   })
 
-  it('should be case-insensitive for documentoIdentidad', () => {
+  it('should be case-insensitive for numeroDocumento', () => {
     fc.assert(
       fc.property(
         fc.array(alumnoArb, { minLength: 1, maxLength: 20 }),
         (alumnos) => {
           // Pick a documento from the list and search with different cases
           const targetAlumno = alumnos[0]
-          const searchLower = targetAlumno.documentoIdentidad.substring(0, 3).toLowerCase()
-          const searchUpper = targetAlumno.documentoIdentidad.substring(0, 3).toUpperCase()
+          const searchLower = targetAlumno.numeroDocumento?.substring(0, 3).toLowerCase() || ''
+          const searchUpper = targetAlumno.numeroDocumento?.substring(0, 3).toUpperCase() || ''
 
           const filteredLower = filterAlumnosBySearch(alumnos, searchLower)
           const filteredUpper = filterAlumnosBySearch(alumnos, searchUpper)

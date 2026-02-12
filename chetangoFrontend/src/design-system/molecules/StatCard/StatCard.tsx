@@ -6,7 +6,9 @@ type StatCardColor = 'primary' | 'secondary' | 'success' | 'warning';
 interface StatCardProps {
   icon: ReactNode;
   value: string | number;
-  label: string;
+  label?: string;
+  title?: string;
+  subtitle?: string;
   trend?: 'up' | 'down';
   trendValue?: string;
   color?: StatCardColor;
@@ -17,6 +19,8 @@ export function StatCard({
   icon,
   value,
   label,
+  title,
+  subtitle,
   trend,
   trendValue,
   color = 'primary',
@@ -58,7 +62,10 @@ export function StatCard({
           )}
         </div>
         <h3 className="text-[#f9fafb] text-2xl font-semibold mb-1">{value}</h3>
-        <p className="text-[#9ca3af]">{label}</p>
+        <p className="text-[#9ca3af] font-medium mb-1">{title || label}</p>
+        {subtitle && (
+          <p className="text-[#6b7280] text-sm">{subtitle}</p>
+        )}
       </div>
     </GlassPanel>
   );

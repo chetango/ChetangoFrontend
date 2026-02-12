@@ -4,9 +4,10 @@
 // Requirements: 6.2
 // ============================================
 
+import { GlassButton, GlassInput, GlassPanel } from '@/design-system'
+import { toLocalDateString } from '@/shared/utils/dateTimeHelper'
+import { AlertTriangle, Calendar, Clock, Loader2, X } from 'lucide-react'
 import { useState } from 'react'
-import { X, Calendar, AlertTriangle, Clock, Loader2 } from 'lucide-react'
-import { GlassPanel, GlassButton, GlassInput } from '@/design-system'
 import type { ClaseAlumno } from '../types/classTypes'
 import { formatearFechaCompleta, formatearHora24 } from '../utils/dateUtils'
 
@@ -60,7 +61,7 @@ export function ReprogramarModal({
   const minDate = (() => {
     const tomorrow = new Date()
     tomorrow.setDate(tomorrow.getDate() + 1)
-    return tomorrow.toISOString().split('T')[0]
+    return toLocalDateString(tomorrow)
   })()
 
   // Handle date change

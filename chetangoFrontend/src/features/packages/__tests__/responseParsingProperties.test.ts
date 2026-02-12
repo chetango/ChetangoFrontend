@@ -2,8 +2,8 @@
 // PROPERTY-BASED TESTS - RESPONSE PARSING
 // ============================================
 
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
+import { describe, expect, it } from 'vitest'
 import type { AlumnoDTO, TipoPaqueteDTO } from '../types/packageTypes'
 
 // ============================================
@@ -15,20 +15,24 @@ import type { AlumnoDTO, TipoPaqueteDTO } from '../types/packageTypes'
  */
 const alumnoArb: fc.Arbitrary<AlumnoDTO> = fc.record({
   idAlumno: fc.uuid(),
-  nombreCompleto: fc.string({ minLength: 1, maxLength: 100 }),
-  documentoIdentidad: fc.stringMatching(/^[0-9A-Za-z]{5,20}$/),
-  correo: fc.option(fc.emailAddress(), { nil: undefined }),
+  idUsuario: fc.uuid(),
+  nombre: fc.string({ minLength: 1, maxLength: 100 }),
+  correo: fc.emailAddress(),
+  numeroDocumento: fc.option(fc.stringMatching(/^[0-9A-Za-z]{5,20}$/), { nil: undefined }),
+  telefono: fc.option(fc.string({ minLength: 7, maxLength: 15 }), { nil: undefined }),
 })
 
 /**
  * Generate valid TipoPaqueteDTO objects matching GET /api/tipos-paquete response
  */
 const tipoPaqueteArb: fc.Arbitrary<TipoPaqueteDTO> = fc.record({
-  id: fc.uuid(),
+  idTipoPaquete: fc.uuid(),
   nombre: fc.string({ minLength: 1, maxLength: 50 }),
-  clasesDisponibles: fc.integer({ min: 1, max: 100 }),
+  numeroClases: fc.integer({ min: 1, max: 100 }),
   diasVigencia: fc.integer({ min: 1, max: 365 }),
   precio: fc.float({ min: 0, max: 100000, noNaN: true }),
+  descripcion: fc.option(fc.string({ minLength: 0, maxLength: 200 }), { nil: undefined }),
+  activo: fc.boolean(),
 })
 
 // ============================================
@@ -49,21 +53,29 @@ function parseAlumnoDTO(data: unknown): AlumnoDTO {
   if (typeof obj.idAlumno !== 'string') {
     throw new Error('Invalid AlumnoDTO: idAlumno must be a string')
   }
-  if (typeof obj.nombreCompleto !== 'string') {
-    throw new Error('Invalid AlumnoDTO: nombreCompleto must be a string')
+  if (typeof obj.idUsuario !== 'string') {
+    throw new Error('Invalid AlumnoDTO: idUsuario must be a string')
   }
-  if (typeof obj.documentoIdentidad !== 'string') {
-    throw new Error('Invalid AlumnoDTO: documentoIdentidad must be a string')
+  if (typeof obj.nombre !== 'string') {
+    throw new Error('Invalid AlumnoDTO: nombre must be a string')
   }
-  if (obj.correo !== undefined && typeof obj.correo !== 'string') {
-    throw new Error('Invalid AlumnoDTO: correo must be a string or undefined')
+  if (typeof obj.correo !== 'string') {
+    throw new Error('Invalid AlumnoDTO: correo must be a string')
+  }
+  if (obj.numeroDocumento !== undefined && typeof obj.numeroDocumento !== 'string') {
+    throw new Error('Invalid AlumnoDTO: numeroDocumento must be a string or undefined')
+  }
+  if (obj.telefono !== undefined && typeof obj.telefono !== 'string') {
+    throw new Error('Invalid AlumnoDTO: telefono must be a string or undefined')
   }
 
   return {
     idAlumno: obj.idAlumno,
-    nombreCompleto: obj.nombreCompleto,
-    documentoIdentidad: obj.documentoIdentidad,
-    correo: obj.correo as string | undefined,
+    idUsuario: obj.idUsuario,
+    nombre: obj.nombre,
+    correo: obj.correo,
+    numeroDocumento: obj.numeroDocumento as string | undefined,
+    telefono: obj.telefono as string | undefined,
   }
 }
 
@@ -78,14 +90,14 @@ function parseTipoPaqueteDTO(data: unknown): TipoPaqueteDTO {
 
   const obj = data as Record<string, unknown>
 
-  if (typeof obj.id !== 'string') {
-    throw new Error('Invalid TipoPaqueteDTO: id must be a string')
+  if (typeof obj.idTipoPaquete !== 'string') {
+    throw new Error('Invalid TipoPaqueteDTO: idTipoPaquete must be a string')
   }
   if (typeof obj.nombre !== 'string') {
     throw new Error('Invalid TipoPaqueteDTO: nombre must be a string')
   }
-  if (typeof obj.clasesDisponibles !== 'number') {
-    throw new Error('Invalid TipoPaqueteDTO: clasesDisponibles must be a number')
+  if (typeof obj.numeroClases !== 'number') {
+    throw new Error('Invalid TipoPaqueteDTO: numeroClases must be a number')
   }
   if (typeof obj.diasVigencia !== 'number') {
     throw new Error('Invalid TipoPaqueteDTO: diasVigencia must be a number')
@@ -93,13 +105,21 @@ function parseTipoPaqueteDTO(data: unknown): TipoPaqueteDTO {
   if (typeof obj.precio !== 'number') {
     throw new Error('Invalid TipoPaqueteDTO: precio must be a number')
   }
+  if (typeof obj.activo !== 'boolean') {
+    throw new Error('Invalid TipoPaqueteDTO: activo must be a boolean')
+  }
+  if (obj.descripcion !== undefined && typeof obj.descripcion !== 'string') {
+    throw new Error('Invalid TipoPaqueteDTO: descripcion must be a string or undefined')
+  }
 
   return {
-    id: obj.id,
+    idTipoPaquete: obj.idTipoPaquete,
     nombre: obj.nombre,
-    clasesDisponibles: obj.clasesDisponibles,
+    numeroClases: obj.numeroClases,
     diasVigencia: obj.diasVigencia,
     precio: obj.precio,
+    descripcion: obj.descripcion as string | undefined,
+    activo: obj.activo,
   }
 }
 
@@ -116,7 +136,7 @@ function parseTipoPaqueteDTO(data: unknown): TipoPaqueteDTO {
  * `documentoIdentidad` (string) fields.
  */
 describe('Property 2: Alumnos Response Parsing', () => {
-  it('should parse valid AlumnoDTO with required fields idAlumno, nombreCompleto, documentoIdentidad', () => {
+  it('should parse valid AlumnoDTO with required fields idAlumno, idUsuario, nombre, correo', () => {
     fc.assert(
       fc.property(alumnoArb, (alumno) => {
         // Simulate API response by converting to JSON and back
@@ -129,13 +149,17 @@ describe('Property 2: Alumnos Response Parsing', () => {
         expect(parsed.idAlumno).toBe(alumno.idAlumno)
         expect(typeof parsed.idAlumno).toBe('string')
 
-        // Verify nombreCompleto is present and is a string
-        expect(parsed.nombreCompleto).toBe(alumno.nombreCompleto)
-        expect(typeof parsed.nombreCompleto).toBe('string')
+        // Verify idUsuario is present and is a string
+        expect(parsed.idUsuario).toBe(alumno.idUsuario)
+        expect(typeof parsed.idUsuario).toBe('string')
 
-        // Verify documentoIdentidad is present and is a string
-        expect(parsed.documentoIdentidad).toBe(alumno.documentoIdentidad)
-        expect(typeof parsed.documentoIdentidad).toBe('string')
+        // Verify nombre is present and is a string
+        expect(parsed.nombre).toBe(alumno.nombre)
+        expect(typeof parsed.nombre).toBe('string')
+
+        // Verify correo is present and is a string
+        expect(parsed.correo).toBe(alumno.correo)
+        expect(typeof parsed.correo).toBe('string')
 
         return true
       }),
@@ -143,7 +167,7 @@ describe('Property 2: Alumnos Response Parsing', () => {
     )
   })
 
-  it('should preserve optional correo field when present', () => {
+  it('should preserve optional numeroDocumento and telefono fields when present', () => {
     fc.assert(
       fc.property(alumnoArb, (alumno) => {
         const jsonString = JSON.stringify(alumno)
@@ -151,11 +175,18 @@ describe('Property 2: Alumnos Response Parsing', () => {
 
         const parsed = parseAlumnoDTO(apiResponse)
 
-        if (alumno.correo !== undefined) {
-          expect(parsed.correo).toBe(alumno.correo)
-          expect(typeof parsed.correo).toBe('string')
+        if (alumno.numeroDocumento !== undefined) {
+          expect(parsed.numeroDocumento).toBe(alumno.numeroDocumento)
+          expect(typeof parsed.numeroDocumento).toBe('string')
         } else {
-          expect(parsed.correo).toBeUndefined()
+          expect(parsed.numeroDocumento).toBeUndefined()
+        }
+
+        if (alumno.telefono !== undefined) {
+          expect(parsed.telefono).toBe(alumno.telefono)
+          expect(typeof parsed.telefono).toBe('string')
+        } else {
+          expect(parsed.telefono).toBeUndefined()
         }
 
         return true
@@ -176,8 +207,9 @@ describe('Property 2: Alumnos Response Parsing', () => {
 
         for (let i = 0; i < alumnos.length; i++) {
           expect(parsed[i].idAlumno).toBe(alumnos[i].idAlumno)
-          expect(parsed[i].nombreCompleto).toBe(alumnos[i].nombreCompleto)
-          expect(parsed[i].documentoIdentidad).toBe(alumnos[i].documentoIdentidad)
+          expect(parsed[i].idUsuario).toBe(alumnos[i].idUsuario)
+          expect(parsed[i].nombre).toBe(alumnos[i].nombre)
+          expect(parsed[i].correo).toBe(alumnos[i].correo)
         }
 
         return true
@@ -205,17 +237,17 @@ describe('Property 3: TiposPaquete Response Parsing', () => {
 
         const parsed = parseTipoPaqueteDTO(apiResponse)
 
-        // Verify id is present and is a string
-        expect(parsed.id).toBe(tipoPaquete.id)
-        expect(typeof parsed.id).toBe('string')
+        // Verify idTipoPaquete is present and is a string
+        expect(parsed.idTipoPaquete).toBe(tipoPaquete.idTipoPaquete)
+        expect(typeof parsed.idTipoPaquete).toBe('string')
 
         // Verify nombre is present and is a string
         expect(parsed.nombre).toBe(tipoPaquete.nombre)
         expect(typeof parsed.nombre).toBe('string')
 
-        // Verify clasesDisponibles is present and is a number
-        expect(parsed.clasesDisponibles).toBe(tipoPaquete.clasesDisponibles)
-        expect(typeof parsed.clasesDisponibles).toBe('number')
+        // Verify numeroClases is present and is a number
+        expect(parsed.numeroClases).toBe(tipoPaquete.numeroClases)
+        expect(typeof parsed.numeroClases).toBe('number')
 
         // Verify diasVigencia is present and is a number
         expect(parsed.diasVigencia).toBe(tipoPaquete.diasVigencia)
@@ -242,9 +274,9 @@ describe('Property 3: TiposPaquete Response Parsing', () => {
         expect(parsed).toHaveLength(tiposPaquete.length)
 
         for (let i = 0; i < tiposPaquete.length; i++) {
-          expect(parsed[i].id).toBe(tiposPaquete[i].id)
+          expect(parsed[i].idTipoPaquete).toBe(tiposPaquete[i].idTipoPaquete)
           expect(parsed[i].nombre).toBe(tiposPaquete[i].nombre)
-          expect(parsed[i].clasesDisponibles).toBe(tiposPaquete[i].clasesDisponibles)
+          expect(parsed[i].numeroClases).toBe(tiposPaquete[i].numeroClases)
           expect(parsed[i].diasVigencia).toBe(tiposPaquete[i].diasVigencia)
           expect(parsed[i].precio).toBe(tiposPaquete[i].precio)
         }

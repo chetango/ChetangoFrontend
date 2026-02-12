@@ -2,16 +2,16 @@
 // CLASS MUTATIONS - REACT QUERY HOOKS
 // ============================================
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { httpClient } from '@/shared/api/httpClient'
-import { toast } from 'sonner'
-import { classKeys } from './classQueries'
 import type { ApiError } from '@/shared/api/interceptors'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import type {
-  CrearClaseRequest,
-  CrearClaseResponse,
-  EditarClaseRequest,
+    CrearClaseRequest,
+    CrearClaseResponse,
+    EditarClaseRequest,
 } from '../types/classTypes'
+import { classKeys } from './classQueries'
 
 // ============================================
 // ERROR HANDLING HELPERS
@@ -21,8 +21,9 @@ import type {
  * Extracts error message from API error response
  * Handles both ApiError format and raw axios error format
  * Requirements: 11.3, 11.4, 11.5
+ * @internal - Exported for testing purposes
  */
-function extractErrorMessage(error: unknown, defaultMessage: string): string {
+export function extractErrorMessage(error: unknown, defaultMessage: string): string {
   // Handle null/undefined errors
   if (!error) {
     return defaultMessage
@@ -93,12 +94,10 @@ export function useCreateClaseMutation() {
       queryClient.invalidateQueries({ queryKey: classKeys.all })
     },
 
-    onError: (error: unknown) => {
+    onError: () => {
       // Error handling is done by the interceptor
       // The interceptor shows toast for 400, 404, 500 errors
       // 401 redirects to login, 403 is handled inline
-      // We don't need to show additional toast here to avoid duplicates
-      console.error('[CreateClase] Mutation error:', extractErrorMessage(error, 'Error al crear la clase'))
     },
   })
 }
@@ -129,12 +128,10 @@ export function useUpdateClaseMutation() {
       queryClient.invalidateQueries({ queryKey: classKeys.all })
     },
 
-    onError: (error: unknown) => {
+    onError: () => {
       // Error handling is done by the interceptor
       // The interceptor shows toast for 400, 404, 500 errors
       // 401 redirects to login, 403 is handled inline
-      // We don't need to show additional toast here to avoid duplicates
-      console.error('[UpdateClase] Mutation error:', extractErrorMessage(error, 'Error al actualizar la clase'))
     },
   })
 }
@@ -164,18 +161,44 @@ export function useDeleteClaseMutation() {
       queryClient.invalidateQueries({ queryKey: classKeys.all })
     },
 
-    onError: (error: unknown) => {
+    onError: () => {
       // Error handling is done by the interceptor
       // The interceptor shows toast for 400, 404, 500 errors
       // 401 redirects to login, 403 is handled inline
-      // We don't need to show additional toast here to avoid duplicates
-      console.error('[DeleteClase] Mutation error:', extractErrorMessage(error, 'Error al cancelar la clase'))
     },
   })
 }
 
 // ============================================
-// EXPORTED ERROR HANDLING UTILITIES
+// COMPLETAR CLASE MUTATION
 // ============================================
 
-export { extractErrorMessage }
+/**
+ * Completes a class and generates professor payments
+ * POST /api/clases/{id}/completar
+ * Returns success message on completion
+ *
+ * Requirements: Payment generation
+ */
+export function useCompletarClaseMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation<{ mensaje: string }, Error, string>({
+    mutationFn: async (idClase: string): Promise<{ mensaje: string }> => {
+      const { data } = await httpClient.post<{ mensaje: string }>(`/api/clases/${idClase}/completar`)
+      return data
+    },
+
+    onSuccess: () => {
+      toast.success('Clase completada y pagos generados exitosamente')
+      // Invalidate all class queries and payroll queries
+      queryClient.invalidateQueries({ queryKey: classKeys.all })
+      queryClient.invalidateQueries({ queryKey: ['payroll'] })
+    },
+
+    onError: (error) => {
+      const message = extractErrorMessage(error, 'Error al completar la clase')
+      toast.error(message)
+    },
+  })
+}

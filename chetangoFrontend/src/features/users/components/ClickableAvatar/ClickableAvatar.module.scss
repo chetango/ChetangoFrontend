@@ -1,0 +1,95 @@
+// ============================================
+// CLICKABLE AVATAR STYLES
+// ============================================
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+    
+    .avatar {
+      border-color: rgba(201, 52, 72, 0.6);
+      background: rgba(201, 52, 72, 0.3);
+    }
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+  
+  &:focus-visible {
+    outline: 2px solid rgba(124, 90, 248, 0.6);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  backdrop-filter: blur(20px);
+  background: rgba(201, 52, 72, 0.2);
+  border: 2px solid rgba(201, 52, 72, 0.4);
+  color: #f9fafb;
+  font-weight: 600;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  
+  &--sm {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+  
+  &--md {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+  }
+  
+  &--lg {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1rem;
+  }
+}
+
+.container--with-info {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  
+  &:hover {
+    background: rgba(107, 114, 128, 0.05);
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.info__name {
+  color: #f9fafb;
+  font-weight: 500;
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info__secondary {
+  color: #9ca3af;
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -4,9 +4,10 @@
 // Requirements: 8.1, 8.2, 8.4, 8.5
 // ============================================
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { X, Calendar, FileText, Loader2, Snowflake } from 'lucide-react'
-import { GlassPanel, GlassButton, GlassInput } from '@/design-system'
+import { GlassButton, GlassInput, GlassPanel } from '@/design-system'
+import { getToday } from '@/shared/utils/dateTimeHelper'
+import { Calendar, FileText, Loader2, Snowflake, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 // ============================================
 // TYPES
@@ -49,7 +50,7 @@ export interface CongelarFormData {
  * Gets today's date in YYYY-MM-DD format
  */
 export function getTodayDate(): string {
-  return new Date().toISOString().split('T')[0]
+  return getToday()
 }
 
 /**

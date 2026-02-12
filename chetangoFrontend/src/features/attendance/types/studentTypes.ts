@@ -63,16 +63,22 @@ export interface EstadoPaquete {
 
 /**
  * Response from GET /api/alumnos/{idAlumno}/asistencias
- * Raw attendance record from backend
+ * Raw attendance record from backend (matches AsistenciaDto.cs)
  */
 export interface StudentAttendanceApiResponse {
   idAsistencia: string
   idClase: string
-  nombreClase: string
-  fecha: string // DateTime ISO 8601
-  presente: boolean
+  fechaClase: string // DateTime ISO 8601
+  horaInicio: string // "HH:mm" format
+  horaFin: string // "HH:mm" format
+  tipoClase: string // Class type name (e.g., "Tango")
+  idAlumno: string
+  nombreAlumno: string
+  estadoAsistencia: string // "Presente" | "Ausente"
+  idPaqueteUsado: string | null
+  idTipoAsistencia: number
+  tipoAsistencia: string // "Normal" | "Cortesía" | "Prueba" | "Recuperación"
   observacion: string | null
-  fechaRegistro: string // DateTime ISO 8601
 }
 
 /**
@@ -142,18 +148,34 @@ export interface StudentAttendanceSummary {
 export function transformApiToAsistenciaRecord(
   apiResponse: StudentAttendanceApiResponse
 ): AsistenciaRecord {
-  const fecha = apiResponse.fecha.split('T')[0]
+  // Extract date from fechaClase (DateTime ISO 8601)
+  const fecha = apiResponse.fechaClase.split('T')[0]
+  
+  // Map estadoAsistencia to boolean
+  const presente = apiResponse.estadoAsistencia.toLowerCase() === 'presente'
+  
+  // Map tipoAsistencia to frontend type
+  const tipoMap: Record<string, TipoAsistencia> = {
+    'Normal': 'normal',
+    'Cortesía': 'cortesia',
+    'Clase de Prueba': 'prueba',
+    'Recuperación': 'normal',
+  }
+  const tipo = tipoMap[apiResponse.tipoAsistencia] ?? 'normal'
+  
+  // Descontada means it used a class from the package
+  const descontada = presente && apiResponse.idPaqueteUsado !== null
   
   return {
     id: apiResponse.idAsistencia,
     fecha,
-    clase: apiResponse.nombreClase,
-    estado: apiResponse.presente ? 'presente' : 'ausente',
-    tipo: 'normal', // Default type, backend doesn't provide this yet
-    descontada: apiResponse.presente, // Assume present = deducted
+    clase: apiResponse.tipoClase, // Use tipoClase as class name
+    estado: presente ? 'presente' : 'ausente',
+    tipo,
+    descontada,
     nota: apiResponse.observacion ?? undefined,
-    horaInicio: '00:00:00', // Backend doesn't provide this in attendance response
-    horaFin: '00:00:00', // Backend doesn't provide this in attendance response
+    horaInicio: apiResponse.horaInicio + ':00', // Convert "HH:mm" to "HH:mm:ss"
+    horaFin: apiResponse.horaFin + ':00', // Convert "HH:mm" to "HH:mm:ss"
   }
 }
 

@@ -4,9 +4,10 @@
 // Requirements: 5.2
 // ============================================
 
+import { GlassButton, GlassPanel } from '@/design-system'
+import { ArrowRight, CheckCircle2, Users, X, XCircle } from 'lucide-react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { X, Users, CheckCircle2, XCircle, ArrowRight } from 'lucide-react'
-import { GlassPanel, GlassButton } from '@/design-system'
 import type { ClaseProfesor } from '../types/classTypes'
 import { formatearFechaCompleta, formatearHora24 } from '../utils/dateUtils'
 
@@ -80,6 +81,13 @@ export function ResumenAsistenciaModal({
 }: ResumenAsistenciaModalProps) {
   const navigate = useNavigate()
 
+  // Scroll to top when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [isOpen])
+
   if (!isOpen || !clase) return null
 
   // Calculate attendance stats
@@ -97,15 +105,15 @@ export function ResumenAsistenciaModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="absolute inset-0 z-[100] flex items-start justify-center pt-20 px-4 pb-8 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm -z-10"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <GlassPanel className="relative z-10 w-full max-w-md mx-4 p-6">
+      <GlassPanel className="relative z-10 w-full max-w-md p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-white">Resumen de Asistencia</h2>

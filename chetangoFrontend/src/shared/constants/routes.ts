@@ -42,6 +42,8 @@ export const ROUTES = {
     
     PACKAGES: '/admin/paquetes',
     
+    PAYROLL: '/admin/payroll',
+    
     REPORTS: '/admin/reports',
     REPORTS_ATTENDANCE: '/admin/reports/attendance',
     REPORTS_PAYMENTS: '/admin/reports/payments',
@@ -50,6 +52,9 @@ export const ROUTES = {
     SETTINGS: '/admin/settings',
     SETTINGS_SYSTEM: '/admin/settings/system',
     SETTINGS_ROLES: '/admin/settings/roles',
+    
+    PROFILE: '/admin/profile',
+    NOTIFICATIONS: '/admin/notifications',
   },
   
   // RUTAS DE ESTUDIANTE
@@ -78,8 +83,12 @@ export const ROUTES = {
     CLASSES_MY: '/profesor/classes/my',
     CLASSES_SCHEDULE: '/profesor/classes/schedule',
     
+    PAYMENTS: '/profesor/payments',
+    
     REPORTS: '/profesor/reports',
     REPORTS_MY_CLASSES: '/profesor/reports/my-classes',
+    
+    PROFILE: '/profesor/profile',
   },
   
   // RUTAS COMPARTIDAS (ACCESO SEGÚN ROL)

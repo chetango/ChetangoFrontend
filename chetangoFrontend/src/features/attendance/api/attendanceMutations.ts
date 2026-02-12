@@ -2,16 +2,42 @@
 // ATTENDANCE MUTATIONS - REACT QUERY HOOKS
 // ============================================
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { httpClient } from '@/shared/api/httpClient'
 import { showToast } from '@/design-system'
-import { attendanceKeys } from './attendanceQueries'
+import { httpClient } from '@/shared/api/httpClient'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type {
-  UpdateAttendanceRequest,
-  RegisterAttendanceRequest,
-  AttendanceSummaryResponse,
-  StudentAttendance,
+    AttendanceSummaryResponse,
+    RegisterAttendanceRequest,
+    StudentAttendance,
+    UpdateAttendanceRequest,
 } from '../types/attendanceTypes'
+import { attendanceKeys } from './attendanceQueries'
+import { profesorAttendanceKeys } from './profesorQueries'
+
+// ============================================
+// CONSTANTS
+// ============================================
+
+/**
+ * Attendance type constants
+ * 1=Normal, 2=Cortesía, 3=Prueba, 4=Recuperación
+ */
+const TIPO_ASISTENCIA = {
+  NORMAL: 1,
+  CORTESIA: 2,
+  PRUEBA: 3,
+  RECUPERACION: 4,
+} as const
+
+/**
+ * Attendance state constants
+ * 1=Presente, 2=Ausente, 3=Justificada
+ */
+const ESTADO_ASISTENCIA = {
+  PRESENTE: 1,
+  AUSENTE: 2,
+  JUSTIFICADA: 3,
+} as const
 
 // ============================================
 // MUTATION TYPES
@@ -100,11 +126,17 @@ export function useUpdateAttendanceMutation() {
       
       const wasFrozen = previousStudent?.paquete?.estado === 'Congelado'
 
-      // Force immediate refetch to get updated package states from backend
-      await queryClient.invalidateQueries({ 
-        queryKey: attendanceKeys.summary(idClase),
-        refetchType: 'active'
-      })
+      // Invalidate both admin and profesor caches for cross-role synchronization
+      await Promise.all([
+        queryClient.invalidateQueries({ 
+          queryKey: attendanceKeys.summary(idClase),
+          refetchType: 'active'
+        }),
+        queryClient.invalidateQueries({
+          queryKey: profesorAttendanceKeys.asistenciasClase(idClase),
+          refetchType: 'active'
+        })
+      ])
 
       // Wait a bit for the refetch to complete and UI to update
       await new Promise(resolve => setTimeout(resolve, 100))
@@ -176,27 +208,29 @@ export function useRegisterAttendanceMutation() {
         throw new Error('Estudiante no encontrado')
       }
 
-      // Get the package ID - we need to fetch the active package for this student
-      // For now, we'll use a query to get the student's packages
-      // TODO: This should be refactored to get the package ID from the attendance summary
-      const packagesResponse = await httpClient.get<{ items: Array<{ idPaquete: string, estado: string }> }>(
-        `/api/alumnos/${idAlumno}/paquetes`,
-        { params: { pageNumber: 1, pageSize: 10 } }
-      )
-      
-      const activePackage = packagesResponse.data.items.find(p => p.estado === 'Activo')
-      
-      if (!activePackage) {
-        throw new Error('El alumno no tiene un paquete activo')
+      // Use the idPaquete from data if provided, otherwise use the one from cache
+      const idPaqueteToUse = data.idPaquete || student.paquete?.idPaquete
+
+      console.log('=== REGISTER ATTENDANCE MUTATION ===')
+      console.log('idPaquete from data:', data.idPaquete)
+      console.log('idPaquete from cache:', student.paquete?.idPaquete)
+      console.log('idPaquete to use:', idPaqueteToUse)
+      console.log('Package description:', student.paquete?.descripcion)
+      console.log('====================================')
+
+      // Verify we have a package ID
+      if (!idPaqueteToUse) {
+        throw new Error('No se especificó un paquete para usar')
       }
 
-      // Convert boolean presente to idEstadoAsistencia (1=Presente, 2=Ausente)
-      const idEstadoAsistencia = data.presente ? 1 : 2
+      // Convert boolean presente to idEstadoAsistencia
+      const idEstadoAsistencia = data.presente ? ESTADO_ASISTENCIA.PRESENTE : ESTADO_ASISTENCIA.AUSENTE
 
       const response = await httpClient.post<string>('/api/asistencias', {
         idClase: data.idClase,
         idAlumno: data.idAlumno,
-        idPaqueteUsado: activePackage.idPaquete,
+        idTipoAsistencia: TIPO_ASISTENCIA.NORMAL,
+        idPaqueteUsado: idPaqueteToUse,
         idEstadoAsistencia: idEstadoAsistencia,
         observaciones: data.observacion || null,
       })
@@ -266,7 +300,7 @@ export function useRegisterAttendanceMutation() {
       showToast.error('Error al registrar asistencia')
     },
 
-    onSuccess: (newIdAsistencia, { idClase, idAlumno }) => {
+    onSuccess: async (newIdAsistencia, { idClase, idAlumno }) => {
       // Update the cache with the real attendance ID from the server
       const currentData = queryClient.getQueryData<AttendanceSummaryResponse>(
         attendanceKeys.summary(idClase)
@@ -297,13 +331,20 @@ export function useRegisterAttendanceMutation() {
         )
       }
 
+      // Invalidate profesor cache for cross-role synchronization
+      await queryClient.invalidateQueries({
+        queryKey: profesorAttendanceKeys.asistenciasClase(idClase),
+        refetchType: 'active'
+      })
+
       // Show success toast (Requirement 3.6)
       showToast.attendanceMarked()
     },
 
     onSettled: (_data, _error, { idClase }) => {
-      // Invalidate to refetch fresh data from server
+      // Invalidate both admin and profesor caches to ensure fresh data
       queryClient.invalidateQueries({ queryKey: attendanceKeys.summary(idClase) })
+      queryClient.invalidateQueries({ queryKey: profesorAttendanceKeys.asistenciasClase(idClase) })
     },
   })
 }

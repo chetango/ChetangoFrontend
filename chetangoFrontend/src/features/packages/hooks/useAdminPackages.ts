@@ -2,30 +2,30 @@
 // USE ADMIN PACKAGES HOOK - CHETANGO ADMIN
 // ============================================
 
-import { useState, useMemo, useCallback, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
-  useAlumnosQuery,
-  useTiposPaqueteQuery,
-  usePaqueteDetailQuery,
-} from '../api/packageQueries'
-import {
-  useCreatePaqueteMutation,
-  useCongelarPaqueteMutation,
-  useDescongelarPaqueteMutation,
+    useCongelarPaqueteMutation,
+    useCreatePaqueteMutation,
+    useDescongelarPaqueteMutation,
 } from '../api/packageMutations'
 import {
-  setSearchTerm,
-  setFilterEstado,
-  setFilterTipoPaquete,
-  clearFilters,
+    useAlumnosQuery,
+    usePaqueteDetailQuery,
+    useTiposPaqueteQuery,
+} from '../api/packageQueries'
+import {
+    clearFilters,
+    setFilterEstado,
+    setFilterTipoPaquete,
+    setSearchTerm,
 } from '../store/packagesSlice'
 import type {
-  PaqueteFormData,
-  CrearPaqueteRequest,
-  PaqueteListItemDTO,
-  PackagesStats,
-  CongelarPaqueteRequest,
+    CongelarPaqueteRequest,
+    CrearPaqueteRequest,
+    PackagesStats,
+    PaqueteFormData,
+    PaqueteListItemDTO,
 } from '../types/packageTypes'
 
 // ============================================
@@ -295,7 +295,7 @@ export function useAdminPackages() {
    */
   const handleCreatePaquete = useCallback(
     async (formData: PaqueteFormData) => {
-      const tipoPaquete = tiposPaqueteQuery.data?.find((t) => t.id === formData.idTipoPaquete)
+      const tipoPaquete = tiposPaqueteQuery.data?.find((t) => t.idTipoPaquete === formData.idTipoPaquete)
       if (!tipoPaquete) {
         throw new Error('Tipo de paquete no encontrado')
       }
@@ -303,7 +303,7 @@ export function useAdminPackages() {
       const request: CrearPaqueteRequest = {
         idAlumno: formData.idAlumno,
         idTipoPaquete: formData.idTipoPaquete,
-        clasesDisponibles: tipoPaquete.clasesDisponibles,
+        clasesDisponibles: tipoPaquete.numeroClases,
         valorPaquete: tipoPaquete.precio,
         diasVigencia: tipoPaquete.diasVigencia,
       }

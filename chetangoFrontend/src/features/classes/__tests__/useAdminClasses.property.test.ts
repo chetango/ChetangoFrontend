@@ -2,13 +2,13 @@
 // PROPERTY-BASED TESTS - USE ADMIN CLASSES HOOK
 // ============================================
 
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
+import { describe, expect, it } from 'vitest'
 import {
-  getClaseEstado,
-  groupClasesByDate,
-  filterClases,
-  calculateStats,
+    calculateStats,
+    filterClases,
+    getClaseEstado,
+    groupClasesByDate,
 } from '../hooks/useAdminClasses'
 import type { ClaseListItemDTO } from '../types/classTypes'
 
@@ -50,8 +50,11 @@ const claseListItemArb: fc.Arbitrary<ClaseListItemDTO> = fc.record({
   horaInicio: timeStringArb,
   horaFin: timeStringArb,
   tipoClase: fc.constantFrom('Tango', 'Milonga', 'Vals', 'Practica'),
+  idProfesorPrincipal: fc.uuid(),
+  nombreProfesor: fc.string({ minLength: 3, maxLength: 50 }),
   cupoMaximo: fc.integer({ min: 1, max: 50 }),
   totalAsistencias: fc.integer({ min: 0, max: 50 }),
+  estado: fc.constantFrom('Programada', 'EnCurso', 'Completada', 'Cancelada'),
 })
 
 /**
@@ -65,8 +68,11 @@ const clasesWithSameDateArb = (date: string) =>
       horaInicio: timeStringArb,
       horaFin: timeStringArb,
       tipoClase: fc.constantFrom('Tango', 'Milonga', 'Vals', 'Practica'),
+      idProfesorPrincipal: fc.uuid(),
+      nombreProfesor: fc.string({ minLength: 3, maxLength: 50 }),
       cupoMaximo: fc.integer({ min: 1, max: 50 }),
       totalAsistencias: fc.integer({ min: 0, max: 50 }),
+      estado: fc.constantFrom('Programada', 'EnCurso', 'Completada', 'Cancelada'),
     }),
     { minLength: 1, maxLength: 10 }
   )
@@ -383,8 +389,11 @@ describe('Property 15: Stats Calculation Accuracy', () => {
         horaInicio: timeStringArb,
         horaFin: timeStringArb,
         tipoClase: fc.constantFrom('Tango', 'Milonga'),
+        idProfesorPrincipal: fc.uuid(),
+        nombreProfesor: fc.string({ minLength: 3, maxLength: 50 }),
         cupoMaximo: fc.integer({ min: 1, max: 50 }),
         totalAsistencias: fc.integer({ min: 0, max: 50 }),
+        estado: fc.constantFrom('Programada', 'EnCurso', 'Completada', 'Cancelada'),
       }),
       { minLength: 0, maxLength: 10 }
     )
@@ -411,8 +420,11 @@ describe('Property 15: Stats Calculation Accuracy', () => {
         horaInicio: timeStringArb,
         horaFin: timeStringArb,
         tipoClase: fc.constantFrom('Tango', 'Milonga'),
+        idProfesorPrincipal: fc.uuid(),
+        nombreProfesor: fc.string({ minLength: 3, maxLength: 50 }),
         cupoMaximo: fc.integer({ min: 1, max: 50 }),
         totalAsistencias: fc.integer({ min: 0, max: 50 }),
+        estado: fc.constantFrom('Programada', 'EnCurso', 'Completada', 'Cancelada'),
       }),
       { minLength: 0, maxLength: 10 }
     )
@@ -466,8 +478,11 @@ describe('Property 15: Stats Calculation Accuracy', () => {
         horaInicio: timeStringArb,
         horaFin: timeStringArb,
         tipoClase: fc.constantFrom('Tango', 'Milonga'),
+        idProfesorPrincipal: fc.uuid(),
+        nombreProfesor: fc.string({ minLength: 3, maxLength: 50 }),
         cupoMaximo: fc.integer({ min: 1, max: 50 }),
         totalAsistencias: fc.integer({ min: 0, max: 50 }),
+        estado: fc.constantFrom('Programada', 'EnCurso', 'Completada', 'Cancelada'),
       }),
       { minLength: 0, maxLength: 20 }
     )

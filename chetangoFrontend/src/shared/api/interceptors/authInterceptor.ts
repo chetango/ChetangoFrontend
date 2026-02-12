@@ -1,7 +1,6 @@
-import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios'
-import type { PublicClientApplication, AccountInfo, SilentRequest } from '@azure/msal-browser'
-import { InteractionRequiredAuthError } from '@azure/msal-browser'
 import { ROUTES } from '@/shared/constants/routes'
+import type { AccountInfo, PublicClientApplication, SilentRequest } from '@azure/msal-browser'
+import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 
 interface AuthInterceptorConfig {
   msalInstance: PublicClientApplication
@@ -30,20 +29,21 @@ export const setupAuthInterceptor = (
           config.headers.Authorization = `Bearer ${response.accessToken}`
           console.log('[Auth Interceptor] Token added to request')
         } catch (error) {
-          console.error('[Auth Interceptor] Token acquisition failed:', error)
-          // Si es un error de interacción requerida, intentar popup
-          if (error instanceof InteractionRequiredAuthError) {
-            try {
-              console.log('[Auth Interceptor] Trying popup...')
-              const response = await msalInstance.acquireTokenPopup({
-                ...tokenRequest,
-                account: accounts[0],
-              })
-              config.headers.Authorization = `Bearer ${response.accessToken}`
-              console.log('[Auth Interceptor] Token from popup added')
-            } catch (popupError) {
-              console.error('[Auth Interceptor] Token popup failed:', popupError)
-            }
+          console.error('[Auth Interceptor] Silent token acquisition failed:', error)
+          // Para CUALQUIER error de token (timeout, interacción requerida, etc.), intentar popup
+          try {
+            console.log('[Auth Interceptor] Attempting interactive token acquisition...')
+            const response = await msalInstance.acquireTokenPopup({
+              ...tokenRequest,
+              account: accounts[0],
+            })
+            config.headers.Authorization = `Bearer ${response.accessToken}`
+            console.log('[Auth Interceptor] Token from popup added successfully')
+          } catch (popupError) {
+            console.error('[Auth Interceptor] Interactive token acquisition failed:', popupError)
+            // Si falla popup también, redirigir a login
+            console.warn('[Auth Interceptor] Forcing re-login due to token acquisition failure')
+            window.location.href = ROUTES.LOGIN
           }
         }
       } else {

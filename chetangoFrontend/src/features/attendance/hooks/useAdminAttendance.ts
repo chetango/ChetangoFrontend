@@ -2,23 +2,23 @@
 // USE ADMIN ATTENDANCE HOOK - CHETANGO ADMIN
 // ============================================
 
-import { useCallback, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
+import { useCallback, useRef } from 'react'
+import { useRegisterAttendanceMutation, useUpdateAttendanceMutation } from '../api/attendanceMutations'
 import {
-  useDateRangeQuery,
-  useClassesByDateQuery,
-  useAttendanceSummaryQuery,
+    useAttendanceSummaryQuery,
+    useClassesByDateQuery,
+    useDateRangeQuery,
 } from '../api/attendanceQueries'
-import { useUpdateAttendanceMutation, useRegisterAttendanceMutation } from '../api/attendanceMutations'
 import {
-  setSelectedDate,
-  setSelectedClassId,
-  setUpdatingStudent,
+    setSelectedClassId,
+    setSelectedDate,
+    setUpdatingStudent,
 } from '../store/attendanceSlice'
 import type {
-  DateRangeResponse,
-  ClassesByDateResponse,
-  AttendanceSummaryResponse,
+    AttendanceSummaryResponse,
+    ClassesByDateResponse,
+    DateRangeResponse,
 } from '../types/attendanceTypes'
 
 // ============================================
@@ -74,8 +74,8 @@ export interface UseAdminAttendanceReturn {
   // Actions
   setSelectedDate: (date: string) => void
   setSelectedClassId: (classId: string | null) => void
-  toggleAttendance: (studentId: string) => Promise<void>
-  updateObservation: (studentId: string, observation: string) => Promise<void>
+  toggleAttendance: (studentId: string, idPaquete: string | null) => Promise<void>
+  updateObservation: (studentId: string, idPaquete: string | null, observation: string) => Promise<void>
 
   // Mutation states
   isUpdatingAttendance: Record<string, boolean>
@@ -147,7 +147,7 @@ export function useAdminAttendance(): UseAdminAttendanceReturn {
   // Uses useUpdateAttendanceMutation if idAsistencia exists
   // Uses useRegisterAttendanceMutation if idAsistencia is null
   const toggleAttendance = useCallback(
-    async (studentId: string): Promise<void> => {
+    async (studentId: string, idPaquete: string | null): Promise<void> => {
       if (!selectedClassId || !attendanceSummary) {
         return
       }
@@ -164,6 +164,7 @@ export function useAdminAttendance(): UseAdminAttendanceReturn {
       // DEBUG: Log toggle action
       console.log('=== TOGGLE ATTENDANCE ===')
       console.log('Student:', student.nombreCompleto)
+      console.log('idPaquete:', idPaquete)
       console.log('Current estado:', student.asistencia.estado)
       console.log('idAsistencia:', student.asistencia.idAsistencia)
       console.log('New presente:', newPresente)
@@ -196,6 +197,7 @@ export function useAdminAttendance(): UseAdminAttendanceReturn {
             data: {
               idClase: selectedClassId,
               idAlumno: studentId,
+              idPaquete: idPaquete ?? undefined,
               presente: newPresente,
               observacion: student.asistencia.observacion ?? undefined,
             },
@@ -210,7 +212,7 @@ export function useAdminAttendance(): UseAdminAttendanceReturn {
 
   // Internal function to perform the actual observation update
   const performObservationUpdate = useCallback(
-    async (studentId: string, observation: string): Promise<void> => {
+    async (studentId: string, idPaquete: string | null, observation: string): Promise<void> => {
       if (!selectedClassId || !attendanceSummary) {
         return
       }
@@ -246,6 +248,7 @@ export function useAdminAttendance(): UseAdminAttendanceReturn {
             data: {
               idClase: selectedClassId,
               idAlumno: studentId,
+              idPaquete: idPaquete ?? undefined,
               presente: student.asistencia.estado === 'Presente',
               observacion: observation || undefined,
             },
@@ -260,19 +263,20 @@ export function useAdminAttendance(): UseAdminAttendanceReturn {
 
   // Action: Update observation with 500ms debounce (Requirements 8.1, 8.2)
   const updateObservation = useCallback(
-    async (studentId: string, observation: string): Promise<void> => {
+    async (studentId: string, idPaquete: string | null, observation: string): Promise<void> => {
       // Get or create debounced function for this student
-      if (!debouncedObservationUpdatesRef.current[studentId]) {
-        debouncedObservationUpdatesRef.current[studentId] = debounce(
+      const debounceKey = `${studentId}-${idPaquete}`
+      if (!debouncedObservationUpdatesRef.current[debounceKey]) {
+        debouncedObservationUpdatesRef.current[debounceKey] = debounce(
           (obs: string) => {
-            performObservationUpdate(studentId, obs)
+            performObservationUpdate(studentId, idPaquete, obs)
           },
           500
         )
       }
 
       // Call the debounced function
-      debouncedObservationUpdatesRef.current[studentId](observation)
+      debouncedObservationUpdatesRef.current[debounceKey](observation)
     },
     [performObservationUpdate]
   )

@@ -3,9 +3,9 @@
 // Requirements: 4.5, 4.6
 // ============================================
 
-import { X } from 'lucide-react'
-import { GlassPanel } from '@/design-system/atoms/GlassPanel'
 import { GlassButton } from '@/design-system/atoms/GlassButton'
+import { GlassPanel } from '@/design-system/atoms/GlassPanel'
+import { X } from 'lucide-react'
 import type { AlumnoDTO } from '../types/paymentTypes'
 
 interface AlumnoCardProps {
@@ -22,7 +22,7 @@ interface AlumnoCardProps {
  * - 4.6: Include "Cambiar alumno" button to clear selection
  */
 export function AlumnoCard({ alumno, getInitials, onClear }: AlumnoCardProps) {
-  const initials = getInitials(alumno.nombreCompleto)
+  const initials = getInitials(alumno.nombre)
 
   return (
     <GlassPanel className="p-4">
@@ -35,14 +35,16 @@ export function AlumnoCard({ alumno, getInitials, onClear }: AlumnoCardProps) {
         {/* Alumno info */}
         <div className="flex-1 min-w-0">
           <h3 className="text-[#f9fafb] font-medium truncate">
-            {alumno.nombreCompleto}
+            {alumno.nombre}
           </h3>
           {alumno.correo && (
             <p className="text-[#9ca3af] text-sm truncate">{alumno.correo}</p>
           )}
-          <p className="text-[#6b7280] text-xs">
-            Doc: {alumno.documentoIdentidad}
-          </p>
+          {alumno.numeroDocumento && (
+            <p className="text-[#6b7280] text-xs">
+              Doc: {alumno.numeroDocumento}
+            </p>
+          )}
         </div>
 
         {/* Clear button */}

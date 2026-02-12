@@ -2,19 +2,19 @@
 // PROPERTY-BASED TESTS - CLASE DETAIL MODAL COMPONENT
 // ============================================
 
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
+import { describe, expect, it } from 'vitest'
 import {
-  getClaseEstadoFromDate,
-  formatDateDisplay,
-  formatHorarioWithDuration,
-} from '../components/ClaseDetailModal'
-import {
-  formatTime,
-  calculateDuration,
-  getEstadoBadgeVariant,
-  calculateCapacityPercentage,
+    calculateCapacityPercentage,
+    calculateDuration,
+    formatTime,
+    getEstadoBadgeVariant,
 } from '../components/ClaseCard'
+import {
+    formatDateDisplay,
+    formatHorarioWithDuration,
+    getClaseEstadoFromDate,
+} from '../components/ClaseDetailModal'
 import type { ClaseDetalleDTO } from '../types/classTypes'
 
 // ============================================
@@ -45,7 +45,7 @@ const claseDetalleArb: fc.Arbitrary<ClaseDetalleDTO> = fc.record({
     .integer({ min: 7, max: 22 })
     .map((h) => `${h.toString().padStart(2, '0')}:00:00`),
   tipoClase: fc.constantFrom('Tango', 'Milonga', 'Vals', 'Técnica'),
-  idProfesorPrincipal: fc.uuid(),
+  idProfesorPrincipal: fc.option(fc.uuid(), { nil: null }),
   nombreProfesor: fc.string({ minLength: 3, maxLength: 50 }).filter((s) => s.trim().length > 0),
   cupoMaximo: fc.integer({ min: 1, max: 50 }),
   observaciones: fc.option(fc.string({ minLength: 0, maxLength: 200 }), { nil: null }),
@@ -57,6 +57,15 @@ const claseDetalleArb: fc.Arbitrary<ClaseDetalleDTO> = fc.record({
     }),
     { minLength: 0, maxLength: 3 }
   ),
+  profesores: fc.array(
+    fc.record({
+      idProfesor: fc.uuid(),
+      nombreProfesor: fc.string({ minLength: 3, maxLength: 50 }).filter((s) => s.trim().length > 0),
+      rolEnClase: fc.constantFrom('Principal', 'Monitor') as fc.Arbitrary<'Principal' | 'Monitor'>,
+    }),
+    { minLength: 1, maxLength: 4 }
+  ),
+  estado: fc.constantFrom('Programada', 'EnCurso', 'Completada', 'Cancelada'),
 })
 
 

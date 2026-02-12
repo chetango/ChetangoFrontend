@@ -4,11 +4,13 @@ interface GlassPanelProps {
   children: ReactNode;
   className?: string;
   hover?: boolean;
+  onClick?: () => void;
 }
 
-export function GlassPanel({ children, className = '', hover = false }: GlassPanelProps) {
+export function GlassPanel({ children, className = '', hover = false, onClick }: GlassPanelProps) {
   return (
     <div
+      onClick={onClick}
       className={`
         backdrop-blur-2xl 
         bg-gradient-to-br from-[rgba(42,42,48,0.7)] to-[rgba(26,26,32,0.8)] 

@@ -75,16 +75,17 @@ export interface ClaseProfesorItem {
 }
 
 /**
- * Response from GET /api/clases/{idClase}/asistencias
- * List of attendance records for a class
+ * Response from GET /api/admin/asistencias/clase/{idClase}/resumen (shared with admin)
+ * Complete attendance summary with package information
  */
 export interface AsistenciasClaseResponse {
-  idAsistencia: string
+  idAsistencia: string | null
   idAlumno: string
   nombreAlumno: string
   presente: boolean
   observacion: string | null
-  fechaRegistro: string // DateTime ISO 8601
+  estadoPaquete?: string | number // 'Activo' | 'Agotado' | 'Congelado' | 'SinPaquete' or 0-3
+  clasesRestantes?: number | null
 }
 
 // ============================================

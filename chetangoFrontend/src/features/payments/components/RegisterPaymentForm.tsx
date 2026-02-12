@@ -3,19 +3,20 @@
 // Requirements: 5.1, 5.2, 5.10, 5.11, 7.1, 7.2, 7.8
 // ============================================
 
-import { useState, useCallback, useMemo, useEffect } from 'react'
-import { Calendar, FileText, Loader2 } from 'lucide-react'
-import { GlassInput } from '@/design-system/atoms/GlassInput'
 import { GlassButton } from '@/design-system/atoms/GlassButton'
-import { PaymentMethodSelector } from './PaymentMethodSelector'
-import { PackageSelector } from './PackageSelector'
-import { PaymentTotalDisplay } from './PaymentTotalDisplay'
+import { GlassInput } from '@/design-system/atoms/GlassInput'
+import { getToday, toLocalISOString } from '@/shared/utils/dateTimeHelper'
+import { Calendar, FileText, Loader2 } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type {
-  MetodoPagoDTO,
-  TipoPaqueteDTO,
-  SelectedPaquete,
-  PagoFormData,
+    MetodoPagoDTO,
+    PagoFormData,
+    SelectedPaquete,
+    TipoPaqueteDTO,
 } from '../types/paymentTypes'
+import { PackageSelector } from './PackageSelector'
+import { PaymentMethodSelector } from './PaymentMethodSelector'
+import { PaymentTotalDisplay } from './PaymentTotalDisplay'
 
 /**
  * Initial values for pre-filling the form
@@ -69,8 +70,7 @@ export function RegisterPaymentForm({
 }: RegisterPaymentFormProps) {
   // Form state
   const [fechaPago, setFechaPago] = useState(() => {
-    const today = new Date()
-    return today.toISOString().split('T')[0]
+    return getToday()
   })
   const [idMetodoPago, setIdMetodoPago] = useState('')
   const [selectedPaquetes, setSelectedPaquetes] = useState<SelectedPaquete[]>([])
@@ -170,7 +170,7 @@ export function RegisterPaymentForm({
 
     const formData: PagoFormData = {
       idAlumno,
-      fechaPago: new Date(fechaPago).toISOString(),
+      fechaPago: toLocalISOString(new Date(fechaPago)),
       idMetodoPago,
       selectedPaquetes,
       montoTotal,

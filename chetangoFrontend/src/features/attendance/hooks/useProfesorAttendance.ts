@@ -2,22 +2,22 @@
 // USE PROFESOR ATTENDANCE HOOK - CHETANGO
 // ============================================
 
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react'
 import { showToast } from '@/design-system'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useRegisterAttendanceMutation, useUpdateAttendanceMutation } from '../api/attendanceMutations'
 import {
-  useProfesorClasesQuery,
-  useAsistenciasClaseQuery,
+    useAsistenciasClaseQuery,
+    useProfesorClasesQuery,
 } from '../api/profesorQueries'
-import { useUpdateAttendanceMutation, useRegisterAttendanceMutation } from '../api/attendanceMutations'
-import { findCurrentClass } from '../types/profesorTypes'
 import type {
-  ClaseProfesor,
-  ClaseProfesorItem,
-  EstudianteProfesor,
-  EstadoPaqueteProfesor,
-  ProfesorAttendanceCounters,
-  AsistenciasClaseResponse,
+    AsistenciasClaseResponse,
+    ClaseProfesor,
+    ClaseProfesorItem,
+    EstadoPaqueteProfesor,
+    EstudianteProfesor,
+    ProfesorAttendanceCounters,
 } from '../types/profesorTypes'
+import { findCurrentClass } from '../types/profesorTypes'
 
 // ============================================
 // DEBOUNCE UTILITY
@@ -240,8 +240,12 @@ export function useProfesorAttendance(
           documento: '', // API doesn't provide documento in this endpoint
           asistencia: asistencia.presente,
           observacion: asistencia.observacion || '',
-          estadoPaquete: mapEstadoPaquete(undefined), // API doesn't provide package status in this endpoint
-          idAsistencia: asistencia.idAsistencia,
+          estadoPaquete: mapEstadoPaquete(
+            typeof asistencia.estadoPaquete === 'number' 
+              ? ['Activo', 'Agotado', 'Congelado', 'SinPaquete'][asistencia.estadoPaquete]
+              : asistencia.estadoPaquete
+          ),
+          idAsistencia: asistencia.idAsistencia || null,
         })
       )
       setLocalEstudiantes(estudiantes)

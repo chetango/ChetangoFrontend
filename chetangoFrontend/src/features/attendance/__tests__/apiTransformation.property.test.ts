@@ -2,23 +2,23 @@
 // PROPERTY-BASED TESTS - API DATA TRANSFORMATION
 // ============================================
 
-import { describe, it, expect } from 'vitest'
 import * as fc from 'fast-check'
-import {
-  transformDateRangeResponse,
-  transformClassesByDateResponse,
-  transformAttendanceSummaryResponse,
-  serializeUpdateAttendanceRequest,
-  serializeRegisterAttendanceRequest,
-} from '../utils/attendanceUtils'
+import { describe, expect, it } from 'vitest'
 import type {
-  DateRangeResponse,
-  ClassesByDateResponse,
-  AttendanceSummaryResponse,
-  UpdateAttendanceRequest,
-  RegisterAttendanceRequest,
-  PackageState,
+    AttendanceSummaryResponse,
+    ClassesByDateResponse,
+    DateRangeResponse,
+    PackageState,
+    RegisterAttendanceRequest,
+    UpdateAttendanceRequest,
 } from '../types/attendanceTypes'
+import {
+    serializeRegisterAttendanceRequest,
+    serializeUpdateAttendanceRequest,
+    transformAttendanceSummaryResponse,
+    transformClassesByDateResponse,
+    transformDateRangeResponse,
+} from '../utils/attendanceUtils'
 
 // ============================================
 // ARBITRARIES FOR GENERATING VALID API DATA
@@ -82,11 +82,15 @@ const classesByDateResponseArb: fc.Arbitrary<ClassesByDateResponse> = fc.record(
 
 // Generate valid StudentPackage
 const studentPackageArb = fc.record({
+  idPaquete: fc.option(fc.uuid(), { nil: null }),
   estado: packageStateArb,
   descripcion: fc.option(fc.string({ minLength: 1, maxLength: 30 }), { nil: null }),
   clasesTotales: fc.option(fc.integer({ min: 1, max: 20 }), { nil: null }),
   clasesUsadas: fc.option(fc.integer({ min: 0, max: 20 }), { nil: null }),
   clasesRestantes: fc.option(fc.integer({ min: 0, max: 20 }), { nil: null }),
+  esCompartido: fc.boolean(),
+  idsAlumnosCompartidos: fc.option(fc.array(fc.uuid(), { minLength: 0, maxLength: 3 }), { nil: null }),
+  nombresAlumnosCompartidos: fc.option(fc.array(fc.string({ minLength: 1, maxLength: 30 }), { minLength: 0, maxLength: 3 }), { nil: null }),
 })
 
 // Generate valid AttendanceRecord (formerly AttendanceStatus)

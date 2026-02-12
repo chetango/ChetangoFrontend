@@ -4,29 +4,30 @@
 // Requirements: 3.3, 3.7, 3.8, 8.5, 8.6, 9.3, 10.1, 10.2
 // ============================================
 
-import { useState, useCallback, useEffect, useMemo } from 'react'
-import { Search, Calendar, Plus, X, RefreshCw, AlertCircle } from 'lucide-react'
 import {
-  GlassPanel,
-  GlassButton,
-  GlassInput,
-  GlassSelect,
-  GlassSelectTrigger,
-  GlassSelectValue,
-  GlassSelectContent,
-  GlassSelectItem,
-  StatCard,
-  Skeleton,
-  SkeletonCard,
+    GlassButton,
+    GlassInput,
+    GlassPanel,
+    GlassSelect,
+    GlassSelectContent,
+    GlassSelectItem,
+    GlassSelectTrigger,
+    GlassSelectValue,
+    Skeleton,
+    SkeletonCard,
+    StatCard,
 } from '@/design-system'
-import { useAdminClasses, getClaseEstado } from '@/features/classes/hooks'
+import { useCompletarClaseMutation } from '@/features/classes/api/classMutations'
 import {
-  ClaseCard,
-  ClaseFormModal,
-  ClaseDetailModal,
-  formatDateDisplay,
+    ClaseCard,
+    ClaseDetailModal,
+    ClaseFormModal,
+    formatDateDisplay,
 } from '@/features/classes/components'
-import type { ClaseFormData, ClaseDetalleDTO } from '@/features/classes/types/classTypes'
+import { getClaseEstado, useAdminClasses } from '@/features/classes/hooks'
+import type { ClaseDetalleDTO, ClaseFormData } from '@/features/classes/types/classTypes'
+import { AlertCircle, Calendar, Plus, RefreshCw, Search, X } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styles from '../PageStyles.module.scss'
 
 // ============================================
@@ -272,6 +273,9 @@ export default function AdminClassesPage() {
     refetchClases,
   } = useAdminClasses()
 
+  // Complete class mutation
+  const completarClaseMutation = useCompletarClaseMutation()
+
   // ============================================
   // LOCAL STATE
   // ============================================
@@ -286,7 +290,8 @@ export default function AdminClassesPage() {
   const [confirmDialog, setConfirmDialog] = useState<{
     isOpen: boolean
     claseId: string | null
-  }>({ isOpen: false, claseId: null })
+    type: 'delete' | 'complete'
+  }>({ isOpen: false, claseId: null, type: 'delete' })
 
   // Search debounce
   const [searchInput, setSearchInput] = useState(filters.searchTerm)
@@ -368,20 +373,29 @@ export default function AdminClassesPage() {
 
   // Open cancel confirmation - Requirements: 7.1
   const handleOpenCancelConfirmation = useCallback((idClase: string) => {
-    setConfirmDialog({ isOpen: true, claseId: idClase })
+    setConfirmDialog({ isOpen: true, claseId: idClase, type: 'delete' })
+  }, [])
+
+  // Open complete confirmation
+  const handleOpenCompleteConfirmation = useCallback((idClase: string) => {
+    setConfirmDialog({ isOpen: true, claseId: idClase, type: 'complete' })
   }, [])
 
   // Confirm cancel - Requirements: 7.2
   const handleConfirmCancel = useCallback(async () => {
     if (confirmDialog.claseId) {
-      await handleDeleteClase(confirmDialog.claseId)
-      setConfirmDialog({ isOpen: false, claseId: null })
+      if (confirmDialog.type === 'delete') {
+        await handleDeleteClase(confirmDialog.claseId)
+      } else if (confirmDialog.type === 'complete') {
+        await completarClaseMutation.mutateAsync(confirmDialog.claseId)
+      }
+      setConfirmDialog({ isOpen: false, claseId: null, type: 'delete' })
     }
-  }, [confirmDialog.claseId, handleDeleteClase])
+  }, [confirmDialog, handleDeleteClase, completarClaseMutation])
 
   // Close confirmation dialog
   const handleCloseConfirmation = useCallback(() => {
-    setConfirmDialog({ isOpen: false, claseId: null })
+    setConfirmDialog({ isOpen: false, claseId: null, type: 'delete' })
   }, [])
 
   // Handle profesor filter change
@@ -575,6 +589,7 @@ export default function AdminClassesPage() {
                       nombreProfesor={profesor?.nombreCompleto}
                       onEdit={handleOpenEditModal}
                       onCancel={handleOpenCancelConfirmation}
+                      onComplete={handleOpenCompleteConfirmation}
                       onViewDetail={handleOpenDetailModal}
                     />
                   )
@@ -608,11 +623,17 @@ export default function AdminClassesPage() {
       {/* Confirmation Dialog - Requirements: 7.1, 7.6 */}
       <ConfirmationDialog
         isOpen={confirmDialog.isOpen}
-        title="Cancelar Clase"
-        message="¿Estás seguro de que deseas cancelar esta clase? Esta acción no se puede deshacer."
-        confirmText="Sí, cancelar clase"
+        title={confirmDialog.type === 'complete' ? 'Completar Clase' : 'Cancelar Clase'}
+        message={
+          confirmDialog.type === 'complete'
+            ? '¿Estás seguro de que deseas completar esta clase? Se generarán los pagos automáticamente para el profesor y monitores.'
+            : '¿Estás seguro de que deseas cancelar esta clase? Esta acción no se puede deshacer.'
+        }
+        confirmText={
+          confirmDialog.type === 'complete' ? 'Sí, completar clase' : 'Sí, cancelar clase'
+        }
         cancelText="No, mantener"
-        isLoading={isDeleting}
+        isLoading={isDeleting || completarClaseMutation.isPending}
         onConfirm={handleConfirmCancel}
         onCancel={handleCloseConfirmation}
       />

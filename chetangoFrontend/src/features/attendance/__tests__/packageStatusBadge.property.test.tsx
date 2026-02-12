@@ -2,11 +2,11 @@
 // PROPERTY-BASED TESTS - PACKAGE STATUS BADGE
 // ============================================
 
-import { describe, it, expect, afterEach } from 'vitest'
+import { cleanup, render } from '@testing-library/react'
 import * as fc from 'fast-check'
-import { render, cleanup } from '@testing-library/react'
+import { afterEach, describe, expect, it } from 'vitest'
 import { PackageStatusBadge } from '../components/admin/PackageStatusBadge'
-import type { StudentPackage, PackageState } from '../types/attendanceTypes'
+import type { PackageState, StudentPackage } from '../types/attendanceTypes'
 
 // Arbitrary for generating valid PackageState
 const packageStateArb: fc.Arbitrary<PackageState> = fc.constantFrom(
@@ -40,11 +40,15 @@ describe('Property 4: Package status badge rendering', () => {
         (descripcion, clasesTotales, clasesUsadas) => {
           cleanup()
           const pkg: StudentPackage = {
+            idPaquete: null,
             estado: 'Activo',
             descripcion,
             clasesTotales,
             clasesUsadas,
             clasesRestantes: clasesTotales - clasesUsadas,
+            esCompartido: false,
+            idsAlumnosCompartidos: null,
+            nombresAlumnosCompartidos: null,
           }
 
           const { container } = render(<PackageStatusBadge package={pkg} />)
@@ -80,11 +84,15 @@ describe('Property 4: Package status badge rendering', () => {
         (clasesTotales) => {
           cleanup()
           const pkg: StudentPackage = {
+            idPaquete: null,
             estado: 'Agotado',
             descripcion: null,
             clasesTotales,
             clasesUsadas: clasesTotales,
             clasesRestantes: 0,
+            esCompartido: false,
+            idsAlumnosCompartidos: null,
+            nombresAlumnosCompartidos: null,
           }
 
           const { container } = render(<PackageStatusBadge package={pkg} />)
@@ -117,11 +125,15 @@ describe('Property 4: Package status badge rendering', () => {
         (clasesTotales, clasesUsadas) => {
           cleanup()
           const pkg: StudentPackage = {
+            idPaquete: null,
             estado: 'Congelado',
             descripcion: null,
             clasesTotales,
             clasesUsadas,
             clasesRestantes: clasesTotales - clasesUsadas,
+            esCompartido: false,
+            idsAlumnosCompartidos: null,
+            nombresAlumnosCompartidos: null,
           }
 
           const { container } = render(<PackageStatusBadge package={pkg} />)
@@ -154,11 +166,15 @@ describe('Property 4: Package status badge rendering', () => {
       fc.property(fc.boolean(), () => {
         cleanup()
         const pkg: StudentPackage = {
+          idPaquete: null,
           estado: 'SinPaquete',
           descripcion: null,
           clasesTotales: null,
           clasesUsadas: null,
           clasesRestantes: null,
+          esCompartido: false,
+          idsAlumnosCompartidos: null,
+          nombresAlumnosCompartidos: null,
         }
 
         const { container } = render(<PackageStatusBadge package={pkg} />)

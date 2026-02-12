@@ -2,11 +2,11 @@
 // PROPERTY-BASED TESTS - ATTENDANCE ROW / STUDENT ROW RENDERING
 // ============================================
 
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { cleanup, render } from '@testing-library/react'
 import * as fc from 'fast-check'
-import { render, cleanup } from '@testing-library/react'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { AttendanceRow, formatStudentInitials } from '../components/admin/AttendanceRow'
-import type { StudentAttendance, PackageState } from '../types/attendanceTypes'
+import type { PackageState, StudentAttendance } from '../types/attendanceTypes'
 
 /**
  * **Feature: admin-attendance-correction, Property 3: Student row rendering**
@@ -36,11 +36,15 @@ describe('Property 3: Student row rendering', () => {
     avatarIniciales: fc.string({ minLength: 2, maxLength: 2 }).filter((s) => /^[A-Za-z]{2}$/.test(s)),
     paquete: fc.option(
       fc.record({
+        idPaquete: fc.option(fc.uuid(), { nil: null }),
         estado: packageStateArb,
         descripcion: fc.option(fc.string({ minLength: 1, maxLength: 30 }), { nil: null }),
         clasesTotales: fc.option(fc.integer({ min: 1, max: 20 }), { nil: null }),
         clasesUsadas: fc.option(fc.integer({ min: 0, max: 20 }), { nil: null }),
         clasesRestantes: fc.option(fc.integer({ min: 0, max: 20 }), { nil: null }),
+        esCompartido: fc.boolean(),
+        idsAlumnosCompartidos: fc.option(fc.array(fc.uuid(), { maxLength: 3 }), { nil: null }),
+        nombresAlumnosCompartidos: fc.option(fc.array(fc.string({ minLength: 1, maxLength: 30 }), { maxLength: 3 }), { nil: null }),
       }),
       { nil: null }
     ),

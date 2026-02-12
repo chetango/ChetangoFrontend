@@ -2,12 +2,13 @@
 // PROFESOR ATTENDANCE QUERIES - REACT QUERY HOOKS
 // ============================================
 
-import { useQuery } from '@tanstack/react-query'
 import { httpClient } from '@/shared/api/httpClient'
+import { getToday } from '@/shared/utils/dateTimeHelper'
+import { useQuery } from '@tanstack/react-query'
 import type {
-  ClasesProfesorResponse,
-  ClaseProfesorItem,
-  AsistenciasClaseResponse,
+    AsistenciasClaseResponse,
+    ClaseProfesorItem,
+    ClasesProfesorResponse,
 } from '../types/profesorTypes'
 
 // ============================================
@@ -32,8 +33,7 @@ export const profesorAttendanceKeys = {
  * Gets today's date in YYYY-MM-DD format
  */
 export function getTodayDateString(): string {
-  const today = new Date()
-  return today.toISOString().split('T')[0]
+  return getToday()
 }
 
 /**
@@ -122,19 +122,32 @@ export function useProfesorClasesDelDiaQuery(idProfesor: string | null) {
 }
 
 /**
- * Fetches attendance records for a specific class
+ * Fetches attendance summary for a specific class
  * GET /api/clases/{idClase}/asistencias
  * @param idClase - Class UUID
- * @returns List of attendance records for the class
+ * @returns Attendance list for the class including ALL active students
  */
 export function useAsistenciasClaseQuery(idClase: string | null) {
   return useQuery({
     queryKey: profesorAttendanceKeys.asistenciasClase(idClase ?? ''),
     queryFn: async (): Promise<AsistenciasClaseResponse[]> => {
-      const response = await httpClient.get<AsistenciasClaseResponse[]>(
+      // Use profesor endpoint with ownership validation
+      const response = await httpClient.get<any[]>(
         `/api/clases/${idClase}/asistencias`
       )
-      return response.data
+      
+      // Transform response from new AsistenciaProfesorDto format
+      const asistencias: AsistenciasClaseResponse[] = response.data.map((item: any) => ({
+        idAsistencia: item.idAsistencia ?? null,  // Can be null for students without prior attendance
+        idAlumno: item.idAlumno,
+        nombreAlumno: item.nombreAlumno,
+        presente: item.presente ?? false,  // Default to false if not set
+        observacion: item.observacion ?? '',
+        estadoPaquete: item.estadoPaquete ?? 'SinPaquete',  // 'Activo', 'Agotado', 'Congelado', 'SinPaquete'
+        clasesRestantes: item.clasesRestantes ?? null,
+      }))
+      
+      return asistencias
     },
     enabled: !!idClase,
   })

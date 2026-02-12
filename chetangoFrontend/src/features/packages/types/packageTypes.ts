@@ -12,9 +12,11 @@
  */
 export interface AlumnoDTO {
   idAlumno: string // Guid
-  nombreCompleto: string
-  documentoIdentidad: string
-  correo?: string
+  idUsuario: string // Guid
+  nombre: string
+  correo: string
+  numeroDocumento?: string
+  telefono?: string
 }
 
 /**
@@ -22,11 +24,13 @@ export interface AlumnoDTO {
  * Package type information for dropdowns
  */
 export interface TipoPaqueteDTO {
-  id: string // Guid
+  idTipoPaquete: string // Guid
   nombre: string
-  clasesDisponibles: number
+  numeroClases: number
   diasVigencia: number
   precio: number
+  descripcion?: string
+  activo: boolean
 }
 
 // ============================================
@@ -103,6 +107,14 @@ export interface AsistenciaHistorialDTO {
 }
 
 /**
+ * Alumno en el mismo pago (para paquetes compartidos)
+ */
+export interface AlumnoPaqueteDTO {
+  idAlumno: string // Guid
+  nombreAlumno: string
+}
+
+/**
  * GET /api/paquetes/{id}
  * Detailed package information
  */
@@ -124,6 +136,7 @@ export interface PaqueteDetalleDTO {
   tieneClasesDisponibles: boolean
   congelaciones: CongelacionDTO[]
   historialConsumo?: AsistenciaHistorialDTO[]
+  alumnosDelPago?: AlumnoPaqueteDTO[] | null
 }
 
 // ============================================

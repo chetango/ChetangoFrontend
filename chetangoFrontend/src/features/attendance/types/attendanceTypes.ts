@@ -72,11 +72,15 @@ export interface StudentAttendance {
  * Student package information
  */
 export interface StudentPackage {
+  idPaquete: string | null
   estado: PackageState
   descripcion: string | null
   clasesTotales: number | null
   clasesUsadas: number | null
   clasesRestantes: number | null
+  esCompartido: boolean
+  idsAlumnosCompartidos: string[] | null
+  nombresAlumnosCompartidos: string[] | null
 }
 
 /**
@@ -120,6 +124,7 @@ export interface UpdateAttendanceRequest {
 export interface RegisterAttendanceRequest {
   idClase: string
   idAlumno: string
+  idPaquete?: string
   presente: boolean
   observacion?: string
 }
