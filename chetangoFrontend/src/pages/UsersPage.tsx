@@ -237,7 +237,7 @@ const UsersPage = () => {
                   </td>
                 </tr>
               ) : (
-                data?.items.map((user) => (
+                (data?.items || []).map((user) => (
                   <tr
                     key={user.idUsuario}
                     className="border-b border-[rgba(64,64,64,0.3)] hover:bg-[rgba(255,255,255,0.02)] transition-colors"
@@ -314,7 +314,7 @@ const UsersPage = () => {
                 Anterior
               </button>
               <div className="flex items-center gap-1">
-                {Array.from({ length: data.totalPages }, (_, i) => i + 1).map((page) => (
+                {Array.from({ length: data?.totalPages || 0 }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
                     onClick={() => setFilters((prev) => ({ ...prev, page }))}
