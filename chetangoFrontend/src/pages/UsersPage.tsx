@@ -230,7 +230,7 @@ const UsersPage = () => {
                     </div>
                   </td>
                 </tr>
-              ) : data?.items.length === 0 ? (
+              ) : data?.items?.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-[#9ca3af]">
                     No se encontraron usuarios
