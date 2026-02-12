@@ -15,7 +15,8 @@ export interface User {
   numeroDocumento: string
   fechaCreacion: string
   estado: UserStatus
-  roles: UserRole[]
+  rol: UserRole  // API devuelve rol singular
+  roles?: UserRole[]  // Mantener opcional para compatibilidad
   idProfesor?: string
   idAlumno?: string
 }

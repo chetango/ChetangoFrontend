@@ -91,11 +91,22 @@ const UsersPage = () => {
     }
   }
 
-  const getRoleBadge = (roles: UserRole[]) => {
-    if (!roles?.length) {
+  const getRoleBadge = (rolOrRoles: UserRole | UserRole[] | undefined) => {
+    // Compatibilidad: La API devuelve 'rol' (singular) pero antes era 'roles' (array)
+    let rol: UserRole | undefined
+    
+    if (Array.isArray(rolOrRoles)) {
+      // Si es array (formato antiguo)
+      rol = rolOrRoles[0]
+    } else {
+      // Si es string (formato nuevo de la API)
+      rol = rolOrRoles
+    }
+    
+    if (!rol) {
       return <span className="text-[#9ca3af] text-sm">Sin rol</span>
     }
-    const rol = roles[0]
+    
     const styles = {
       admin: 'bg-[rgba(139,92,246,0.15)] text-[#a78bfa] border-[rgba(139,92,246,0.3)]',
       profesor: 'bg-[rgba(59,130,246,0.15)] text-[#60a5fa] border-[rgba(59,130,246,0.3)]',
@@ -245,7 +256,7 @@ const UsersPage = () => {
                         <p className="text-[#9ca3af] text-sm">{user.telefono}</p>
                       </div>
                     </td>
-                    <td className="px-6 py-4">{getRoleBadge(user.roles)}</td>
+                    <td className="px-6 py-4">{getRoleBadge(user.rol || user.roles)}</td>
                     <td className="px-6 py-4">{getStatusBadge(user.estado)}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
@@ -292,7 +303,7 @@ const UsersPage = () => {
         {data && data.totalPages > 1 && (
           <div className="px-6 py-4 border-t border-[rgba(64,64,64,0.3)] flex items-center justify-between">
             <p className="text-[#9ca3af] text-sm">
-              Mostrando {data.items.length} de {data.totalCount} usuarios
+              Mostrando {data.items?.length || 0} de {data.totalCount} usuarios
             </p>
             <div className="flex gap-2">
               <button
