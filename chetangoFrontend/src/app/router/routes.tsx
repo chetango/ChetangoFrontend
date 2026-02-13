@@ -1,7 +1,7 @@
 import { useAuth } from '@/features/auth'
 import { getDefaultRouteForRoles } from '@/shared/lib/navigation'
 import { lazy, useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { RootLayout } from './RootLayout'
 
 // Componente simple que renderiza las rutas hijas
@@ -57,15 +57,19 @@ export type AppRoute = {
 const RootRedirect = () => {
   const { session } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   
   useEffect(() => {
     if (session.user?.roles) {
       const defaultRoute = getDefaultRouteForRoles(session.user.roles)
-      navigate(defaultRoute, { replace: true })
-    } else {
+      // Solo navegar si no estamos ya en la ruta destino
+      if (location.pathname !== defaultRoute && !location.pathname.startsWith(defaultRoute)) {
+        navigate(defaultRoute, { replace: true })
+      }
+    } else if (location.pathname === '/') {
       navigate('/dashboard', { replace: true })
     }
-  }, [session.user?.roles, navigate])
+  }, [session.user?.roles, navigate, location.pathname])
   
   return <div>Redirigiendo...</div>
 }
@@ -74,13 +78,17 @@ const RootRedirect = () => {
 const DashboardRedirect = () => {
   const { session } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   
   useEffect(() => {
     if (session.user?.roles) {
       const defaultRoute = getDefaultRouteForRoles(session.user.roles)
-      navigate(defaultRoute, { replace: true })
+      // Solo navegar si no estamos ya en la ruta destino
+      if (location.pathname !== defaultRoute && !location.pathname.startsWith(defaultRoute)) {
+        navigate(defaultRoute, { replace: true })
+      }
     }
-  }, [session.user?.roles, navigate])
+  }, [session.user?.roles, navigate, location.pathname])
   
   return <div>Redirigiendo...</div>
 }

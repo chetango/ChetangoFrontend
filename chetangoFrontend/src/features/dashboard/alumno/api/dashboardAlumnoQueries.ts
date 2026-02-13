@@ -36,8 +36,10 @@ export function useDashboardAlumnoQuery() {
       return response.data
     },
     staleTime: 5 * 60 * 1000, // 5 minutos
-    refetchInterval: 5 * 60 * 1000, // Refetch cada 5 minutos
-    retry: 2,
-    refetchOnWindowFocus: true
+    refetchInterval: false, // ❌ Deshabilitar auto-refetch para evitar loops
+    retry: 1, // Solo 1 reintento en caso de error
+    refetchOnWindowFocus: false, // ❌ No refetch al enfocar ventana
+    refetchOnMount: false, // ❌ No refetch al montar componente
+    refetchOnReconnect: false // ❌ No refetch al reconectar
   })
 }
