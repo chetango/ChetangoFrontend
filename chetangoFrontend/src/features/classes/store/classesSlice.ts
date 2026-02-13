@@ -49,7 +49,7 @@ const initialState: ClassesUIState = {
   searchTerm: '',
   filterProfesor: 'todos',
   filterTipo: 'todos',
-  filterFecha: '',
+  filterFecha: new Date().toISOString().split('T')[0], // Fecha actual por defecto
   selectedClaseId: null,
 
   // Profesor state

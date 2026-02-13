@@ -309,14 +309,6 @@ export default function AdminClassesPage() {
     return () => clearTimeout(timer)
   }, [searchInput, setSearchTerm])
 
-  // Auto-select first profesor if none selected
-  useEffect(() => {
-    if (profesores.length > 0 && !selectedProfesorId) {
-      setSelectedProfesorId(profesores[0].idProfesor)
-      setFilterProfesor(profesores[0].idProfesor)
-    }
-  }, [profesores, selectedProfesorId, setSelectedProfesorId, setFilterProfesor])
-
   // ============================================
   // HANDLERS
   // ============================================

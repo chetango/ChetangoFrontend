@@ -4,6 +4,7 @@
 // ============================================
 
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
+import { useQueries } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import {
     useCreateClaseMutation,
@@ -170,12 +171,62 @@ export function useAdminClasses() {
     tamanoPagina: 50,
   })
 
-  // Classes query - only enabled when a profesor is selected
-  const clasesQuery = useClasesByProfesorQuery(
+  // When "todos" is selected, query all professors in parallel
+  const profesoresList = profesoresQuery.data || []
+  const shouldQueryAll = filters.filterProfesor === 'todos'
+  
+  // Query individual profesor
+  const singleProfesorQuery = useClasesByProfesorQuery(
     selectedProfesorId,
     queryParams,
-    !!selectedProfesorId
+    !!selectedProfesorId && !shouldQueryAll
   )
+
+  // Query all profesores when "todos" is selected
+  const allProfesoresQueries = useQueries({
+    queries: shouldQueryAll ? profesoresList.map((prof) => ({
+      queryKey: ['clases', prof.idProfesor, queryParams],
+      queryFn: async () => {
+        const { httpClient } = await import('@/shared/api/httpClient')
+        const queryParamsObj = new URLSearchParams()
+        if (queryParams.fechaDesde) queryParamsObj.append('fechaDesde', queryParams.fechaDesde)
+        if (queryParams.fechaHasta) queryParamsObj.append('fechaHasta', queryParams.fechaHasta)
+        if (queryParams.pagina) queryParamsObj.append('pageNumber', queryParams.pagina.toString())
+        if (queryParams.tamanoPagina) queryParamsObj.append('pageSize', queryParams.tamanoPagina.toString())
+        const queryString = queryParamsObj.toString()
+        const url = `/api/profesores/${prof.idProfesor}/clases${queryString ? `?${queryString}` : ''}`
+        const response = await httpClient.get(url)
+        return response.data
+      },
+      enabled: shouldQueryAll,
+    })) : [],
+  })
+
+  // Combine results from all queries
+  const clasesQuery = useMemo(() => {
+    if (shouldQueryAll) {
+      const allData = allProfesoresQueries
+        .filter(q => q.data)
+        .flatMap(q => q.data?.items || [])
+      
+      return {
+        data: { 
+          items: allData, 
+          totalItems: allData.length, 
+          totalPages: 1,
+          paginaActual: 1,
+          totalPaginas: 1,
+          totalRegistros: allData.length,
+          tienePaginaAnterior: false,
+          tienePaginaSiguiente: false,
+        },
+        isLoading: allProfesoresQueries.some(q => q.isLoading),
+        error: allProfesoresQueries.find(q => q.error)?.error || null,
+        refetch: () => allProfesoresQueries.forEach(q => q.refetch()),
+      }
+    }
+    return singleProfesorQuery
+  }, [shouldQueryAll, allProfesoresQueries, singleProfesorQuery])
 
   // ============================================
   // DETAIL QUERY
