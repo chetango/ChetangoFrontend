@@ -198,24 +198,21 @@ export function useRegisterAttendanceMutation() {
 
   return useMutation<string, Error, RegisterAttendanceParams, RegisterMutationContext>({
     mutationFn: async ({ idClase, idAlumno, data }: RegisterAttendanceParams): Promise<string> => {
-      // Get the student's package from the cache
-      const currentData = queryClient.getQueryData<AttendanceSummaryResponse>(
-        attendanceKeys.summary(idClase)
-      )
-      const student = currentData?.alumnos.find((a: StudentAttendance) => a.idAlumno === idAlumno)
-      
-      if (!student) {
-        throw new Error('Estudiante no encontrado')
-      }
+      // Use idPaquete from data if provided (profesor flow), otherwise try to get from cache (admin flow)
+      let idPaqueteToUse = data.idPaquete
 
-      // Use the idPaquete from data if provided, otherwise use the one from cache
-      const idPaqueteToUse = data.idPaquete || student.paquete?.idPaquete
+      if (!idPaqueteToUse) {
+        // Try to get from admin cache (fallback for admin flow)
+        const currentData = queryClient.getQueryData<AttendanceSummaryResponse>(
+          attendanceKeys.summary(idClase)
+        )
+        const student = currentData?.alumnos.find((a: StudentAttendance) => a.idAlumno === idAlumno)
+        idPaqueteToUse = student?.paquete?.idPaquete
+      }
 
       console.log('=== REGISTER ATTENDANCE MUTATION ===')
       console.log('idPaquete from data:', data.idPaquete)
-      console.log('idPaquete from cache:', student.paquete?.idPaquete)
       console.log('idPaquete to use:', idPaqueteToUse)
-      console.log('Package description:', student.paquete?.descripcion)
       console.log('====================================')
 
       // Determine if we have a package and which attendance type to use
