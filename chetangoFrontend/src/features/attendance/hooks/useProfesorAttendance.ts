@@ -233,22 +233,35 @@ export function useProfesorAttendance(
   // Transform asistencias data to estudiantes format when data loads
   useEffect(() => {
     if (asistenciasData) {
+      console.log('=== MAPPING ASISTENCIAS DATA ===')
+      console.log('Raw asistenciasData:', asistenciasData)
+      
       const estudiantes: EstudianteProfesor[] = asistenciasData.map(
-        (asistencia: AsistenciasClaseResponse) => ({
-          id: asistencia.idAlumno,
-          nombre: asistencia.nombreAlumno,
-          documento: '', // API doesn't provide documento in this endpoint
-          asistencia: asistencia.presente,
-          observacion: asistencia.observacion || '',
-          estadoPaquete: mapEstadoPaquete(
-            typeof asistencia.estadoPaquete === 'number' 
-              ? ['Activo', 'Agotado', 'Congelado', 'SinPaquete'][asistencia.estadoPaquete]
-              : asistencia.estadoPaquete
-          ),
-          idAsistencia: asistencia.idAsistencia || null,
-          idPaquete: asistencia.idPaquete || null, // Include package ID for attendance registration
-        })
+        (asistencia: AsistenciasClaseResponse) => {
+          console.log(`Mapping ${asistencia.nombreAlumno}:`, {
+            idPaquete: asistencia.idPaquete,
+            estadoPaquete: asistencia.estadoPaquete
+          })
+          
+          return {
+            id: asistencia.idAlumno,
+            nombre: asistencia.nombreAlumno,
+            documento: '', // API doesn't provide documento in this endpoint
+            asistencia: asistencia.presente,
+            observacion: asistencia.observacion || '',
+            estadoPaquete: mapEstadoPaquete(
+              typeof asistencia.estadoPaquete === 'number' 
+                ? ['Activo', 'Agotado', 'Congelado', 'SinPaquete'][asistencia.estadoPaquete]
+                : asistencia.estadoPaquete
+            ),
+            idAsistencia: asistencia.idAsistencia || null,
+            idPaquete: asistencia.idPaquete || null, // Include package ID for attendance registration
+          }
+        }
       )
+      
+      console.log('Mapped estudiantes:', estudiantes)
+      console.log('================================')
       setLocalEstudiantes(estudiantes)
     } else {
       setLocalEstudiantes([])
