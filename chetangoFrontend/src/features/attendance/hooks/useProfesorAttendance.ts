@@ -236,11 +236,19 @@ export function useProfesorAttendance(
       console.log('=== MAPPING ASISTENCIAS DATA ===')
       console.log('Raw asistenciasData:', asistenciasData)
       
+      // Log the full object for debugging
+      const mariaData = asistenciasData.find((a: any) => a.nombreAlumno?.includes('Maria'))
+      if (mariaData) {
+        console.log('FULL Maria object:', mariaData)
+        console.log('Object.keys:', Object.keys(mariaData))
+      }
+      
       const estudiantes: EstudianteProfesor[] = asistenciasData.map(
         (asistencia: AsistenciasClaseResponse) => {
           console.log(`Mapping ${asistencia.nombreAlumno}:`, {
             idPaquete: asistencia.idPaquete,
-            estadoPaquete: asistencia.estadoPaquete
+            estadoPaquete: asistencia.estadoPaquete,
+            allKeys: Object.keys(asistencia)
           })
           
           return {
