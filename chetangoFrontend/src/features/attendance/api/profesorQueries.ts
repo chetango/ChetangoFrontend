@@ -145,6 +145,7 @@ export function useAsistenciasClaseQuery(idClase: string | null) {
         observacion: item.observacion ?? '',
         estadoPaquete: item.estadoPaquete ?? 'SinPaquete',  // 'Activo', 'Agotado', 'Congelado', 'SinPaquete'
         clasesRestantes: item.clasesRestantes ?? null,
+        idPaquete: item.idPaquete ?? null,  // Include package ID for attendance registration
       }))
       
       return asistencias
