@@ -10,7 +10,6 @@ import {
     useProfesorClasesQuery,
 } from '../api/profesorQueries'
 import type {
-    AsistenciasClaseResponse,
     ClaseProfesor,
     ClaseProfesorItem,
     EstadoPaqueteProfesor,
