@@ -4,15 +4,14 @@
 
 import { AlertCircle, CheckCircle, Clock, DollarSign, Plus, TrendingUp } from 'lucide-react'
 import { useState } from 'react'
+import { useUpdatePagoMutation } from '../../features/payments/api/paymentMutations'
+import { useMetodosPagoQuery, usePagoDetailQuery } from '../../features/payments/api/paymentQueries'
 import {
     useAllVerifiedPaymentsQuery,
-    usePaymentDetailQuery,
     usePaymentStatsQuery,
     usePendingPaymentsQuery,
     useVerifiedPaymentsQuery,
 } from '../../features/payments/api/paymentsQueries'
-import { useMetodosPagoQuery } from '../../features/payments/api/paymentQueries'
-import { useUpdatePagoMutation } from '../../features/payments/api/paymentMutations'
 import { EditPaymentModal } from '../../features/payments/components/EditPaymentModal'
 import { PaymentDetailModal } from '../../features/payments/components/PaymentDetailModal'
 import { PendingPaymentCard } from '../../features/payments/components/PendingPaymentCard'
@@ -20,7 +19,7 @@ import { RegisterPaymentModal } from '../../features/payments/components/Registe
 import { VerifiedPaymentCard } from '../../features/payments/components/VerifiedPaymentCard'
 import { VerifyPaymentModal } from '../../features/payments/components/VerifyPaymentModal'
 import type { Payment } from '../../features/payments/types/payment.types'
-import type { EditarPagoRequest, MetodoPagoDTO } from '../../features/payments/types/paymentTypes'
+import type { EditarPagoRequest } from '../../features/payments/types/paymentTypes'
 
 const AdminPaymentsPage = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
@@ -33,7 +32,7 @@ const AdminPaymentsPage = () => {
   const { data: verifiedPayments, isLoading: loadingVerified, refetch: refetchVerified } = useVerifiedPaymentsQuery()
   const { data: stats, refetch: refetchStats } = usePaymentStatsQuery()
   const { data: allVerifiedPayments, isLoading: loadingRecent, refetch: refetchAllVerified } = useAllVerifiedPaymentsQuery()
-  const { data: paymentDetail, isLoading: isLoadingDetail } = usePaymentDetailQuery(selectedPayment?.idPago || '')
+  const { data: paymentDetail, isLoading: isLoadingDetail } = usePagoDetailQuery(selectedPayment?.idPago || '', !!selectedPayment?.idPago)
   const { data: metodosPago } = useMetodosPagoQuery()
   
   const updatePagoMutation = useUpdatePagoMutation()
