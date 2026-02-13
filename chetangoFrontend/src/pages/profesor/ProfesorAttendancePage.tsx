@@ -544,6 +544,7 @@ interface StudentRowProps {
     asistencia: boolean
     observacion: string
     estadoPaquete: 'activo' | 'agotado' | 'sin_paquete' | 'clase_prueba'
+    idPaquete?: string | null
   }
   onToggle: () => void
   onObservacionChange: (value: string) => void

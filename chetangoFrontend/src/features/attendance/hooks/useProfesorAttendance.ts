@@ -246,6 +246,7 @@ export function useProfesorAttendance(
               : asistencia.estadoPaquete
           ),
           idAsistencia: asistencia.idAsistencia || null,
+          idPaquete: asistencia.idPaquete || null, // Include package ID for attendance registration
         })
       )
       setLocalEstudiantes(estudiantes)
@@ -318,11 +319,7 @@ export function useProfesorAttendance(
           })
         } else {
           // Register new attendance record
-          // Get the student's package if available
-          const studentPackageId = localEstudiantes.find(e => e.id === estudianteId)?.estadoPaquete === 'activo'
-            ? asistenciasData?.find(a => a.idAlumno === estudianteId)?.idPaquete
-            : undefined
-
+          // Use the student's package ID if available (already in local state)
           const newIdAsistencia = await registerAttendanceMutation.mutateAsync({
             idClase: selectedClassId,
             idAlumno: estudianteId,
@@ -331,7 +328,7 @@ export function useProfesorAttendance(
               idAlumno: estudianteId,
               presente: newPresente,
               observacion: student.observacion || undefined,
-              idPaquete: studentPackageId,
+              idPaquete: student.idPaquete ?? undefined,
             },
           })
 
@@ -391,11 +388,7 @@ export function useProfesorAttendance(
           })
         } else {
           // Register new attendance with observation
-          // Get the student's package if available
-          const studentPackageId = localEstudiantes.find(e => e.id === estudianteId)?.estadoPaquete === 'activo'
-            ? asistenciasData?.find(a => a.idAlumno === estudianteId)?.idPaquete
-            : undefined
-
+          // Use the student's package ID if available (already in local state)
           const newIdAsistencia = await registerAttendanceMutation.mutateAsync({
             idClase: selectedClassId,
             idAlumno: estudianteId,
@@ -404,7 +397,7 @@ export function useProfesorAttendance(
               idAlumno: estudianteId,
               presente: student.asistencia,
               observacion: observacion || undefined,
-              idPaquete: studentPackageId,
+              idPaquete: student.idPaquete ?? undefined,
             },
           })
 

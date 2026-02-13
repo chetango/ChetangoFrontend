@@ -24,6 +24,7 @@ export interface EstudianteProfesor {
   observacion: string
   estadoPaquete: EstadoPaqueteProfesor
   idAsistencia: string | null // Null if no prior attendance record exists
+  idPaquete?: string | null // Package ID if student has an active package
 }
 
 // ============================================
