@@ -130,7 +130,16 @@ export interface UserFilters {
   pageSize?: number
 }
 
-// Pagination
+// Pagination - Backend response
+export interface PaginatedUsersBackend {
+  usuarios: User[]
+  totalItems: number
+  page: number
+  pageSize: number
+  totalPages: number
+}
+
+// Pagination - Frontend interface
 export interface PaginatedUsers {
   items: User[]
   totalCount: number

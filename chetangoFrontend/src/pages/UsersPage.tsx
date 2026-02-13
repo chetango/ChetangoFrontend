@@ -345,7 +345,9 @@ const UsersPage = () => {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSuccess={() => {
-          // Refresh list or show success message
+          // React Query ya invalida la caché automáticamente en la mutación
+          // Pero podemos forzar un refetch para estar seguros
+          handleCloseModal()
         }}
         mode={editUserId ? 'edit' : 'create'}
         initialUser={editUserId && userDetail ? userDetail : undefined}

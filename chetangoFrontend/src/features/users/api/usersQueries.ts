@@ -9,6 +9,7 @@ import type {
     CreateUserRequest,
     DeleteUserRequest,
     PaginatedUsers,
+    PaginatedUsersBackend,
     UpdateUserRequest,
     UserDetail,
     UserFilters,
@@ -44,8 +45,16 @@ export const useUsersQuery = (filters: UserFilters) => {
       if (filters.pageNumber) params.append('pageNumber', filters.pageNumber.toString())
       if (filters.pageSize) params.append('pageSize', filters.pageSize.toString())
 
-      const response = await api.get<PaginatedUsers>(`/api/usuarios?${params.toString()}`)
-      return response.data
+      const response = await api.get<PaginatedUsersBackend>(`/api/usuarios?${params.toString()}`)
+      
+      // Transform backend response to frontend format
+      return {
+        items: response.data.usuarios,
+        totalCount: response.data.totalItems,
+        pageNumber: response.data.page,
+        pageSize: response.data.pageSize,
+        totalPages: response.data.totalPages,
+      } as PaginatedUsers
     },
   })
 }
