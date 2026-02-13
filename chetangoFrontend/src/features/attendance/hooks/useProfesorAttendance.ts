@@ -244,12 +244,16 @@ export function useProfesorAttendance(
       }
       
       const estudiantes: EstudianteProfesor[] = asistenciasData.map(
-        (asistencia: AsistenciasClaseResponse) => {
+        (asistencia: any) => { // Use 'any' to access PascalCase properties
           console.log(`Mapping ${asistencia.nombreAlumno}:`, {
             idPaquete: asistencia.idPaquete,
+            IdPaquete: asistencia.IdPaquete,
             estadoPaquete: asistencia.estadoPaquete,
             allKeys: Object.keys(asistencia)
           })
+          
+          // Backend returns IdPaquete (PascalCase), not idPaquete (camelCase)
+          const idPaqueteValue = asistencia.IdPaquete || asistencia.idPaquete
           
           return {
             id: asistencia.idAlumno,
@@ -263,7 +267,7 @@ export function useProfesorAttendance(
                 : asistencia.estadoPaquete
             ),
             idAsistencia: asistencia.idAsistencia || null,
-            idPaquete: asistencia.idPaquete || null, // Include package ID for attendance registration
+            idPaquete: idPaqueteValue || null, // Use the correctly cased field
           }
         }
       )
