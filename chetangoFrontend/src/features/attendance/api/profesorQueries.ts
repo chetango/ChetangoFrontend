@@ -150,5 +150,7 @@ export function useAsistenciasClaseQuery(idClase: string | null) {
       return asistencias
     },
     enabled: !!idClase,
+    retry: false, // Don't retry on authorization errors
+    refetchOnWindowFocus: false, // Don't refetch when window regains focus
   })
 }
