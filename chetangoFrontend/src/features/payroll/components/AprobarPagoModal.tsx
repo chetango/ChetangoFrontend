@@ -64,9 +64,11 @@ export const AprobarPagoModal = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-2xl shadow-2xl w-full max-w-lg mx-4 overflow-hidden">
-        {/* Header */}
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 pb-8 overflow-y-auto">
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm -z-10" onClick={handleClose} />
+      
+      <div className="bg-[#1a1a1a] border border-[rgba(255,255,255,0.1)] rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">{/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[rgba(255,255,255,0.1)]">
           <div>
             <h2 className="text-[#f9fafb] text-xl font-bold">Aprobar Pago</h2>

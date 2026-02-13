@@ -2,8 +2,8 @@
 // CLASSES SLICE - REDUX STATE FOR UI
 // ============================================
 
-import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import type { FiltroAnterior } from '../types/classTypes'
 
 // ============================================
