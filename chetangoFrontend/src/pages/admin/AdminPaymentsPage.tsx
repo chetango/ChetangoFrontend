@@ -11,17 +11,22 @@ import {
     usePendingPaymentsQuery,
     useVerifiedPaymentsQuery,
 } from '../../features/payments/api/paymentsQueries'
+import { useMetodosPagoQuery } from '../../features/payments/api/paymentQueries'
+import { useUpdatePagoMutation } from '../../features/payments/api/paymentMutations'
+import { EditPaymentModal } from '../../features/payments/components/EditPaymentModal'
 import { PaymentDetailModal } from '../../features/payments/components/PaymentDetailModal'
 import { PendingPaymentCard } from '../../features/payments/components/PendingPaymentCard'
 import { RegisterPaymentModal } from '../../features/payments/components/RegisterPaymentModal'
 import { VerifiedPaymentCard } from '../../features/payments/components/VerifiedPaymentCard'
 import { VerifyPaymentModal } from '../../features/payments/components/VerifyPaymentModal'
 import type { Payment } from '../../features/payments/types/payment.types'
+import type { EditarPagoRequest, MetodoPagoDTO } from '../../features/payments/types/paymentTypes'
 
 const AdminPaymentsPage = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null)
 
   const { data: pendingPayments, isLoading: loadingPending, refetch: refetchPending } = usePendingPaymentsQuery()
@@ -29,6 +34,9 @@ const AdminPaymentsPage = () => {
   const { data: stats, refetch: refetchStats } = usePaymentStatsQuery()
   const { data: allVerifiedPayments, isLoading: loadingRecent, refetch: refetchAllVerified } = useAllVerifiedPaymentsQuery()
   const { data: paymentDetail, isLoading: isLoadingDetail } = usePaymentDetailQuery(selectedPayment?.idPago || '')
+  const { data: metodosPago } = useMetodosPagoQuery()
+  
+  const updatePagoMutation = useUpdatePagoMutation()
 
   const handleVerifyClick = (payment: Payment) => {
     setSelectedPayment(payment)
@@ -43,6 +51,20 @@ const AdminPaymentsPage = () => {
   const handleViewDetail = (payment: Payment) => {
     setSelectedPayment(payment)
     setIsDetailModalOpen(true)
+  }
+
+  const handleEditPayment = () => {
+    setIsDetailModalOpen(false)
+    setIsEditModalOpen(true)
+  }
+
+  const handleSubmitEdit = async (idPago: string, data: EditarPagoRequest) => {
+    await updatePagoMutation.mutateAsync({ idPago, data })
+    setIsEditModalOpen(false)
+    refetchPending()
+    refetchVerified()
+    refetchAllVerified()
+    refetchStats()
   }
 
   const formatCurrency = (amount: number) => {
@@ -260,10 +282,18 @@ const AdminPaymentsPage = () => {
           setIsDetailModalOpen(false)
           setSelectedPayment(null)
         }}
-        onEdit={() => {
-          // TODO: Implementar edición de pago
-          console.log('Edit payment', selectedPayment)
+        onEdit={handleEditPayment}
+      />
+
+      <EditPaymentModal
+        pago={paymentDetail}
+        metodosPago={metodosPago || []}
+        isOpen={isEditModalOpen}
+        isSubmitting={updatePagoMutation.isPending}
+        onClose={() => {
+          setIsEditModalOpen(false)
         }}
+        onSubmit={handleSubmitEdit}
       />
     </div>
   )
