@@ -218,10 +218,9 @@ export function useRegisterAttendanceMutation() {
       console.log('Package description:', student.paquete?.descripcion)
       console.log('====================================')
 
-      // Verify we have a package ID
-      if (!idPaqueteToUse) {
-        throw new Error('No se especificó un paquete para usar')
-      }
+      // Determine if we have a package and which attendance type to use
+      const hasPackage = !!idPaqueteToUse
+      const tipoAsistencia = hasPackage ? TIPO_ASISTENCIA.NORMAL : TIPO_ASISTENCIA.PRUEBA
 
       // Convert boolean presente to idEstadoAsistencia
       const idEstadoAsistencia = data.presente ? ESTADO_ASISTENCIA.PRESENTE : ESTADO_ASISTENCIA.AUSENTE
@@ -229,8 +228,8 @@ export function useRegisterAttendanceMutation() {
       const response = await httpClient.post<string>('/api/asistencias', {
         idClase: data.idClase,
         idAlumno: data.idAlumno,
-        idTipoAsistencia: TIPO_ASISTENCIA.NORMAL,
-        idPaqueteUsado: idPaqueteToUse,
+        idTipoAsistencia: tipoAsistencia,
+        idPaqueteUsado: hasPackage ? idPaqueteToUse : null,
         idEstadoAsistencia: idEstadoAsistencia,
         observaciones: data.observacion || null,
       })

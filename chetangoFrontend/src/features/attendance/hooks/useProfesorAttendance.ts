@@ -318,6 +318,11 @@ export function useProfesorAttendance(
           })
         } else {
           // Register new attendance record
+          // Get the student's package if available
+          const studentPackageId = localEstudiantes.find(e => e.id === estudianteId)?.estadoPaquete === 'activo'
+            ? asistenciasData?.find(a => a.idAlumno === estudianteId)?.idPaquete
+            : undefined
+
           const newIdAsistencia = await registerAttendanceMutation.mutateAsync({
             idClase: selectedClassId,
             idAlumno: estudianteId,
@@ -326,6 +331,7 @@ export function useProfesorAttendance(
               idAlumno: estudianteId,
               presente: newPresente,
               observacion: student.observacion || undefined,
+              idPaquete: studentPackageId,
             },
           })
 
@@ -385,6 +391,11 @@ export function useProfesorAttendance(
           })
         } else {
           // Register new attendance with observation
+          // Get the student's package if available
+          const studentPackageId = localEstudiantes.find(e => e.id === estudianteId)?.estadoPaquete === 'activo'
+            ? asistenciasData?.find(a => a.idAlumno === estudianteId)?.idPaquete
+            : undefined
+
           const newIdAsistencia = await registerAttendanceMutation.mutateAsync({
             idClase: selectedClassId,
             idAlumno: estudianteId,
@@ -393,6 +404,7 @@ export function useProfesorAttendance(
               idAlumno: estudianteId,
               presente: student.asistencia,
               observacion: observacion || undefined,
+              idPaquete: studentPackageId,
             },
           })
 

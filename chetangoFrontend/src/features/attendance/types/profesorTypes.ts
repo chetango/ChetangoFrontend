@@ -86,6 +86,7 @@ export interface AsistenciasClaseResponse {
   observacion: string | null
   estadoPaquete?: string | number // 'Activo' | 'Agotado' | 'Congelado' | 'SinPaquete' or 0-3
   clasesRestantes?: number | null
+  idPaquete?: string | null // Package ID if student has an active package
 }
 
 // ============================================
