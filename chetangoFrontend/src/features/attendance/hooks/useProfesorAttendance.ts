@@ -320,6 +320,12 @@ export function useProfesorAttendance(
         } else {
           // Register new attendance record
           // Use the student's package ID if available (already in local state)
+          console.log('=== PROFESOR TOGGLE - REGISTERING NEW ===')
+          console.log('Student:', student.nombre)
+          console.log('student.idPaquete:', student.idPaquete)
+          console.log('student.estadoPaquete:', student.estadoPaquete)
+          console.log('=========================================')
+          
           const newIdAsistencia = await registerAttendanceMutation.mutateAsync({
             idClase: selectedClassId,
             idAlumno: estudianteId,
