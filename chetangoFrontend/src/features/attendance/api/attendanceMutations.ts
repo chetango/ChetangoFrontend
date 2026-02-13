@@ -199,7 +199,7 @@ export function useRegisterAttendanceMutation() {
   return useMutation<string, Error, RegisterAttendanceParams, RegisterMutationContext>({
     mutationFn: async ({ idClase, idAlumno, data }: RegisterAttendanceParams): Promise<string> => {
       // Use idPaquete from data if provided (profesor flow), otherwise try to get from cache (admin flow)
-      let idPaqueteToUse = data.idPaquete
+      let idPaqueteToUse = data.idPaquete ?? undefined
 
       if (!idPaqueteToUse) {
         // Try to get from admin cache (fallback for admin flow)
@@ -207,7 +207,7 @@ export function useRegisterAttendanceMutation() {
           attendanceKeys.summary(idClase)
         )
         const student = currentData?.alumnos.find((a: StudentAttendance) => a.idAlumno === idAlumno)
-        idPaqueteToUse = student?.paquete?.idPaquete
+        idPaqueteToUse = student?.paquete?.idPaquete ?? undefined
       }
 
       console.log('=== REGISTER ATTENDANCE MUTATION ===')
@@ -226,7 +226,7 @@ export function useRegisterAttendanceMutation() {
         idClase: data.idClase,
         idAlumno: data.idAlumno,
         idTipoAsistencia: tipoAsistencia,
-        idPaqueteUsado: hasPackage ? idPaqueteToUse : null,
+        idPaqueteUsado: idPaqueteToUse ?? null,
         idEstadoAsistencia: idEstadoAsistencia,
         observaciones: data.observacion || null,
       })
