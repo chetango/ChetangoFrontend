@@ -13,6 +13,7 @@ import {
     useVerifiedPaymentsQuery,
 } from '../../features/payments/api/paymentsQueries'
 import { EditPaymentModal } from '../../features/payments/components/EditPaymentModal'
+import { HistorialPagosAlumnosSection } from '../../features/payments/components/HistorialPagosAlumnosSection'
 import { PaymentDetailModal } from '../../features/payments/components/PaymentDetailModal'
 import { PendingPaymentCard } from '../../features/payments/components/PendingPaymentCard'
 import { RegisterPaymentModal } from '../../features/payments/components/RegisterPaymentModal'
@@ -246,6 +247,14 @@ const AdminPaymentsPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Historial de Pagos de Alumnos */}
+      <HistorialPagosAlumnosSection
+        pagos={allVerifiedPayments || []}
+        isLoading={isLoadingAllVerifiedPayments}
+        formatCurrency={formatCurrency}
+        onVerDetalle={handleViewDetail}
+      />
 
       {/* Modals */}
       <RegisterPaymentModal
