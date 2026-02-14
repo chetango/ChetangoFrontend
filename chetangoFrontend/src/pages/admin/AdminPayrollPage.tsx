@@ -13,7 +13,7 @@ import {
     useRegistrarPagoMutation,
     useResumenProfesoresQuery,
 } from '../../features/payroll'
-import { AprobarPagoModal, DetalleProfesorModal, LiquidarMesModal, RegistrarPagoModal } from '../../features/payroll/components'
+import { AprobarPagoModal, DetalleProfesorModal, HistorialPagoModal, HistorialPagosSection, LiquidarMesModal, RegistrarPagoModal } from '../../features/payroll/components'
 import type { ProfesorClase } from '../../features/payroll/types/payroll.types'
 import { ClickableAvatar } from '../../features/users'
 
@@ -39,6 +39,12 @@ const AdminPayrollPage = () => {
     idProfesor: string
     nombreProfesor: string
   } | null>(null)
+  const [historialPagoModal, setHistorialPagoModal] = useState<{
+    idLiquidacion: string
+    nombreProfesor: string
+    periodo: string
+    fechaPago: string
+  } | null>(null)
 
   const { data: clasesRealizadas, isLoading: loadingClases } = useClasesRealizadasQuery({
     estadoPago: 'Pendiente',
@@ -50,6 +56,7 @@ const AdminPayrollPage = () => {
   
   const { data: resumen, isLoading: loadingResumen } = useResumenProfesoresQuery()
   const { data: liquidacionesCerradas, isLoading: loadingLiquidaciones } = useLiquidacionesPorEstadoQuery('Cerrada')
+  const { data: liquidacionesPagadas, isLoading: loadingLiquidacionesPagadas } = useLiquidacionesPorEstadoQuery('Pagada')
   
   const aprobarPagoMutation = useAprobarPagoMutation()
   const liquidarMesMutation = useLiquidarMesMutation()
@@ -430,6 +437,21 @@ const AdminPayrollPage = () => {
         </div>
       )}
 
+      {/* Historial de Pagos Realizados */}
+      <HistorialPagosSection
+        liquidaciones={liquidacionesPagadas || []}
+        isLoading={loadingLiquidacionesPagadas}
+        formatCurrency={formatCurrency}
+        onVerDetalle={(idLiquidacion, nombreProfesor, periodo, fechaPago) => {
+          setHistorialPagoModal({
+            idLiquidacion,
+            nombreProfesor,
+            periodo,
+            fechaPago,
+          })
+        }}
+      />
+
       {/* Modal de Aprobación */}
       <AprobarPagoModal
         isOpen={aprobacionModal !== null}
@@ -516,6 +538,14 @@ const AdminPayrollPage = () => {
         onClose={() => setDetalleProfesorModal(null)}
         idProfesor={detalleProfesorModal?.idProfesor ?? ''}
         nombreProfesor={detalleProfesorModal?.nombreProfesor ?? ''}
+      />
+
+      {/* Modal de Detalle del Historial de Pago */}
+      <HistorialPagoModal
+        isOpen={historialPagoModal !== null}
+        onClose={() => setHistorialPagoModal(null)}
+        idLiquidacion={historialPagoModal?.idLiquidacion ?? null}
+        formatCurrency={formatCurrency}
       />
     </div>
   )
