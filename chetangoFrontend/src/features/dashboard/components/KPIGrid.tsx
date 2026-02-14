@@ -2,7 +2,7 @@
 // KPI GRID COMPONENT
 // ============================================
 
-import { Calendar, CheckCircle2, DollarSign, Package } from 'lucide-react'
+import { Calendar, CheckCircle2, DollarSign, Package, TrendingDown, TrendingUp } from 'lucide-react'
 import type { DashboardKPIs } from '../types/dashboard.types'
 import { KPICard } from './KPICard'
 
@@ -14,7 +14,7 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
   const kpiConfigs = [
     {
       id: 'asistencias',
-      title: 'Asistencias Hoy',
+      title: 'Asistencias Registradas Hoy',
       value: kpis.asistenciasHoy,
       change: kpis.comparativaAsistenciasMesAnterior,
       comparison: 'vs mes anterior',
@@ -30,9 +30,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.crecimientoIngresosMesAnterior,
       comparison: 'vs mes anterior',
       icon: DollarSign,
-      color: '#c93448',
-      bgColor: 'rgba(201, 52, 72, 0.15)',
-      glowColor: 'rgba(201, 52, 72, 0.1)'
+      color: '#22c55e',
+      bgColor: 'rgba(34, 197, 94, 0.15)',
+      glowColor: 'rgba(34, 197, 94, 0.1)'
     },
     {
       id: 'clases',
@@ -58,11 +58,46 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
     }
   ]
 
+  const kpiConfigsFinancial = [
+    {
+      id: 'egresos',
+      title: 'Egresos del Mes',
+      value: `$${kpis.egresosEsteMes.toLocaleString('es-CL')}`,
+      change: kpis.comparativaEgresosMesAnterior,
+      comparison: 'vs mes anterior',
+      icon: TrendingDown,
+      color: '#ef4444',
+      bgColor: 'rgba(239, 68, 68, 0.15)',
+      glowColor: 'rgba(239, 68, 68, 0.1)'
+    },
+    {
+      id: 'ganancia',
+      title: 'Ganancia Neta del Mes',
+      value: `$${kpis.gananciaNeta.toLocaleString('es-CL')}`,
+      change: kpis.comparativaGananciaMesAnterior,
+      comparison: 'vs mes anterior',
+      icon: TrendingUp,
+      color: kpis.gananciaNeta >= 0 ? '#10b981' : '#ef4444',
+      bgColor: kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+      glowColor: kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'
+    }
+  ]
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
-      {kpiConfigs.map((kpi) => (
-        <KPICard key={kpi.id} {...kpi} />
-      ))}
-    </div>
+    <>
+      {/* Primera fila: 4 tarjetas principales */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
+        {kpiConfigs.map((kpi) => (
+          <KPICard key={kpi.id} {...kpi} />
+        ))}
+      </div>
+
+      {/* Segunda fila: 2 tarjetas financieras */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
+        {kpiConfigsFinancial.map((kpi) => (
+          <KPICard key={kpi.id} {...kpi} />
+        ))}
+      </div>
+    </>
   )
 }

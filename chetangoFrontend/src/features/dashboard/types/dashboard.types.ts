@@ -42,10 +42,14 @@ export interface DashboardKPIs {
   paquetesVendidos: number
   asistenciasHoy: number
   asistenciasMes: number
+  egresosEsteMes: number
+  gananciaNeta: number
   crecimientoIngresosMesAnterior?: number
   comparativaAsistenciasMesAnterior?: number
   comparativaAlumnosMesAnterior?: number
   comparativaPaquetesVendidosMesAnterior?: number
+  comparativaEgresosMesAnterior?: number
+  comparativaGananciaMesAnterior?: number
 }
 
 /**
