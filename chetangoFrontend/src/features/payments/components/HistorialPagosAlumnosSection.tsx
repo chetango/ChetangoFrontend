@@ -35,7 +35,7 @@ export const HistorialPagosAlumnosSection = ({
 
   // Obtener métodos de pago únicos
   const metodosUnicos = useMemo(() => {
-    const metodos = new Set(pagos.map(p => p.metodoPago))
+    const metodos = new Set(pagos.map(p => p.nombreMetodoPago))
     return Array.from(metodos).sort()
   }, [pagos])
 
@@ -50,12 +50,12 @@ export const HistorialPagosAlumnosSection = ({
     return pagos.filter((pago) => {
       const fechaPago = new Date(pago.fechaPago)
       const matchAlumno = filtroAlumno === '' || pago.nombreAlumno === filtroAlumno
-      const matchMetodo = filtroMetodo === '' || pago.metodoPago === filtroMetodo
+      const matchMetodo = filtroMetodo === '' || pago.nombreMetodoPago === filtroMetodo
       const matchMes = filtroMes === '' || (fechaPago.getMonth() + 1).toString() === filtroMes
       const matchAño = filtroAño === '' || fechaPago.getFullYear().toString() === filtroAño
       const matchBusqueda = busqueda === '' || 
         pago.nombreAlumno.toLowerCase().includes(busqueda.toLowerCase()) ||
-        pago.metodoPago.toLowerCase().includes(busqueda.toLowerCase())
+        pago.nombreMetodoPago.toLowerCase().includes(busqueda.toLowerCase())
 
       return matchAlumno && matchMetodo && matchMes && matchAño && matchBusqueda
     }).sort((a, b) => {
@@ -270,18 +270,18 @@ export const HistorialPagosAlumnosSection = ({
                         </div>
                         <div>
                           <p className="text-[#9ca3af] text-xs mb-1">Método</p>
-                          <p className="text-[#f9fafb] font-semibold">{pago.metodoPago}</p>
+                          <p className="text-[#f9fafb] font-semibold">{pago.nombreMetodoPago}</p>
                         </div>
                         <div>
                           <p className="text-[#9ca3af] text-xs mb-1">Estado</p>
                           <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                            pago.estado === 'Verificado' 
+                            pago.estadoPago === 'verificado' 
                               ? 'bg-[rgba(34,197,94,0.15)] text-[#4ade80]'
-                              : pago.estado === 'Pendiente'
+                              : pago.estadoPago === 'pendiente_verificacion'
                               ? 'bg-[rgba(245,158,11,0.15)] text-[#fbbf24]'
                               : 'bg-[rgba(239,68,68,0.15)] text-[#ef4444]'
                           }`}>
-                            {pago.estado}
+                            {pago.estadoPago === 'verificado' ? 'Verificado' : pago.estadoPago === 'pendiente_verificacion' ? 'Pendiente' : 'Rechazado'}
                           </span>
                         </div>
                         <div>
