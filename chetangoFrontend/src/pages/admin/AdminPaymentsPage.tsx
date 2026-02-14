@@ -251,7 +251,7 @@ const AdminPaymentsPage = () => {
       {/* Historial de Pagos de Alumnos */}
       <HistorialPagosAlumnosSection
         pagos={allVerifiedPayments || []}
-        isLoading={isLoadingAllVerifiedPayments}
+        isLoading={loadingRecent}
         formatCurrency={formatCurrency}
         onVerDetalle={handleViewDetail}
       />
