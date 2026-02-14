@@ -235,7 +235,7 @@ export function useAdminPackages() {
         try {
           const response = await httpClient.get<{
             items: PaqueteListItemDTO[]
-          }>(`/api/alumnos/${alumno.idAlumno}/paquetes?pageSize=100`)
+          }>(`/api/alumnos/${alumno.idAlumno}/paquetes?pageSize=100&soloActivos=false`)
           return response.data.items || []
         } catch {
           // If fetching for one alumno fails, return empty array
