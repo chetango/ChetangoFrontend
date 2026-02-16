@@ -14,7 +14,8 @@ interface EventosCarouselProps {
 }
 
 export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
-  const [eventoActual, setEventoActual] = useStat
+  const [eventoActual, setEventoActual] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
   // Funciones de navegación
   const nextEvento = () => {
@@ -30,8 +31,7 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
     onSwipeLeft: nextEvento,
     onSwipeRight: prevEvento,
     threshold: 50
-  })e(0)
-  const [isPaused, setIsPaused] = useState(false)
+  })
 
   // Autoplay - cambiar cada 5 segundos
   useEffect(() => {
