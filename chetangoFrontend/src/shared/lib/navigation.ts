@@ -30,10 +30,10 @@ const NAVIGATION_ITEMS: NavItem[] = [
   { label: 'Mi Perfil', path: ROUTES.ADMIN.PROFILE, icon: User, roles: ['admin'] },
   
   // Elementos de Estudiante
-  { label: 'Mi Asistencia', path: ROUTES.STUDENT.ATTENDANCE, roles: ['alumno'] },
-  { label: 'Mis Pagos', path: ROUTES.STUDENT.PAYMENTS, roles: ['alumno'] },
-  { label: 'Mis Clases', path: ROUTES.STUDENT.CLASSES, roles: ['alumno'] },
-  { label: 'Mi Perfil', path: ROUTES.STUDENT.PROFILE, roles: ['alumno'] },
+  { label: 'Mi Asistencia', path: ROUTES.STUDENT.ATTENDANCE, icon: CheckCircle2, roles: ['alumno'] },
+  { label: 'Mis Pagos', path: ROUTES.STUDENT.PAYMENTS, icon: DollarSign, roles: ['alumno'] },
+  { label: 'Mis Clases', path: ROUTES.STUDENT.CLASSES, icon: Calendar, roles: ['alumno'] },
+  { label: 'Mi Perfil', path: ROUTES.STUDENT.PROFILE, icon: User, roles: ['alumno'] },
   
   // Elementos de Profesor
   { label: 'Registrar Asistencia', path: ROUTES.TEACHER.ATTENDANCE, icon: ClipboardCheck, roles: ['profesor'] },
