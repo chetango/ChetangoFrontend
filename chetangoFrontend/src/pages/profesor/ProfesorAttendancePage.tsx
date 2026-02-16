@@ -266,9 +266,9 @@ const ProfesorAttendancePage = () => {
         />
 
         {/* Main content - per Figma layout - Responsive */}
-        <div className="relative z-10 p-4 sm:p-6 md:p-8 max-w-[1400px] mx-auto">
+        <div className="relative z-10 px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8 max-w-[1400px] mx-auto">
           {/* Header */}
-          <header className="mb-6 sm:mb-8">
+          <header className="mb-4 sm:mb-6 md:mb-8">
             {/* Vista Profesor Badge - per Figma - Responsive */}
             <div
               className="
@@ -355,9 +355,9 @@ const ProfesorAttendancePage = () => {
 
             {/* Class Selector */}
             {isLoadingInitial ? (
-              <div className="flex gap-3 mb-6">
-                <Skeleton className="h-20 w-64 rounded-2xl" />
-                <Skeleton className="h-20 w-64 rounded-2xl" />
+              <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <Skeleton className="h-20 w-full sm:w-64 rounded-2xl" />
+                <Skeleton className="h-20 w-full sm:w-64 rounded-2xl hidden sm:block" />
               </div>
             ) : (
               <ClassSelectorProfesor
