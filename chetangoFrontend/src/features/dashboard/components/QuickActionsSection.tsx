@@ -42,13 +42,13 @@ export const QuickActionsSection = () => {
   ]
 
   return (
-    <div className="mb-8 md:mb-10">
-      <div className="flex items-center gap-3 mb-6">
-        <h2 className="text-[#f9fafb] text-2xl font-bold">Acciones Rápidas</h2>
+    <div className="mb-6 sm:mb-8 md:mb-10">
+      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <h2 className="text-[#f9fafb] text-xl sm:text-2xl font-bold">Acciones Rápidas</h2>
         <div className="flex-1 h-[2px] bg-gradient-to-r from-[rgba(255,255,255,0.08)] to-transparent" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {quickActions.map((action) => (
           <QuickActionButton key={action.id} {...action} />
         ))}

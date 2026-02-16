@@ -32,13 +32,13 @@ export const DashboardHeader = ({
   }
 
   return (
-    <header className="mb-8 md:mb-10">
+    <header className="mb-6 sm:mb-8 md:mb-10">
       {/* Hero Section - Minimalista y editorial */}
       <div className="max-w-3xl">
-        <h1 className="text-[#f9fafb] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 tracking-tight">
+        <h1 className="text-[#f9fafb] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 sm:mb-3 tracking-tight">
           {getGreeting()}, {userName}
         </h1>
-        <p className="text-[#9ca3af] text-base md:text-lg">
+        <p className="text-[#9ca3af] text-sm sm:text-base md:text-lg">
           Estado de la academia — {formatDate()}
         </p>
       </div>

@@ -122,11 +122,11 @@ const DashboardPage = () => {
       <div className="relative overflow-hidden min-h-screen">
         <AmbientGlows variant="default" />
         <div className="relative z-10">
-          <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12">
             <div className="flex items-center justify-center min-h-[400px]">
               <div className="text-center">
                 <div className="w-16 h-16 border-4 border-[#7c5af8] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                <p className="text-[#9ca3af] text-lg">Cargando dashboard...</p>
+                <p className="text-[#9ca3af] text-base sm:text-lg">Cargando dashboard...</p>
               </div>
             </div>
           </div>
@@ -141,13 +141,13 @@ const DashboardPage = () => {
       <div className="relative overflow-hidden min-h-screen">
         <AmbientGlows variant="default" />
         <div className="relative z-10">
-          <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12">
             <div className="flex items-center justify-center min-h-[400px]">
               <div className="text-center">
                 <div className="w-16 h-16 rounded-full bg-[rgba(239,68,68,0.15)] border-2 border-[#ef4444] flex items-center justify-center mx-auto mb-4">
                   <span className="text-[#ef4444] text-2xl">⚠</span>
                 </div>
-                <h3 className="text-[#f9fafb] text-xl font-bold mb-2">Error al cargar el dashboard</h3>
+                <h3 className="text-[#f9fafb] text-lg sm:text-xl font-bold mb-2">Error al cargar el dashboard</h3>
                 <p className="text-[#9ca3af] mb-4">
                   {error instanceof Error ? error.message : 'Ha ocurrido un error inesperado'}
                 </p>
@@ -171,10 +171,10 @@ const DashboardPage = () => {
       <div className="relative overflow-hidden min-h-screen">
         <AmbientGlows variant="default" />
         <div className="relative z-10">
-          <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12">
+          <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12">
             <div className="flex items-center justify-center min-h-[400px]">
               <div className="text-center">
-                <p className="text-[#9ca3af] text-lg">No hay datos disponibles</p>
+                <p className="text-[#9ca3af] text-base sm:text-lg">No hay datos disponibles</p>
               </div>
             </div>
           </div>
@@ -201,7 +201,7 @@ const DashboardPage = () => {
       
       {/* Content */}
       <div className="relative z-10">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-12 py-6 md:py-8">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12">
           
           {/* Header Section */}
           <DashboardHeader 
@@ -232,7 +232,7 @@ const DashboardPage = () => {
           )}
 
           {/* Bottom Section: Alerts + Activity */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             {dashboard.alertas && <AlertsPanel alertas={dashboard.alertas} />}
             {dashboard.ultimosPagos && (
               <ActivityTimeline 
