@@ -83,7 +83,7 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
           {eventos.length > 1 && (
             <button
               onClick={prevEvento}
-              className="hidden md:flex shrink-0 p-2 rounded-full bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.1)] text-[#d1d5db] transition-all duration-300"
+              className="hidden sm:flex shrink-0 p-2 rounded-full bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.1)] text-[#d1d5db] transition-all duration-300"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -141,7 +141,7 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
           {eventos.length > 1 && (
             <button
               onClick={nextEvento}
-              className="hidden md:flex shrink-0 p-2 rounded-full bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.1)] text-[#d1d5db] transition-all duration-300"
+              className="hidden sm:flex shrink-0 p-2 rounded-full bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] border border-[rgba(255,255,255,0.1)] text-[#d1d5db] transition-all duration-300"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

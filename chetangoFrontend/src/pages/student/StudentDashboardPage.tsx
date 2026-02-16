@@ -156,9 +156,9 @@ const StudentDashboardPage = () => {
           <LogrosSection logros={dashboard.logros} />
 
           {/* Eventos Próximos - Carrusel */}
-          <EventosCarousel eventos={dashboard.eventosProximos} />
+          <EventosCarousel key="student-eventos" eventos={dashboard.eventosProximos} />
 
-          {/* CTA Comercial - Recomendaciones */}
+          {/* CTA Comercial - Recomendaciones */
           <RecomendadosSection paquete={dashboard.paqueteActivo} />
 
         </div>

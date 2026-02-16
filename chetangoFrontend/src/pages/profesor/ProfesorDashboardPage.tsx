@@ -135,7 +135,7 @@ const ProfesorDashboardPage = () => {
           <ProximasClasesSection clases={dashboard.proximasClases} />
           
           {/* NotiChetango - Contenido Informativo */}
-          <EventosCarousel eventos={dashboard.eventosProximos} />
+          <EventosCarousel key="profesor-eventos" eventos={dashboard.eventosProximos} />
           
         </div>
       </div>
