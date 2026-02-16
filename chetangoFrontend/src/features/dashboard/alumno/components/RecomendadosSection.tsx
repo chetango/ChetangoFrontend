@@ -136,13 +136,13 @@ export const RecomendadosSection = ({ paquete }: RecomendadosSectionProps) => {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-6">
-        <Gift className="w-5 h-5 text-[#c93448]" />
-        <h3 className="text-[#f9fafb] text-xl font-semibold">Recomendado para Ti</h3>
+      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+        <Gift className="w-4 h-4 sm:w-5 sm:h-5 text-[#c93448]" />
+        <h3 className="text-[#f9fafb] text-lg sm:text-xl font-semibold">Recomendado para Ti</h3>
         <div className="flex-1 h-[2px] bg-gradient-to-r from-[rgba(255,255,255,0.08)] to-transparent" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {cards.map((card) => {
           const Icon = card.icon
           const isLoading = loadingCard === card.id
@@ -170,29 +170,29 @@ export const RecomendadosSection = ({ paquete }: RecomendadosSectionProps) => {
           return (
             <GlassPanel
               key={card.id}
-              className={`p-6 group hover:scale-[1.02] transition-all duration-300 ${
+              className={`p-4 sm:p-6 group hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 ${
                 isLoading ? 'cursor-wait opacity-70' : 'cursor-pointer'
               } ${card.prioridad === 'alta' ? 'ring-2 ring-[#c93448]' : ''}`}
               onClick={handleCardClick}
             >
               <div
-                className="w-12 h-12 mb-4 rounded-xl flex items-center justify-center"
+                className="w-10 h-10 sm:w-12 sm:h-12 mb-3 sm:mb-4 rounded-xl flex items-center justify-center"
                 style={{
                   background: card.bgColor,
                   color: card.color
                 }}
               >
                 {isLoading ? (
-                  <Loader2 className="w-6 h-6 animate-spin" />
+                  <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
                 ) : (
-                  <Icon className="w-6 h-6" />
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
                 )}
               </div>
-              <h4 className="text-[#f9fafb] font-semibold mb-2">{card.titulo}</h4>
-              <p className="text-[#9ca3af] text-sm mb-4">{card.descripcion}</p>
+              <h4 className="text-[#f9fafb] text-sm sm:text-base font-semibold mb-2">{card.titulo}</h4>
+              <p className="text-[#9ca3af] text-xs sm:text-sm mb-3 sm:mb-4">{card.descripcion}</p>
               <button
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white text-sm font-medium transition-all duration-300 disabled:opacity-60"
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white text-sm font-medium transition-all duration-300 disabled:opacity-60 active:scale-95"
                 style={{
                   background: `linear-gradient(to right, ${card.color}, ${card.color}dd)`,
                   boxShadow: `0 4px 12px ${card.color}40`
