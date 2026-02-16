@@ -131,7 +131,8 @@ const StudentDashboardPage = () => {
 
       {/* Content */}
       <div className="relative z-10">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12">
+        {/* Responsive container: padding mobile-first */}
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8 md:py-12">
 
           {/* Header Section */}
           <AlumnoHeader alumno={dashboard} />
@@ -139,14 +140,14 @@ const StudentDashboardPage = () => {
           {/* Alertas Importantes */}
           <AlertasImportantes paquete={dashboard.paqueteActivo} />
 
-          {/* Main Grid: QR + Próxima Clase */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 md:mb-10">
+          {/* Main Grid: QR + Próxima Clase - Stack en móvil, 2 columnas en desktop */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 md:mb-10">
             <CredencialDigitalCard alumno={dashboard} />
             <ProximaClaseCard clase={dashboard.proximaClase} />
           </div>
 
-          {/* Progreso del Alumno */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 md:mb-10">
+          {/* Progreso del Alumno - Stack en móvil, 2 columnas en desktop */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 md:mb-10">
             <MiPaqueteCard paquete={dashboard.paqueteActivo} />
             <MiAsistenciaCard asistencia={dashboard.asistencia} />
           </div>
