@@ -39,7 +39,6 @@ import {
 } from '@/features/reports/utils/pdfGenerator'
 import { AlertCircle, TrendingUp } from 'lucide-react'
 import { useState } from 'react'
-import styles from './PageStyles.module.scss'
 
 // ============================================
 // COMPONENT
@@ -201,37 +200,37 @@ const ReportsPage = () => {
   // ============================================
 
   return (
-    <div className={styles['page-container']}>
+    <div className="p-4 sm:p-6 md:p-8 max-w-[1600px] mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className={styles['page-title']}>📊 Reportes - Chetango</h1>
-        <p className={styles['page-description']}>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-[#f9fafb] text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">📊 Reportes - Chetango</h1>
+        <p className="text-[#9ca3af] text-sm sm:text-base">
           Consulta estadísticas detalladas y exporta reportes del sistema
         </p>
       </div>
 
       {/* Global Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
         <StatCard
           label="Reportes Disponibles"
           value={availableReports.length}
-          icon={<TrendingUp className="w-5 h-5" />}
+          icon={<TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />}
         />
         <StatCard
           label="Período Seleccionado"
           value={dateFilter.preset === 'month' ? 'Este Mes' : 'Personalizado'}
-          icon={<TrendingUp className="w-5 h-5" />}
+          icon={<TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />}
         />
         <StatCard
           label="Última Actualización"
           value="Hoy"
-          icon={<TrendingUp className="w-5 h-5" />}
+          icon={<TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />}
         />
       </div>
 
       {/* Date Filter */}
-      <GlassPanel className="p-6 mb-6">
-        <h2 className="text-lg font-semibold text-white mb-4">
+      <GlassPanel className="p-4 sm:p-6 mb-4 sm:mb-6">
+        <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
           Filtros Globales
         </h2>
         <DateRangeFilterComponent
@@ -239,18 +238,18 @@ const ReportsPage = () => {
           onChange={setDateFilter}
           showLabel={true}
         />
-        <p className="text-gray-400 text-sm mt-3">
+        <p className="text-gray-400 text-xs sm:text-sm mt-2 sm:mt-3">
           Los filtros se aplicarán a todos los reportes que consultes
         </p>
       </GlassPanel>
 
       {/* Reports Grid */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-white mb-4">
+      <div className="mb-4 sm:mb-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">
           Reportes Disponibles
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {availableReports.map((report) => {
             const Icon = REPORT_ICONS[report.icon as keyof typeof REPORT_ICONS]
             
@@ -274,22 +273,22 @@ const ReportsPage = () => {
       </div>
 
       {/* Help Section */}
-      <GlassPanel className="p-6">
-        <div className="flex items-start gap-4">
+      <GlassPanel className="p-4 sm:p-6">
+        <div className="flex items-start gap-3 sm:gap-4">
           <div className="
-            w-10 h-10 flex-shrink-0
+            w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0
             flex items-center justify-center
             rounded-lg
             bg-blue-500/20
             text-blue-400
           ">
-            <AlertCircle className="w-5 h-5" />
+            <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h3 className="text-white font-semibold mb-2">
+            <h3 className="text-white font-semibold text-sm sm:text-base mb-2">
               ¿Cómo usar los reportes?
             </h3>
-            <ul className="text-gray-400 text-sm space-y-1">
+            <ul className="text-gray-400 text-xs sm:text-sm space-y-1">
               <li>• Selecciona el período de fechas que deseas consultar</li>
               <li>• Haz clic en "Ver Reporte" en cualquier tarjeta</li>
               <li>• Aplica filtros específicos dentro de cada reporte</li>
