@@ -23,7 +23,6 @@ import { useAdminPackages } from '@/features/packages/hooks'
 import type { CongelacionDTO, PaqueteFormData, PaqueteListItemDTO } from '@/features/packages/types/packageTypes'
 import { AlertCircle, Package, Plus, RefreshCw } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import styles from '../PageStyles.module.scss'
 
 // ============================================
 // SKELETON LOADERS
@@ -36,13 +35,13 @@ import styles from '../PageStyles.module.scss'
  */
 function StatsSkeletons() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
       {[1, 2, 3, 4].map((i) => (
         <div
           key={i}
           className="
             relative
-            p-4
+            p-3 sm:p-4
             rounded-xl
             backdrop-blur-xl
             bg-[rgba(26,26,32,0.5)]
@@ -50,10 +49,10 @@ function StatsSkeletons() {
           "
         >
           <div className="flex items-center justify-between mb-2">
-            <Skeleton className="h-4 w-20 rounded" />
-            <Skeleton className="h-8 w-8 rounded-lg" />
+            <Skeleton className="h-3 sm:h-4 w-16 sm:w-20 rounded" />
+            <Skeleton className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg" />
           </div>
-          <Skeleton className="h-8 w-12 rounded" />
+          <Skeleton className="h-6 sm:h-8 w-10 sm:w-12 rounded" />
         </div>
       ))}
     </div>
@@ -155,29 +154,29 @@ interface EmptyStateProps {
 
 function EmptyState({ hasFilters, onClearFilters, onCreatePackage }: EmptyStateProps) {
   return (
-    <GlassPanel className="p-12 text-center">
-      <div className="flex justify-center mb-4">
-        <div className="p-4 rounded-full bg-white/5">
-          <Package className="w-12 h-12 text-gray-400" />
+    <GlassPanel className="p-6 sm:p-8 md:p-12 text-center">
+      <div className="flex justify-center mb-3 sm:mb-4">
+        <div className="p-3 sm:p-4 rounded-full bg-white/5">
+          <Package className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400" />
         </div>
       </div>
-      <h3 className="text-xl font-semibold text-white mb-2">
+      <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
         {hasFilters ? 'No se encontraron paquetes' : 'No hay paquetes registrados'}
       </h3>
-      <p className="text-gray-400 mb-6 max-w-md mx-auto">
+      <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6 max-w-md mx-auto">
         {hasFilters
           ? 'No hay paquetes que coincidan con los filtros seleccionados. Intenta ajustar los criterios de búsqueda.'
           : 'Aún no hay paquetes registrados. Crea un nuevo paquete para comenzar.'}
       </p>
-      <div className="flex items-center justify-center gap-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3">
         {hasFilters && (
-          <GlassButton variant="secondary" onClick={onClearFilters}>
+          <GlassButton variant="secondary" onClick={onClearFilters} className="min-h-[44px]">
             Limpiar filtros
           </GlassButton>
         )}
-        <GlassButton variant="primary" onClick={onCreatePackage}>
-          <Plus className="w-4 h-4" />
-          <span>Asignar Paquete</span>
+        <GlassButton variant="primary" onClick={onCreatePackage} className="min-h-[44px]">
+          <Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
+          <span className="text-sm sm:text-base">Asignar Paquete</span>
         </GlassButton>
       </div>
     </GlassPanel>
@@ -196,17 +195,17 @@ interface ErrorStateProps {
 
 function ErrorState({ message, onRetry }: ErrorStateProps) {
   return (
-    <GlassPanel className="p-8 text-center border-red-500/30">
-      <div className="flex justify-center mb-4">
-        <div className="p-4 rounded-full bg-red-500/10">
-          <AlertCircle className="w-10 h-10 text-red-400" />
+    <GlassPanel className="p-6 sm:p-8 text-center border-red-500/30">
+      <div className="flex justify-center mb-3 sm:mb-4">
+        <div className="p-3 sm:p-4 rounded-full bg-red-500/10">
+          <AlertCircle className="w-8 h-8 sm:w-10 sm:h-10 text-red-400" />
         </div>
       </div>
-      <h3 className="text-lg font-semibold text-white mb-2">Error al cargar los paquetes</h3>
-      <p className="text-gray-400 mb-4">{message}</p>
-      <GlassButton variant="secondary" onClick={onRetry}>
-        <RefreshCw className="w-4 h-4" />
-        <span>Reintentar</span>
+      <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Error al cargar los paquetes</h3>
+      <p className="text-sm sm:text-base text-gray-400 mb-3 sm:mb-4">{message}</p>
+      <GlassButton variant="secondary" onClick={onRetry} className="min-h-[44px]">
+        <RefreshCw size={16} className="sm:w-[18px] sm:h-[18px]" />
+        <span className="text-sm sm:text-base">Reintentar</span>
       </GlassButton>
     </GlassPanel>
   )
@@ -476,29 +475,29 @@ export default function AdminPackagesPage() {
   // ============================================
 
   return (
-    <div className={styles['page-container']}>
+    <div className="p-4 sm:p-6 md:p-8 max-w-[1600px] mx-auto">
       {/* Header - Requirements: 3.1 */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
-          <h1 className={styles['page-title']}>Gestión de Paquetes</h1>
-          <p className={styles['page-description']}>
+          <h1 className="text-[#f9fafb] text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">Gestión de Paquetes</h1>
+          <p className="text-[#9ca3af] text-sm sm:text-base">
             Administra los paquetes de clases de los alumnos
           </p>
         </div>
-        <div className="flex gap-3">
-          <GlassButton variant="secondary" onClick={() => setIsConfigModalOpen(true)}>
-            <Package className="w-4 h-4" />
-            <span>Configurar Paquetes</span>
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+          <GlassButton variant="secondary" onClick={() => setIsConfigModalOpen(true)} className="min-h-[44px]">
+            <Package size={16} className="sm:w-[18px] sm:h-[18px]" />
+            <span className="text-sm sm:text-base">Configurar Paquetes</span>
           </GlassButton>
-          <GlassButton variant="primary" onClick={handleOpenCreateModal}>
-            <Plus className="w-4 h-4" />
-            <span>Asignar Paquete</span>
+          <GlassButton variant="primary" onClick={handleOpenCreateModal} className="min-h-[44px]">
+            <Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
+            <span className="text-sm sm:text-base">Asignar Paquete</span>
           </GlassButton>
         </div>
       </div>
 
       {/* Stats Cards - Requirements: 3.2, 3.3 */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         {isPaquetesLoading ? (
           <StatsSkeletons />
         ) : (
@@ -507,8 +506,8 @@ export default function AdminPackagesPage() {
       </div>
 
       {/* Filters - Requirements: 4.1, 4.2, 4.3, 10.1 */}
-      <GlassPanel className="p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-4">
+      <GlassPanel className="p-3 sm:p-4 mb-4 sm:mb-6">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4">
           {isCatalogsLoading ? (
             <FiltersSkeletons />
           ) : (
@@ -524,7 +523,7 @@ export default function AdminPackagesPage() {
                 isLoading={isCatalogsLoading}
               />
               {hasActiveFilters && (
-                <GlassButton variant="ghost" onClick={clearFilters} className="text-sm">
+                <GlassButton variant="ghost" onClick={clearFilters} className="text-xs sm:text-sm min-h-[44px]">
                   Limpiar
                 </GlassButton>
               )}
@@ -532,7 +531,7 @@ export default function AdminPackagesPage() {
                 variant="icon"
                 onClick={refetchPaquetes}
                 title="Actualizar lista"
-                className="!p-2"
+                className="!p-2.5 sm:!p-2 min-h-[44px] min-w-[44px]"
               >
                 <RefreshCw className={`w-4 h-4 ${isPaquetesLoading ? 'animate-spin' : ''}`} />
               </GlassButton>
@@ -542,7 +541,7 @@ export default function AdminPackagesPage() {
       </GlassPanel>
 
       {/* Packages Table - Requirements: 3.4, 10.2 */}
-      <GlassPanel className="p-6">
+      <GlassPanel className="p-3 sm:p-4 md:p-6">
         {paquetesError ? (
           <ErrorState
             message="No se pudieron cargar los paquetes. Verifica tu conexión e intenta de nuevo."

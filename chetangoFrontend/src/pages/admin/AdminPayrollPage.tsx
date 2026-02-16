@@ -92,66 +92,66 @@ const AdminPayrollPage = () => {
   )
 
   return (
-    <div className="p-8 max-w-[1600px] mx-auto">
+    <div className="p-4 sm:p-6 md:p-8 max-w-[1600px] mx-auto">
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div>
-            <h1 className="text-[#f9fafb] text-3xl font-bold mb-2">💼 Nómina de Profesores</h1>
-            <p className="text-[#9ca3af]">Gestiona los pagos a profesores por clases dictadas</p>
+            <h1 className="text-[#f9fafb] text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">💼 Nómina de Profesores</h1>
+            <p className="text-[#9ca3af] text-sm sm:text-base">Gestiona los pagos a profesores por clases dictadas</p>
           </div>
           <button
             onClick={() => setLiquidarMesModalOpen(true)}
             disabled={!resumen || resumen.length === 0}
-            className="flex items-center gap-2 px-6 py-3 bg-[#60a5fa] hover:bg-[#3b82f6] text-white rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#60a5fa] hover:bg-[#3b82f6] text-white rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] text-sm sm:text-base w-full sm:w-auto"
           >
-            <DollarSign size={20} />
+            <DollarSign size={18} className="sm:w-5 sm:h-5" />
             Liquidar Mes
           </button>
         </div>
 
         {/* Stats */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(245,158,11,0.3)] rounded-lg p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(245,158,11,0.3)] rounded-lg p-3 sm:p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[#9ca3af] text-sm">Clases Pendientes</span>
-                <Clock className="text-[#fbbf24]" size={20} />
+                <span className="text-[#9ca3af] text-xs sm:text-sm">Clases Pendientes</span>
+                <Clock className="text-[#fbbf24] w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <p className="text-[#f9fafb] text-2xl font-bold">{stats.totalPendientes}</p>
+              <p className="text-[#f9fafb] text-xl sm:text-2xl font-bold">{stats.totalPendientes}</p>
               <p className="text-[#fbbf24] text-xs mt-1">
                 {formatCurrency(stats.montoPendiente)} por aprobar
               </p>
             </div>
 
-            <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(34,197,94,0.3)] rounded-lg p-4">
+            <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(34,197,94,0.3)] rounded-lg p-3 sm:p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[#9ca3af] text-sm">Clases Aprobadas</span>
-                <CheckCircle className="text-[#4ade80]" size={20} />
+                <span className="text-[#9ca3af] text-xs sm:text-sm">Clases Aprobadas</span>
+                <CheckCircle className="text-[#4ade80] w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <p className="text-[#f9fafb] text-2xl font-bold">{stats.totalAprobados}</p>
+              <p className="text-[#f9fafb] text-xl sm:text-2xl font-bold">{stats.totalAprobados}</p>
               <p className="text-[#4ade80] text-xs mt-1">
                 {formatCurrency(stats.montoAprobado)} listo para liquidar
               </p>
             </div>
 
-            <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(59,130,246,0.3)] rounded-lg p-4">
+            <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(59,130,246,0.3)] rounded-lg p-3 sm:p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[#9ca3af] text-sm">Liquidadas</span>
-                <DollarSign className="text-[#60a5fa]" size={20} />
+                <span className="text-[#9ca3af] text-xs sm:text-sm">Liquidadas</span>
+                <DollarSign className="text-[#60a5fa] w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <p className="text-[#f9fafb] text-2xl font-bold">{stats.totalLiquidados}</p>
+              <p className="text-[#f9fafb] text-xl sm:text-2xl font-bold">{stats.totalLiquidados}</p>
               <p className="text-[#60a5fa] text-xs mt-1">
                 {formatCurrency(stats.montoLiquidado)} en proceso de pago
               </p>
             </div>
 
-            <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(139,92,246,0.3)] rounded-lg p-4">
+            <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(139,92,246,0.3)] rounded-lg p-3 sm:p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[#9ca3af] text-sm">Total Profesores</span>
-                <Users className="text-[#a78bfa]" size={20} />
+                <span className="text-[#9ca3af] text-xs sm:text-sm">Total Profesores</span>
+                <Users className="text-[#a78bfa] w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <p className="text-[#f9fafb] text-2xl font-bold">{resumen?.length || 0}</p>
+              <p className="text-[#f9fafb] text-xl sm:text-2xl font-bold">{resumen?.length || 0}</p>
               <p className="text-[#a78bfa] text-xs mt-1">
                 Con clases activas
               </p>
@@ -161,12 +161,12 @@ const AdminPayrollPage = () => {
       </div>
 
       {/* Dashboard Kanban */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Columna 1: Clases Pendientes */}
-        <div className="bg-[rgba(26,26,26,0.5)] border border-[rgba(245,158,11,0.3)] rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Clock className="text-[#fbbf24]" size={20} />
-            <h2 className="text-[#f9fafb] text-lg font-semibold">Clases Pendientes</h2>
+        <div className="bg-[rgba(26,26,26,0.5)] border border-[rgba(245,158,11,0.3)] rounded-xl p-3 sm:p-4">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
+            <Clock className="text-[#fbbf24] w-4 h-4 sm:w-5 sm:h-5" />
+            <h2 className="text-[#f9fafb] text-base sm:text-lg font-semibold">Clases Pendientes</h2>
             <span className="ml-auto bg-[rgba(245,158,11,0.15)] text-[#fbbf24] px-2 py-1 rounded-full text-sm font-medium">
               {clasesRealizadas?.reduce((sum, clase) => sum + clase.profesores.length, 0) || 0}
             </span>
@@ -239,10 +239,10 @@ const AdminPayrollPage = () => {
         </div>
 
         {/* Columna 2: Clases Aprobadas */}
-        <div className="bg-[rgba(26,26,26,0.5)] border border-[rgba(34,197,94,0.3)] rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <CheckCircle className="text-[#4ade80]" size={20} />
-            <h2 className="text-[#f9fafb] text-lg font-semibold">Clases Aprobadas</h2>
+        <div className="bg-[rgba(26,26,26,0.5)] border border-[rgba(34,197,94,0.3)] rounded-xl p-3 sm:p-4">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
+            <CheckCircle className="text-[#4ade80] w-4 h-4 sm:w-5 sm:h-5" />
+            <h2 className="text-[#f9fafb] text-base sm:text-lg font-semibold">Clases Aprobadas</h2>
             <span className="ml-auto bg-[rgba(34,197,94,0.15)] text-[#4ade80] px-2 py-1 rounded-full text-sm font-medium">
               {clasesAprobadas?.reduce((sum, clase) => sum + clase.profesores.length, 0) || 0}
             </span>
@@ -297,10 +297,10 @@ const AdminPayrollPage = () => {
         </div>
 
         {/* Columna 3: Resumen por Profesor */}
-        <div className="bg-[rgba(26,26,26,0.5)] border border-[rgba(64,64,64,0.3)] rounded-xl p-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Users className="text-[#9ca3af]" size={20} />
-            <h2 className="text-[#f9fafb] text-lg font-semibold">Profesores</h2>
+        <div className="bg-[rgba(26,26,26,0.5)] border border-[rgba(64,64,64,0.3)] rounded-xl p-3 sm:p-4">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4">
+            <Users className="text-[#9ca3af] w-4 h-4 sm:w-5 sm:h-5" />
+            <h2 className="text-[#f9fafb] text-base sm:text-lg font-semibold">Profesores</h2>
           </div>
 
           <div className="space-y-3 max-h-[calc(100vh-400px)] overflow-y-auto pr-2">
@@ -357,10 +357,10 @@ const AdminPayrollPage = () => {
 
       {/* Sección de Liquidaciones Pendientes de Pago */}
       {liquidacionesCerradas && liquidacionesCerradas.length > 0 && (
-        <div className="mt-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Wallet className="text-[#60a5fa]" size={24} />
-            <h2 className="text-[#f9fafb] text-2xl font-bold">Liquidaciones Pendientes de Pago</h2>
+        <div className="mt-6 sm:mt-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <Wallet className="text-[#60a5fa] w-5 h-5 sm:w-6 sm:h-6" />
+            <h2 className="text-[#f9fafb] text-xl sm:text-2xl font-bold">Liquidaciones Pendientes de Pago</h2>
             <span className="ml-auto bg-[rgba(96,165,250,0.15)] text-[#60a5fa] px-3 py-1 rounded-full text-sm font-medium">
               {liquidacionesCerradas.length} pendiente{liquidacionesCerradas.length !== 1 ? 's' : ''}
             </span>
@@ -374,44 +374,44 @@ const AdminPayrollPage = () => {
             ) : (
               <div className="divide-y divide-[rgba(255,255,255,0.05)]">
                 {liquidacionesCerradas.map((liquidacion) => (
-                  <div key={liquidacion.idLiquidacion} className="p-4 hover:bg-[rgba(96,165,250,0.05)] transition-colors">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1 grid grid-cols-1 md:grid-cols-5 gap-4">
+                  <div key={liquidacion.idLiquidacion} className="p-3 sm:p-4 hover:bg-[rgba(96,165,250,0.05)] transition-colors">
+                    <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+                      <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
                         <div>
                           <p className="text-gray-400 text-xs mb-1">Profesor</p>
-                          <p className="text-white font-semibold">{liquidacion.nombreProfesor}</p>
+                          <p className="text-white font-semibold text-sm sm:text-base">{liquidacion.nombreProfesor}</p>
                         </div>
                         <div>
                           <p className="text-gray-400 text-xs mb-1">Periodo</p>
-                          <p className="text-white font-semibold">
+                          <p className="text-white font-semibold text-sm sm:text-base">
                             {new Date(0, liquidacion.mes - 1).toLocaleString('es-CO', { month: 'long' }).charAt(0).toUpperCase() + 
                              new Date(0, liquidacion.mes - 1).toLocaleString('es-CO', { month: 'long' }).slice(1)} {liquidacion.año}
                           </p>
                         </div>
                         <div>
                           <p className="text-gray-400 text-xs mb-1">Clases</p>
-                          <p className="text-white font-semibold">{liquidacion.totalClases}</p>
+                          <p className="text-white font-semibold text-sm sm:text-base">{liquidacion.totalClases}</p>
                         </div>
                         <div>
                           <p className="text-gray-400 text-xs mb-1">Horas</p>
-                          <p className="text-white font-semibold">{liquidacion.totalHoras.toFixed(1)}h</p>
+                          <p className="text-white font-semibold text-sm sm:text-base">{liquidacion.totalHoras.toFixed(1)}h</p>
                         </div>
-                        <div>
+                        <div className="col-span-2 sm:col-span-1">
                           <p className="text-gray-400 text-xs mb-1">Monto a Pagar</p>
-                          <p className="text-[#4ade80] font-bold text-lg">{formatCurrency(liquidacion.totalPagar)}</p>
+                          <p className="text-[#4ade80] font-bold text-base sm:text-lg">{formatCurrency(liquidacion.totalPagar)}</p>
                         </div>
                       </div>
-                      <div className="ml-4 flex items-center gap-2">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                         <button
                           onClick={() => {
                             if (window.confirm('¿Estás seguro de eliminar esta liquidación? Las clases volverán al estado "Aprobado".')) {
                               eliminarLiquidacionMutation.mutate(liquidacion.idLiquidacion)
                             }
                           }}
-                          className="px-4 py-2 bg-[rgba(239,68,68,0.1)] hover:bg-[rgba(239,68,68,0.2)] text-[#ef4444] border border-[rgba(239,68,68,0.3)] rounded-lg font-semibold transition-all flex items-center gap-2"
+                          className="px-3 sm:px-4 py-2 sm:py-2.5 bg-[rgba(239,68,68,0.1)] hover:bg-[rgba(239,68,68,0.2)] text-[#ef4444] border border-[rgba(239,68,68,0.3)] rounded-lg font-semibold transition-all flex items-center justify-center gap-2 min-h-[44px] text-sm sm:text-base"
                           title="Eliminar liquidación"
                         >
-                          <Trash2 size={18} />
+                          <Trash2 size={16} className="sm:w-[18px] sm:h-[18px]" />
                           Eliminar
                         </button>
                         <button
@@ -422,9 +422,9 @@ const AdminPayrollPage = () => {
                             año: liquidacion.año,
                             totalPagar: liquidacion.totalPagar,
                           })}
-                          className="px-4 py-2 bg-[#60a5fa] hover:bg-[#3b82f6] text-white rounded-lg font-semibold transition-all flex items-center gap-2"
+                          className="px-3 sm:px-4 py-2 sm:py-2.5 bg-[#60a5fa] hover:bg-[#3b82f6] text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2 min-h-[44px] text-sm sm:text-base"
                         >
-                          <Wallet size={18} />
+                          <Wallet size={16} className="sm:w-[18px] sm:h-[18px]" />
                           Registrar Pago
                         </button>
                       </div>
