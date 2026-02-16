@@ -146,7 +146,7 @@ const StudentDashboardPage = () => {
             <ProximaClaseCard clase={dashboard.proximaClase} />
           </div>
 
-          {/* Progreso del Alumno - Stack en móvil, 2 columnas en desktop */}
+          {/* Progreso del Alumno - Stack en movil, 2 columnas en desktop */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 md:mb-10">
             <MiPaqueteCard paquete={dashboard.paqueteActivo} />
             <MiAsistenciaCard asistencia={dashboard.asistencia} />
