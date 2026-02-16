@@ -32,14 +32,15 @@ export const PaymentCard = ({ pago, onExportPDF }: PaymentCardProps) => {
   const icono = getMetodoPagoIcono(pago.nombreMetodoPago)
 
   return (
-    <div className="mb-4">
+    <div className="mb-3 sm:mb-4">
       {/* Card Header - Siempre Visible */}
       <GlassPanel className="overflow-hidden">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="w-full p-5 text-left hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+          className="w-full p-4 sm:p-5 text-left hover:bg-[rgba(255,255,255,0.02)] active:bg-[rgba(255,255,255,0.03)] transition-colors"
         >
-          <div className="flex items-center justify-between">
+          {/* Desktop Layout */}
+          <div className="hidden md:flex items-center justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl">{icono}</span>
@@ -89,6 +90,46 @@ export const PaymentCard = ({ pago, onExportPDF }: PaymentCardProps) => {
               ) : (
                 <ChevronDown className="w-5 h-5 text-[#9ca3af]" />
               )}
+            </div>
+          </div>
+
+          {/* Mobile Layout */}
+          <div className="md:hidden">
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-start gap-2 flex-1 min-w-0">
+                <span className="text-xl flex-shrink-0">{icono}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[#f9fafb] text-base font-semibold">
+                    {formatearFechaPago(pago.fechaPago)}
+                  </p>
+                  <p className="text-[#9ca3af] text-xs">
+                    {obtenerTiempoRelativo(pago.fechaPago)}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <div className="text-right">
+                  <p className="text-[#f9fafb] text-lg font-bold">
+                    {formatearMonto(pago.montoTotal)}
+                  </p>
+                </div>
+                {isExpanded ? (
+                  <ChevronUp className="w-5 h-5 text-[#9ca3af]" />
+                ) : (
+                  <ChevronDown className="w-5 h-5 text-[#9ca3af]" />
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[#9ca3af] text-xs">{pago.nombreMetodoPago}</span>
+              <span className="text-[#6b7280]">•</span>
+              <span className="text-[#9ca3af] text-xs">{pago.cantidadPaquetes} paquetes</span>
+              <span
+                className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${badge.color} ${badge.bgColor}`}
+              >
+                {badge.label}
+              </span>
             </div>
           </div>
         </button>
@@ -157,13 +198,13 @@ export const PaymentCard = ({ pago, onExportPDF }: PaymentCardProps) => {
                 )}
 
                 {/* Botones de Acción */}
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
                       onExportPDF(pago.idPago)
                     }}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(139,92,246,0.1)] hover:bg-[rgba(139,92,246,0.2)] border border-[rgba(139,92,246,0.2)] text-[#8b5cf6] transition-all duration-300"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-lg bg-[rgba(139,92,246,0.1)] hover:bg-[rgba(139,92,246,0.2)] active:scale-95 border border-[rgba(139,92,246,0.2)] text-[#8b5cf6] text-sm font-medium transition-all duration-300"
                   >
                     <Download className="w-4 h-4" />
                     Exportar PDF
@@ -175,7 +216,7 @@ export const PaymentCard = ({ pago, onExportPDF }: PaymentCardProps) => {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[rgba(16,185,129,0.1)] hover:bg-[rgba(16,185,129,0.2)] border border-[rgba(16,185,129,0.2)] text-[#10b981] transition-all duration-300"
+                      className="flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-lg bg-[rgba(16,185,129,0.1)] hover:bg-[rgba(16,185,129,0.2)] active:scale-95 border border-[rgba(16,185,129,0.2)] text-[#10b981] text-sm font-medium transition-all duration-300"
                     >
                       <Download className="w-4 h-4" />
                       Descargar Comprobante
