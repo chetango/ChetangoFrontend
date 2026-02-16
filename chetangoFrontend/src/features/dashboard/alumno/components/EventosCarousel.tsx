@@ -3,6 +3,7 @@
 // ============================================
 
 import { GlassPanel } from '@/design-system/atoms/GlassPanel'
+import { useSwipe } from '@/shared/hooks/useTouchGestures'
 import { Calendar, ChevronLeft, ChevronRight, ExternalLink, Sparkles } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import type { EventoProximo } from '../types/dashboardAlumno.types'
@@ -15,6 +16,22 @@ interface EventosCarouselProps {
 export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
   const [eventoActual, setEventoActual] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+
+  // Funciones de navegación
+  const nextEvento = () => {
+    setEventoActual((prev) => (prev + 1) % eventos.length)
+  }
+
+  const prevEvento = () => {
+    setEventoActual((prev) => (prev - 1 + eventos.length) % eventos.length)
+  }
+
+  // Swipe gestures para móvil
+  const swipeHandlers = useSwipe({
+    onSwipeLeft: nextEvento,
+    onSwipeRight: prevEvento,
+    threshold: 50
+  })
 
   // Autoplay - cambiar cada 5 segundos
   useEffect(() => {
@@ -48,14 +65,6 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
     )
   }
 
-  const nextEvento = () => {
-    setEventoActual((prev) => (prev + 1) % eventos.length)
-  }
-
-  const prevEvento = () => {
-    setEventoActual((prev) => (prev - 1 + eventos.length) % eventos.length)
-  }
-
   const evento = eventos[eventoActual]
 
   return (
@@ -78,11 +87,14 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
             </button>
           )}
 
-          {/* Evento Card */}
+          {/* Evento Card con swipe gestures */}
           <div 
-            className="flex-1"
+            {...swipeHandlers}
+            className="flex-1 touch-pan-y"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => setIsPaused(false)}
           >
             <GlassPanel className="overflow-hidden group cursor-pointer">
               <div className="relative h-40 sm:h-44 md:h-48 overflow-hidden">
@@ -137,12 +149,16 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
             {eventos.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setEventoActual(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
+                onClick={() => {
+                  setEventoActual(index)
+                  setIsPaused(false) // Reanudar autoplay después de click manual
+                }}
+                className={`rounded-full transition-all touch-manipulation ${
                   index === eventoActual 
-                    ? 'w-8 bg-[#7c5af8]' 
-                    : 'bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'
+                    ? 'w-8 h-2 bg-[#7c5af8]' 
+                    : 'w-2 h-2 bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)] active:bg-[rgba(255,255,255,0.4)]'
                 }`}
+                aria-label={`Ir al evento ${index + 1}`}
               />
             ))}
           </div>
