@@ -77,25 +77,25 @@ export const StudentPaymentsPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f1419] py-8 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f1419] py-4 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <div className="h-10 w-48 bg-[rgba(255,255,255,0.05)] rounded animate-pulse mb-4" />
-            <div className="h-6 w-96 bg-[rgba(255,255,255,0.05)] rounded animate-pulse mb-6" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="mb-6 sm:mb-8">
+            <div className="h-8 sm:h-10 w-40 sm:w-48 bg-[rgba(255,255,255,0.05)] rounded animate-pulse mb-3 sm:mb-4" />
+            <div className="h-5 sm:h-6 w-64 sm:w-96 bg-[rgba(255,255,255,0.05)] rounded animate-pulse mb-4 sm:mb-6" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {[1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-24 bg-[rgba(255,255,255,0.05)] rounded-lg animate-pulse"
+                  className="h-20 sm:h-24 bg-[rgba(255,255,255,0.05)] rounded-lg animate-pulse"
                 />
               ))}
             </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="h-32 bg-[rgba(255,255,255,0.05)] rounded-lg animate-pulse"
+                className="h-28 sm:h-32 bg-[rgba(255,255,255,0.05)] rounded-lg animate-pulse"
               />
             ))}
           </div>
@@ -116,7 +116,7 @@ export const StudentPaymentsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f1419] py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f1419] py-4 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Ambient Glows */}
       <AmbientGlows variant="warm" />
 
