@@ -20,10 +20,9 @@
  * ```
  */
 
-import { ReactNode } from 'react';
+import { type ReactNode, type ElementType } from 'react';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
 import { cn } from '../../constants/responsive';
-import type { DeviceCategory } from '../../constants/breakpoints';
 
 interface ResponsiveContainerProps {
   /** Render prop que recibe información del dispositivo */
@@ -48,7 +47,7 @@ interface ResponsiveContainerProps {
   applyGap?: boolean;
   
   /** Tag HTML del contenedor */
-  as?: keyof JSX.IntrinsicElements;
+  as?: ElementType;
   
   /** Props adicionales para el elemento HTML */
   [key: string]: any;

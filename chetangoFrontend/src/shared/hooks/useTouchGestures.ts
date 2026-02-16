@@ -61,7 +61,7 @@ export function useSwipe(config: UseSwipeConfig) {
   const [direction, setDirection] = useState<'left' | 'right' | 'up' | 'down' | null>(null);
 
   const bind = useDrag(
-    ({ direction: [dx, dy], velocity: [vx, vy], last, swipe }) => {
+    ({ direction: [dx, dy], velocity: [vx, vy], last }) => {
       if (!last) return;
 
       // Detectar dirección del swipe
@@ -238,7 +238,6 @@ export function usePullToRefresh(config: UsePullToRefreshConfig) {
 interface UseGesturesConfig {
   onTap?: () => void;
   onDoubleTap?: () => void;
-  onLongPress?: () => void;
   onSwipeLeft?: () => void;
   onSwipeRight?: () => void;
 }
@@ -247,7 +246,6 @@ export function useGestures(config: UseGesturesConfig) {
   const {
     onTap,
     onDoubleTap,
-    onLongPress,
     onSwipeLeft,
     onSwipeRight,
   } = config;

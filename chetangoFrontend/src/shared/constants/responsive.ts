@@ -106,7 +106,7 @@ export const RESPONSIVE_CLASSES = {
 /**
  * Obtener espaciado según categoría de dispositivo
  */
-export function getSpacing(device: DeviceCategory): typeof SPACING.mobile {
+export function getSpacing(device: DeviceCategory) {
   return SPACING[device];
 }
 
