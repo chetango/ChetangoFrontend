@@ -152,13 +152,10 @@ const StudentDashboardPage = () => {
             <MiAsistenciaCard asistencia={dashboard.asistencia} />
           </div>
 
-          {/* Logros / Gamificacion */}
           <LogrosSection logros={dashboard.logros} />
-
-          {/* Eventos Proximos - Carrusel */}
+          
           <EventosCarousel key="student-eventos" eventos={dashboard.eventosProximos} />
-
-          {/* CTA Comercial - Recomendaciones */
+          
           <RecomendadosSection paquete={dashboard.paqueteActivo} />
 
         </div>
