@@ -28,7 +28,6 @@ import { getClaseEstado, useAdminClasses } from '@/features/classes/hooks'
 import type { ClaseDetalleDTO, ClaseFormData } from '@/features/classes/types/classTypes'
 import { AlertCircle, Calendar, Plus, RefreshCw, Search, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import styles from '../PageStyles.module.scss'
 
 // ============================================
 // CONFIRMATION DIALOG COMPONENT
@@ -67,15 +66,16 @@ function ConfirmationDialog({
       />
 
       {/* Dialog */}
-      <GlassPanel className="relative z-10 w-full max-w-md mx-4 p-6">
-        <h3 className="text-xl font-semibold text-white mb-3">{title}</h3>
-        <p className="text-gray-300 mb-6">{message}</p>
+      <GlassPanel className="relative z-10 w-full max-w-md mx-4 p-4 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-3">{title}</h3>
+        <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6">{message}</p>
 
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 sm:gap-3">
           <GlassButton
             variant="secondary"
             onClick={onCancel}
             disabled={isLoading}
+            className="min-h-[44px]"
           >
             {cancelText}
           </GlassButton>
@@ -83,15 +83,15 @@ function ConfirmationDialog({
             variant="primary"
             onClick={onConfirm}
             disabled={isLoading}
-            className="!bg-red-500/20 !border-red-500/40 hover:!bg-red-500/30"
+            className="!bg-red-500/20 !border-red-500/40 hover:!bg-red-500/30 min-h-[44px]"
           >
             {isLoading ? (
               <>
                 <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Procesando...</span>
+                <span className="text-sm sm:text-base">Procesando...</span>
               </>
             ) : (
-              confirmText
+              <span className="text-sm sm:text-base">{confirmText}</span>
             )}
           </GlassButton>
         </div>
@@ -142,9 +142,9 @@ function ClassesSkeletons() {
 
 function StatsSkeletons() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
       {[1, 2, 3].map((i) => (
-        <Skeleton key={i} className="h-28" />
+        <Skeleton key={i} className="h-24 sm:h-28" />
       ))}
     </div>
   )
@@ -163,30 +163,30 @@ interface EmptyStateProps {
 
 function EmptyState({ hasFilters, onClearFilters, onCreateClass }: EmptyStateProps) {
   return (
-    <GlassPanel className="p-12 text-center">
-      <div className="flex justify-center mb-4">
-        <div className="p-4 rounded-full bg-white/5">
-          <Calendar className="w-12 h-12 text-gray-400" />
+    <GlassPanel className="p-6 sm:p-8 md:p-12 text-center">
+      <div className="flex justify-center mb-3 sm:mb-4">
+        <div className="p-3 sm:p-4 rounded-full bg-white/5">
+          <Calendar className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400" />
         </div>
       </div>
-      <h3 className="text-xl font-semibold text-white mb-2">
+      <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
         {hasFilters ? 'No se encontraron clases' : 'No hay clases programadas'}
       </h3>
-      <p className="text-gray-400 mb-6 max-w-md mx-auto">
+      <p className="text-sm sm:text-base text-gray-400 mb-4 sm:mb-6 max-w-md mx-auto">
         {hasFilters
           ? 'No hay clases que coincidan con los filtros seleccionados. Intenta ajustar los criterios de búsqueda.'
           : 'Aún no hay clases programadas. Crea una nueva clase para comenzar.'}
       </p>
-      <div className="flex items-center justify-center gap-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 sm:gap-3">
         {hasFilters && (
-          <GlassButton variant="secondary" onClick={onClearFilters}>
-            <X className="w-4 h-4" />
-            <span>Limpiar filtros</span>
+          <GlassButton variant="secondary" onClick={onClearFilters} className="min-h-[44px]">
+            <X size={16} className="sm:w-[18px] sm:h-[18px]" />
+            <span className="text-sm sm:text-base">Limpiar filtros</span>
           </GlassButton>
         )}
-        <GlassButton variant="primary" onClick={onCreateClass}>
-          <Plus className="w-4 h-4" />
-          <span>Nueva Clase</span>
+        <GlassButton variant="primary" onClick={onCreateClass} className="min-h-[44px]">
+          <Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
+          <span className="text-sm sm:text-base">Nueva Clase</span>
         </GlassButton>
       </div>
     </GlassPanel>
@@ -205,17 +205,17 @@ interface ErrorStateProps {
 
 function ErrorState({ message, onRetry }: ErrorStateProps) {
   return (
-    <GlassPanel className="p-8 text-center border-red-500/30">
-      <div className="flex justify-center mb-4">
-        <div className="p-4 rounded-full bg-red-500/10">
-          <AlertCircle className="w-10 h-10 text-red-400" />
+    <GlassPanel className="p-6 sm:p-8 text-center border-red-500/30">
+      <div className="flex justify-center mb-3 sm:mb-4">
+        <div className="p-3 sm:p-4 rounded-full bg-red-500/10">
+          <AlertCircle className="w-8 h-8 sm:w-10 sm:h-10 text-red-400" />
         </div>
       </div>
-      <h3 className="text-lg font-semibold text-white mb-2">Error al cargar las clases</h3>
-      <p className="text-gray-400 mb-4">{message}</p>
-      <GlassButton variant="secondary" onClick={onRetry}>
-        <RefreshCw className="w-4 h-4" />
-        <span>Reintentar</span>
+      <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Error al cargar las clases</h3>
+      <p className="text-sm sm:text-base text-gray-400 mb-3 sm:mb-4">{message}</p>
+      <GlassButton variant="secondary" onClick={onRetry} className="min-h-[44px]">
+        <RefreshCw size={16} className="sm:w-[18px] sm:h-[18px]" />
+        <span className="text-sm sm:text-base">Reintentar</span>
       </GlassButton>
     </GlassPanel>
   )
@@ -412,18 +412,18 @@ export default function AdminClassesPage() {
   // ============================================
 
   return (
-    <div className={styles['page-container']}>
+    <div className="p-4 sm:p-6 md:p-8 max-w-[1600px] mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
         <div>
-          <h1 className={styles['page-title']}>Gestión de Clases</h1>
-          <p className={styles['page-description']}>
+          <h1 className="text-[#f9fafb] text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2">Gestión de Clases</h1>
+          <p className="text-[#9ca3af] text-sm sm:text-base">
             Administra las clases programadas de la academia
           </p>
         </div>
-        <GlassButton variant="primary" onClick={handleOpenCreateModal}>
-          <Plus className="w-4 h-4" />
-          <span>Nueva Clase</span>
+        <GlassButton variant="primary" onClick={handleOpenCreateModal} className="min-h-[44px] w-full sm:w-auto">
+          <Plus size={16} className="sm:w-[18px] sm:h-[18px]" />
+          <span className="text-sm sm:text-base">Nueva Clase</span>
         </GlassButton>
       </div>
 
@@ -431,21 +431,21 @@ export default function AdminClassesPage() {
       {isClasesLoading ? (
         <StatsSkeletons />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <StatCard
-            icon={<Calendar className="w-5 h-5" />}
+            icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />}
             value={stats.clasesHoy}
             label="Clases Hoy"
             color="primary"
           />
           <StatCard
-            icon={<Calendar className="w-5 h-5" />}
+            icon={<Calendar className="w-4 h-4 sm:w-5 sm:h-5" />}
             value={stats.clasesSemana}
             label="Esta Semana"
             color="secondary"
           />
           <StatCard
-            icon={<X className="w-5 h-5" />}
+            icon={<X className="w-4 h-4 sm:w-5 sm:h-5" />}
             value={stats.clasesCanceladas}
             label="Canceladas"
             color="warning"
@@ -457,8 +457,8 @@ export default function AdminClassesPage() {
       {isCatalogsLoading ? (
         <CatalogSkeletons />
       ) : (
-        <GlassPanel className="p-4 mb-6">
-          <div className="flex flex-wrap items-center gap-4">
+        <GlassPanel className="p-3 sm:p-4 mb-4 sm:mb-6">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4">
             {/* Search Input - Requirements: 8.1 */}
             <div className="flex-1 min-w-[200px] max-w-md">
               <GlassInput
@@ -471,7 +471,7 @@ export default function AdminClassesPage() {
             </div>
 
             {/* Profesor Filter - Requirements: 8.3 */}
-            <div className="min-w-[180px]">
+            <div className="min-w-[180px] w-full sm:w-auto">
               <GlassSelect
                 value={filters.filterProfesor}
                 onValueChange={handleProfesorChange}
@@ -491,7 +491,7 @@ export default function AdminClassesPage() {
             </div>
 
             {/* Tipo Filter - Requirements: 8.4 */}
-            <div className="min-w-[160px]">
+            <div className="min-w-[160px] w-full sm:w-auto">
               <GlassSelect
                 value={filters.filterTipo}
                 onValueChange={setFilterTipo}
@@ -511,7 +511,7 @@ export default function AdminClassesPage() {
             </div>
 
             {/* Date Filter - Requirements: 8.2 */}
-            <div className="min-w-[160px]">
+            <div className="min-w-[160px] w-full sm:w-auto">
               <GlassInput
                 type="date"
                 value={filters.filterFecha}
@@ -522,7 +522,7 @@ export default function AdminClassesPage() {
 
             {/* Clear Filters - Requirements: 8.6 */}
             {hasActiveFilters && (
-              <GlassButton variant="ghost" onClick={clearFilters} className="text-sm">
+              <GlassButton variant="ghost" onClick={clearFilters} className="text-xs sm:text-sm min-h-[44px]">
                 <X className="w-4 h-4" />
                 <span>Limpiar</span>
               </GlassButton>
@@ -533,7 +533,7 @@ export default function AdminClassesPage() {
               variant="icon"
               onClick={() => refetchClases()}
               title="Actualizar lista"
-              className="!p-2"
+              className="!p-2.5 sm:!p-2 min-h-[44px] min-w-[44px]"
             >
               <RefreshCw className={`w-4 h-4 ${isClasesLoading ? 'animate-spin' : ''}`} />
             </GlassButton>
@@ -556,16 +556,16 @@ export default function AdminClassesPage() {
           onCreateClass={handleOpenCreateModal}
         />
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {sortedDates.map((date) => (
             <div key={date}>
               {/* Date Header */}
-              <h2 className="text-lg font-semibold text-white mb-4 capitalize">
+              <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 capitalize">
                 {formatDateDisplay(date)}
               </h2>
 
               {/* Classes Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {clasesByDate[date].map((clase) => {
                   const estado = getClaseEstado(clase.fecha)
                   // Find profesor name
