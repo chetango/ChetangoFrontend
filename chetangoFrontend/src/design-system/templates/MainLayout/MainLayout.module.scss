@@ -376,6 +376,27 @@
   }
 }
 
+.header__hamburger {
+  display: none;
+  background: rgba(64, 64, 64, 0.3);
+  border: 1px solid rgba(64, 64, 64, 0.5);
+  color: $color-text-secondary;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  &:hover,
+  &:active {
+    background: rgba(191, 6, 40, 0.1);
+    color: $color-primary;
+    transform: scale(0.95);
+  }
+}
+
 .status-badge {
   display: flex;
   align-items: center;
@@ -677,5 +698,116 @@
   .user-name,
   .logout-btn {
     display: none;
+  }
+}
+
+// ============================================
+// RESPONSIVE - MOBILE SIDEBAR OVERLAY
+// ============================================
+
+@media (max-width: 1023px) {
+  // Sidebar se convierte en overlay móvil
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px !important; // Siempre expandido en móvil
+    height: 100vh;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 999;
+    box-shadow: 2px 0 30px rgba(0, 0, 0, 0.5);
+
+    &--open {
+      transform: translateX(0);
+    }
+
+    // Ocultar toggle en móvil (no se necesita)
+    .sidebar__toggle {
+      display: none;
+    }
+  }
+
+  // Backdrop oscuro cuando sidebar está abierto
+  .mobile-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 998;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  // Botón X para cerrar sidebar en móvil
+  .sidebar__close {
+    position: absolute;
+    top: 20px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(191, 6, 40, 0.1);
+    border: 1px solid rgba(191, 6, 40, 0.3);
+    border-radius: 8px;
+    color: $color-primary;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+
+    &:hover,
+    &:active {
+      background: rgba(191, 6, 40, 0.2);
+      transform: scale(0.95);
+    }
+  }
+
+  // Header ajustes para móvil
+  .header {
+    padding: 12px 16px;
+  }
+
+  .header__left {
+    margin-left: 0; // Resetear margen del sidebar
+  }
+
+  // Botón hamburger visible en móvil
+  .header__menu-btn,
+  .header__hamburger {
+    display: flex;
+    width: 40px;
+    height: 40px;
+  }
+
+  // Ocultar textos en badges para móvil
+  .status-badge__text {
+    display: none;
+  }
+
+  .status-badge__text--hidden {
+    display: none;
+  }
+
+  // Main container sin margen del sidebar
+  .main-container {
+    margin-left: 0 !important;
+  }
+
+  // Main content con padding reducido
+  .main-content {
+    padding: 12px 16px;
   }
 }

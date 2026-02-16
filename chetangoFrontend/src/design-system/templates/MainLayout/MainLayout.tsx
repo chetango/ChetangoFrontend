@@ -7,8 +7,9 @@ import { NotificationDropdown } from '@/features/notifications'
 import { useGlobalSearch } from '@/features/search'
 import { useSolicitudesClasePrivadaPendientes, useSolicitudesRenovacionPendientes } from '@/features/solicitudes/api/solicitudesQueries'
 import type { SolicitudClasePrivadaDTO, SolicitudRenovacionPaqueteDTO } from '@/features/solicitudes/types/solicitudesTypes'
+import { useBreakpoint } from '@/shared/hooks'
 import { getPrimaryRoleText } from '@/shared/utils'
-import { Bell, ChevronLeft, ChevronRight, Search } from 'lucide-react'
+import { Bell, ChevronLeft, ChevronRight, Menu, Search, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import styles from './MainLayout.module.scss'
@@ -40,13 +41,15 @@ const MainLayout = ({
   onOpenRenovacion,
   onOpenClasePrivada 
 }: MainLayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const { isMobile } = useBreakpoint()
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile) // Cerrado por defecto en móvil
   const [searchQuery, setSearchQuery] = useState('')
   const [showNotifications, setShowNotifications] = useState(false)
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const [hasViewedNotifications, setHasViewedNotifications] = useState(false)
   const notificationRef = useRef<HTMLDivElement>(null)
   const profileRef = useRef<HTMLDivElement>(null)
+  const sidebarRef = useRef<HTMLElement>(null)
   const location = useLocation()
   
   const isAdmin = user?.roles?.includes('admin')
@@ -80,16 +83,39 @@ const MainLayout = ({
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setShowProfileDropdown(false)
       }
+      // Cerrar sidebar en móvil al hacer click fuera
+      if (isMobile && sidebarOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setSidebarOpen(false)
+      }
     }
 
-    if (showNotifications || showProfileDropdown) {
+    if (showNotifications || showProfileDropdown || (isMobile && sidebarOpen)) {
       document.addEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [showNotifications, showProfileDropdown])
+  }, [showNotifications, showProfileDropdown, isMobile, sidebarOpen])
+
+  // Cerrar sidebar en móvil cuando cambia la ruta
+  useEffect(() => {
+    if (isMobile && sidebarOpen) {
+      setSidebarOpen(false)
+    }
+  }, [location.pathname, isMobile])
+
+  // Prevenir scroll del body cuando sidebar está abierto en móvil
+  useEffect(() => {
+    if (isMobile && sidebarOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobile, sidebarOpen])
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -113,8 +139,31 @@ const MainLayout = ({
 
   return (
     <div className={styles['main-layout']}>
+      {/* Backdrop para móvil cuando sidebar está abierto */}
+      {isMobile && sidebarOpen && (
+        <div 
+          className={styles['mobile-backdrop']}
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={`${styles['sidebar']} ${sidebarOpen ? styles['sidebar--open'] : styles['sidebar--closed']}`}>
+      <aside 
+        ref={sidebarRef}
+        className={`${styles['sidebar']} ${sidebarOpen ? styles['sidebar--open'] : styles['sidebar--closed']} ${isMobile ? styles['sidebar--mobile'] : ''}`}
+      >
+        {/* Close button - Solo móvil */}
+        {isMobile && (
+          <button
+            className={styles['sidebar__close']}
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Cerrar menú"
+          >
+            <X size={24} />
+          </button>
+        )}
+
         {/* Sidebar Header */}
         <div className={styles['sidebar__header']}>
           <div className={styles['sidebar__brand']}>
@@ -152,14 +201,16 @@ const MainLayout = ({
           })}
         </nav>
 
-        {/* Toggle Button at Bottom */}
-        <button 
-          className={styles['sidebar__toggle']}
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          aria-label={sidebarOpen ? 'Cerrar menú' : 'Abrir menú'}
-        >
-          {sidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
-        </button>
+        {/* Toggle Button at Bottom - Solo desktop */}
+        {!isMobile && (
+          <button 
+            className={styles['sidebar__toggle']}
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-label={sidebarOpen ? 'Cerrar menú' : 'Abrir menú'}
+          >
+            {sidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+          </button>
+        )}
       </aside>
 
       {/* Main Container */}
@@ -167,10 +218,21 @@ const MainLayout = ({
         {/* Top Header - Simplificado */}
         <header className={styles['header']}>
           <div className={styles['header__left']}>
+            {/* Hamburger button - Solo móvil */}
+            {isMobile && (
+              <button
+                className={styles['header__hamburger']}
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                aria-label="Abrir menú"
+              >
+                <Menu size={24} />
+              </button>
+            )}
+
             {/* Indicador Sistema Activo - Discreto */}
             <div className={styles['status-badge']}>
               <span className={styles['status-badge__dot']}></span>
-              <span className={styles['status-badge__text']}>Sistema Activo</span>
+              <span className={`${styles['status-badge__text']} ${isMobile ? styles['status-badge__text--hidden'] : ''}`}>Sistema Activo</span>
             </div>
           </div>
 
