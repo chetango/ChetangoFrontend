@@ -106,6 +106,17 @@ const StudentDashboardPage = () => {
 
   return (
     <div className="relative overflow-hidden min-h-screen">
+      {/* Imagen de fondo JorgePeliculas como silueta */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.08] bg-no-repeat bg-contain"
+        style={{ 
+          backgroundImage: 'url(/JorgePeliculas.jpeg)',
+          backgroundPosition: 'center -150px',
+          mixBlendMode: 'screen',
+          filter: 'grayscale(100%) contrast(1.2)'
+        }}
+      />
+      
       {/* Ambient Background */}
       <AmbientGlows variant="warm" />
 
@@ -117,12 +128,6 @@ const StudentDashboardPage = () => {
           onDismiss={handleDismiss}
         />
       )}
-
-      {/* Siluetas de Tango - Fondo Sutil */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.02] z-0">
-        <div className="absolute top-20 right-10 text-[400px] transform rotate-12">💃</div>
-        <div className="absolute bottom-20 left-10 text-[350px] transform -rotate-12">🕺</div>
-      </div>
 
       {/* Content */}
       <div className="relative z-10">

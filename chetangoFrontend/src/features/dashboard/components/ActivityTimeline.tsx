@@ -19,7 +19,7 @@ export const ActivityTimeline = ({ ultimosPagos, onRefresh }: ActivityTimelinePr
     descripcion: `Pago registrado – ${pago.nombreAlumno} – $${pago.monto.toLocaleString('es-CL')}`,
     fecha: pago.fecha,
     icon: DollarSign,
-    color: '#c93448'
+    color: '#22c55e'
   }))
 
   return (

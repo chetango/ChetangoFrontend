@@ -2,14 +2,13 @@
 // MAIN LAYOUT TEMPLATE - CHETANGO
 // ============================================
 
-import { Button } from '@/design-system/atoms/Button'
+import { ProfileDropdown } from '@/design-system/molecules/ProfileDropdown'
 import { NotificationDropdown } from '@/features/notifications'
 import { useGlobalSearch } from '@/features/search'
 import { useSolicitudesClasePrivadaPendientes, useSolicitudesRenovacionPendientes } from '@/features/solicitudes/api/solicitudesQueries'
 import type { SolicitudClasePrivadaDTO, SolicitudRenovacionPaqueteDTO } from '@/features/solicitudes/types/solicitudesTypes'
-import { ROUTES } from '@/shared/constants/routes'
 import { getPrimaryRoleText } from '@/shared/utils'
-import { Bell, ChevronLeft, ChevronRight, Search, User } from 'lucide-react'
+import { Bell, ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import styles from './MainLayout.module.scss'
@@ -44,8 +43,10 @@ const MainLayout = ({
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [showNotifications, setShowNotifications] = useState(false)
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const [hasViewedNotifications, setHasViewedNotifications] = useState(false)
   const notificationRef = useRef<HTMLDivElement>(null)
+  const profileRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
   const navigate = useNavigate()
   
@@ -77,16 +78,19 @@ const MainLayout = ({
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setShowNotifications(false)
       }
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setShowProfileDropdown(false)
+      }
     }
 
-    if (showNotifications) {
+    if (showNotifications || showProfileDropdown) {
       document.addEventListener('mousedown', handleClickOutside)
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [showNotifications])
+  }, [showNotifications, showProfileDropdown])
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -97,13 +101,7 @@ const MainLayout = ({
   }
 
   const handleUserClick = () => {
-    if (userRole === 'admin') {
-      navigate(ROUTES.ADMIN.PROFILE)
-    } else if (userRole === 'profesor') {
-      navigate(ROUTES.TEACHER.PROFILE)
-    } else if (userRole === 'alumno') {
-      navigate(ROUTES.STUDENT.PROFILE)
-    }
+    setShowProfileDropdown(!showProfileDropdown)
   }
 
   const handleToggleNotifications = () => {
@@ -167,19 +165,10 @@ const MainLayout = ({
 
       {/* Main Container */}
       <div className={styles['main-container']}>
-        {/* Top Header */}
+        {/* Top Header - Simplificado */}
         <header className={styles['header']}>
           <div className={styles['header__left']}>
-            {/* Logo Compacto */}
-            <div className={styles['header__logo']}>
-              <div className={styles['logo__circle']}>C</div>
-              <div className={styles['logo__text-container']}>
-                <span className={styles['logo__text']}>Chetango</span>
-                <span className={styles['logo__subtitle']}>{roleText}</span>
-              </div>
-            </div>
-            
-            {/* Sistema Activo Badge */}
+            {/* Indicador Sistema Activo - Discreto */}
             <div className={styles['status-badge']}>
               <span className={styles['status-badge__dot']}></span>
               <span className={styles['status-badge__text']}>Sistema Activo</span>
@@ -187,6 +176,7 @@ const MainLayout = ({
           </div>
 
           <div className={styles['header__right']}>
+            {/* Búsqueda */}
             <form onSubmit={handleSearchSubmit} className={styles['header__search']}>
               <Search size={16} />
               <input 
@@ -198,6 +188,7 @@ const MainLayout = ({
               />
             </form>
             
+            {/* Notificaciones - Solo Admin */}
             {isAdmin && (
               <div className={styles['header__icon-btn-wrapper']} ref={notificationRef}>
                 <button 
@@ -221,32 +212,31 @@ const MainLayout = ({
               </div>
             )}
             
-            <button 
-              className={styles['header__user']}
-              onClick={handleUserClick}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className={styles['user-avatar']}>
-                <User size={16} />
-              </div>
-              {user && (
-                <div className={styles['user-info']}>
-                  <span className={styles['user-name']}>{user.name || 'Usuario'}</span>
-                  <span className={styles['user-role']}>{roleText}</span>
-                </div>
-              )}
-            </button>
-            
-            {onLogout && (
-              <Button 
-                onClick={onLogout} 
-                variant="secondary" 
-                size="sm"
-                className={styles['logout-btn']}
+            {/* Perfil con Dropdown */}
+            <div className={styles['header__icon-btn-wrapper']} ref={profileRef}>
+              <button 
+                className={styles['header__user']}
+                onClick={handleUserClick}
               >
-                Cerrar Sesión
-              </Button>
-            )}
+                <div className={styles['user-avatar']}>
+                  {user?.name?.[0]?.toUpperCase() || 'U'}
+                </div>
+                {user && (
+                  <span className={styles['user-name-compact']}>
+                    {user.name?.split(' ')[0] || 'Usuario'}
+                  </span>
+                )}
+              </button>
+              
+              {showProfileDropdown && onLogout && (
+                <ProfileDropdown
+                  userName={user?.name || user?.email || 'Usuario'}
+                  userRole={roleText}
+                  onLogout={onLogout}
+                  onClose={() => setShowProfileDropdown(false)}
+                />
+              )}
+            </div>
           </div>
         </header>
 

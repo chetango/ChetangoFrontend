@@ -42,10 +42,11 @@ export const ProfesorHeader = ({
         </div>
 
         {/* Profesor Card */}
-        <GlassPanel className="p-5 md:min-w-[280px]">
+        <GlassPanel className="p-5 md:min-w-[280px] shadow-[0_8px_24px_rgba(0,0,0,0.3),0_12px_32px_rgba(124,90,248,0.15),inset_0_1px_2px_rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.2)]">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7c5af8] to-[#6938ef] flex items-center justify-center shadow-[0_4px_16px_rgba(124,90,248,0.4)]">
-              <User className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#7c5af8] to-[#6938ef] flex items-center justify-center shadow-[0_4px_16px_rgba(124,90,248,0.4),0_8px_24px_rgba(124,90,248,0.2),inset_0_1px_2px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.2)] border border-[rgba(255,255,255,0.15)] relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[rgba(255,255,255,0.15)] via-transparent to-transparent rounded-xl" />
+              <User className="w-6 h-6 text-white relative z-10" />
             </div>
             <div className="flex-1">
               <p className="text-[#f9fafb] font-medium mb-0.5">{nombreProfesor}</p>

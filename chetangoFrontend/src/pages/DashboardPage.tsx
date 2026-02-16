@@ -185,12 +185,23 @@ const DashboardPage = () => {
 
   return (
     <div className="relative overflow-hidden min-h-screen">
-      {/* Ambient Background */}
+      {/* Imagen de fondo como silueta */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.08] bg-no-repeat bg-contain"
+        style={{ 
+          backgroundImage: 'url(/JorgePeliculas.jpeg)',
+          backgroundPosition: 'center -150px',
+          mixBlendMode: 'screen',
+          filter: 'grayscale(100%) contrast(1.2)'
+        }}
+      />
+      
+      {/* Ambient Background - Más visible */}
       <AmbientGlows variant="default" />
       
       {/* Content */}
       <div className="relative z-10">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12">
+        <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-12 py-6 md:py-8">
           
           {/* Header Section */}
           <DashboardHeader 

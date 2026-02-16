@@ -4,7 +4,7 @@
 
 import { GlassPanel } from '@/design-system/atoms/GlassPanel'
 import type { DashboardAlumnoResponse } from '../types/dashboardAlumno.types'
-import { getEstadoPaqueteBadge, obtenerIniciales, obtenerSaludo } from '../utils/dashboardUtils'
+import { formatearFechaHoy, getEstadoPaqueteBadge, obtenerIniciales, obtenerSaludo } from '../utils/dashboardUtils'
 
 interface AlumnoHeaderProps {
   alumno: DashboardAlumnoResponse
@@ -12,6 +12,7 @@ interface AlumnoHeaderProps {
 
 export const AlumnoHeader = ({ alumno }: AlumnoHeaderProps) => {
   const saludo = obtenerSaludo()
+  const fecha = formatearFechaHoy()
   const iniciales = obtenerIniciales(alumno.nombreAlumno)
   const estadoBadge = alumno.paqueteActivo 
     ? getEstadoPaqueteBadge(alumno.paqueteActivo.estado)
@@ -33,15 +34,16 @@ export const AlumnoHeader = ({ alumno }: AlumnoHeaderProps) => {
             {saludo}, {alumno.nombreAlumno.split(' ')[0]}
           </h1>
           <p className="text-[#d1d5db] text-lg">
-            Tu progreso y tus próximas clases
+            Tu progreso y tus próximas clases — {fecha}
           </p>
         </div>
 
         {/* Alumno Card */}
-        <GlassPanel className="p-5 md:min-w-[280px]">
+        <GlassPanel className="p-5 md:min-w-[280px] shadow-[0_8px_24px_rgba(0,0,0,0.3),0_12px_32px_rgba(201,52,72,0.15),inset_0_1px_2px_rgba(255,255,255,0.1)] border-[rgba(255,255,255,0.2)]">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#c93448] to-[#a8243a] flex items-center justify-center shadow-[0_4px_16px_rgba(201,52,72,0.4)]">
-              <span className="text-white font-bold text-lg">{iniciales}</span>
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#c93448] to-[#a8243a] flex items-center justify-center shadow-[0_4px_16px_rgba(201,52,72,0.4),0_8px_24px_rgba(201,52,72,0.2),inset_0_1px_2px_rgba(255,255,255,0.2),inset_0_-1px_2px_rgba(0,0,0,0.2)] border border-[rgba(255,255,255,0.15)] relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-[rgba(255,255,255,0.15)] via-transparent to-transparent rounded-xl" />
+              <span className="text-white font-bold text-lg relative z-10">{iniciales}</span>
             </div>
             <div className="flex-1">
               <p className="text-[#f9fafb] font-medium mb-0.5">{alumno.nombreAlumno}</p>

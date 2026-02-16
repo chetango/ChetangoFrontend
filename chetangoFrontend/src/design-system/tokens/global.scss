@@ -9,7 +9,9 @@ html, body {
   font-weight: $body-base-weight;
   line-height: $body-base-line-height;
   color: $color-text-primary;
-  background-color: $color-background-primary;
+  // Gradiente radial negro con morado intenso en la parte superior derecha
+  background: radial-gradient(ellipse at top right, #3a1f4d 0%, #2d1a3d 15%, #1a1324 35%, #0a0a0a 60%);
+  background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

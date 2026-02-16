@@ -43,9 +43,9 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
             <div className="mb-12 lg:mb-14 group cursor-pointer">
               <div className="flex items-center gap-5">
                 <div className="relative">
-                  <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#B84545] via-[#A03838] to-[#7D2B2B] flex items-center justify-center shadow-[0_12px_40px_rgba(184,69,69,0.6),0_4px_12px_rgba(0,0,0,0.4)] group-hover:shadow-[0_16px_50px_rgba(184,69,69,0.8),0_6px_16px_rgba(0,0,0,0.5)] transition-all duration-500 group-hover:scale-105" style={{ boxShadow: '0 12px 40px rgba(184,69,69,0.6), 0 4px 12px rgba(0,0,0,0.4), inset 0 -2px 8px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.15)' }}>
+                  <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-[#B84545] via-[#A03838] to-[#7D2B2B] flex items-center justify-center shadow-[0_12px_40px_rgba(184,69,69,0.6),0_4px_12px_rgba(0,0,0,0.4)] group-hover:shadow-[0_16px_50px_rgba(184,69,69,0.8),0_6px_16px_rgba(0,0,0,0.5)] transition-all duration-500 group-hover:scale-105" style={{ boxShadow: '0 12px 40px rgba(184,69,69,0.6), 0 4px 12px rgba(0,0,0,0.4), inset 0 -2px 8px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.15)' }}>
                     <span 
-                      className="text-white text-4xl font-bold tracking-tight"
+                      className="text-white text-3xl font-bold tracking-tight"
                       style={{
                         textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3), 0 -1px 2px rgba(255,255,255,0.3), 2px 2px 4px rgba(125,43,43,0.5)'
                       }}
@@ -63,7 +63,14 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
                   <div className="absolute -inset-2 rounded-[28px] border border-[rgba(184,69,69,0.4)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
                 <div>
-                  <span className="text-white text-3xl font-semibold tracking-tight">Chetango</span>
+                  <span 
+                    className="text-white text-3xl font-semibold tracking-tight"
+                    style={{
+                      textShadow: '0 0 20px rgba(255,255,255,0.4), 0 0 40px rgba(184,69,69,0.3), 0 2px 8px rgba(0,0,0,0.5)'
+                    }}
+                  >
+                    Chetango
+                  </span>
                 </div>
               </div>
             </div>
@@ -133,16 +140,16 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
               className="
                 w-full
                 px-8 py-6
-                bg-gradient-to-br from-[#1a1a1a] to-[#0f0f0f]
-                hover:from-[#262626] hover:to-[#1a1a1a]
+                bg-gradient-to-br from-[#1f1f1f] to-[#141414]
+                hover:from-[#2a2a2a] hover:to-[#1f1f1f]
                 disabled:from-[#0a0a0a] disabled:to-[#050505]
-                border border-[rgba(255,255,255,0.12)]
-                hover:border-[rgba(201,52,72,0.6)]
+                border border-[rgba(255,255,255,0.15)]
+                hover:border-[rgba(201,52,72,0.5)]
                 disabled:border-[rgba(255,255,255,0.05)]
                 text-white
                 rounded-2xl
-                shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.05)]
-                hover:shadow-[0_16px_56px_rgba(201,52,72,0.4),0_0_48px_rgba(201,52,72,0.2),inset_0_1px_0_rgba(255,255,255,0.1)]
+                shadow-[0_8px_32px_rgba(0,0,0,0.5),0_12px_48px_rgba(201,52,72,0.15),inset_0_1px_2px_rgba(255,255,255,0.08),inset_0_-1px_2px_rgba(0,0,0,0.2)]
+                hover:shadow-[0_16px_56px_rgba(201,52,72,0.4),0_20px_64px_rgba(201,52,72,0.25),inset_0_2px_4px_rgba(255,255,255,0.12),inset_0_-2px_4px_rgba(0,0,0,0.25)]
                 disabled:shadow-[0_4px_16px_rgba(0,0,0,0.3)]
                 transition-all duration-500
                 hover:scale-[1.02]
@@ -153,6 +160,9 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
                 disabled:opacity-50
                 relative overflow-hidden group
               "
+              style={{
+                textShadow: '0 1px 3px rgba(0,0,0,0.5)'
+              }}
             >
               {/* Animated gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[rgba(201,52,72,0.15)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />

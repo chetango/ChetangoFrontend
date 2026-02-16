@@ -92,6 +92,17 @@ const ProfesorDashboardPage = () => {
 
   return (
     <div className="relative overflow-hidden min-h-screen">
+      {/* Imagen de fondo JorgePeliculas como silueta */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.08] bg-no-repeat bg-contain"
+        style={{ 
+          backgroundImage: 'url(/JorgePeliculas.jpeg)',
+          backgroundPosition: 'center -150px',
+          mixBlendMode: 'screen',
+          filter: 'grayscale(100%) contrast(1.2)'
+        }}
+      />
+      
       {/* Ambient Background */}
       <AmbientGlows variant="cool" />
       

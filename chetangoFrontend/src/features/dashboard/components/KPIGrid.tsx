@@ -19,9 +19,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.comparativaAsistenciasMesAnterior,
       comparison: 'vs mes anterior',
       icon: CheckCircle2,
-      color: '#34d399',
-      bgColor: 'rgba(52, 211, 153, 0.15)',
-      glowColor: 'rgba(52, 211, 153, 0.1)'
+      color: '#22d3ee', // Cyan vibrante
+      bgColor: 'rgba(34, 211, 238, 0.1)',
+      glowColor: 'rgba(34, 211, 238, 0.08)'
     },
     {
       id: 'ingresos',
@@ -30,9 +30,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.crecimientoIngresosMesAnterior,
       comparison: 'vs mes anterior',
       icon: DollarSign,
-      color: '#22c55e',
-      bgColor: 'rgba(34, 197, 94, 0.15)',
-      glowColor: 'rgba(34, 197, 94, 0.1)'
+      color: '#22c55e', // Verde brillante para dinero
+      bgColor: 'rgba(34, 197, 94, 0.1)',
+      glowColor: 'rgba(34, 197, 94, 0.08)'
     },
     {
       id: 'clases',
@@ -41,9 +41,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: 0,
       comparison: `${kpis.asistenciasMes} asistencias este mes`,
       icon: Calendar,
-      color: '#7c5af8',
-      bgColor: 'rgba(124, 90, 248, 0.15)',
-      glowColor: 'rgba(124, 90, 248, 0.1)'
+      color: '#a855f7', // Morado más brillante
+      bgColor: 'rgba(168, 85, 247, 0.1)',
+      glowColor: 'rgba(168, 85, 247, 0.08)'
     },
     {
       id: 'paquetes',
@@ -52,9 +52,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.comparativaPaquetesVendidosMesAnterior,
       comparison: 'próximos 7 días',
       icon: Package,
-      color: '#f59e0b',
-      bgColor: 'rgba(245, 158, 11, 0.15)',
-      glowColor: 'rgba(245, 158, 11, 0.1)'
+      color: '#fbbf24', // Amarillo más brillante
+      bgColor: 'rgba(251, 191, 36, 0.1)',
+      glowColor: 'rgba(251, 191, 36, 0.08)'
     }
   ]
 
@@ -66,9 +66,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.comparativaEgresosMesAnterior,
       comparison: 'vs mes anterior',
       icon: TrendingDown,
-      color: '#ef4444',
-      bgColor: 'rgba(239, 68, 68, 0.15)',
-      glowColor: 'rgba(239, 68, 68, 0.1)'
+      color: '#f43f5e', // Rojo-rosa más brillante
+      bgColor: 'rgba(244, 63, 94, 0.1)',
+      glowColor: 'rgba(244, 63, 94, 0.08)'
     },
     {
       id: 'ganancia',
@@ -77,23 +77,23 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.comparativaGananciaMesAnterior,
       comparison: 'vs mes anterior',
       icon: TrendingUp,
-      color: kpis.gananciaNeta >= 0 ? '#10b981' : '#ef4444',
-      bgColor: kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-      glowColor: kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'
+      color: kpis.gananciaNeta >= 0 ? '#22c55e' : '#f43f5e',
+      bgColor: kpis.gananciaNeta >= 0 ? 'rgba(34, 197, 94, 0.1)' : 'rgba(244, 63, 94, 0.1)',
+      glowColor: kpis.gananciaNeta >= 0 ? 'rgba(34, 197, 94, 0.08)' : 'rgba(244, 63, 94, 0.08)'
     }
   ]
 
   return (
     <>
       {/* Primera fila: 4 tarjetas principales */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {kpiConfigs.map((kpi) => (
           <KPICard key={kpi.id} {...kpi} />
         ))}
       </div>
 
       {/* Segunda fila: 2 tarjetas financieras */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
         {kpiConfigsFinancial.map((kpi) => (
           <KPICard key={kpi.id} {...kpi} />
         ))}
