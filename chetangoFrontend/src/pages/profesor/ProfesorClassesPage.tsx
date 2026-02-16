@@ -4,30 +4,30 @@
 // Requirements: 8.1-8.6
 // ============================================
 
-import { useState, useCallback } from 'react'
-import { CalendarDays, Calendar, History, ChevronDown, ChevronUp, Eye, BarChart3 } from 'lucide-react'
 import {
-  GlassPanel,
-  Toaster,
-  Skeleton,
-  SkeletonCard,
-  AmbientGlows,
-  TypographyBackdrop,
-  GlassOrb,
-  FloatingParticle,
-  CreativeAnimations,
-  FloatingBadge,
-  GlassButton,
-  Badge,
+    AmbientGlows,
+    Badge,
+    CreativeAnimations,
+    FloatingBadge,
+    FloatingParticle,
+    GlassButton,
+    GlassOrb,
+    GlassPanel,
+    Skeleton,
+    SkeletonCard,
+    Toaster,
+    TypographyBackdrop,
 } from '@/design-system'
-import { useProfesorClasses } from '@/features/classes/hooks'
 import {
-  ClaseCardProfesor,
-  ClaseDetailModal,
-  ResumenAsistenciaModal,
+    ClaseCardProfesor,
+    ClaseDetailModal,
+    ResumenAsistenciaModal,
 } from '@/features/classes/components'
-import { formatearFecha, formatearHora24 } from '@/features/classes/utils/dateUtils'
+import { useProfesorClasses } from '@/features/classes/hooks'
 import type { ClaseProfesor, FiltroAnterior } from '@/features/classes/types/classTypes'
+import { formatearFecha, formatearHora24 } from '@/features/classes/utils/dateUtils'
+import { BarChart3, Calendar, CalendarDays, ChevronDown, ChevronUp, Eye, History } from 'lucide-react'
+import { useCallback, useState } from 'react'
 
 // ============================================
 // SKELETON LOADERS

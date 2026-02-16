@@ -3,15 +3,15 @@
 // ============================================
 
 import { AmbientGlows } from '@/design-system/decorative'
-import {
-  AccionesRapidasCard,
-  ConfiguracionCard,
-  DatosPersonalesCard,
-  PerfilProfesionalCard,
-  ProfileHeader,
-} from '@/features/profile/profesor/components'
-import { useProfesorProfileQuery } from '@/features/profile/profesor/api/profileQueries'
 import { useAuth } from '@/features/auth'
+import { useProfesorProfileQuery } from '@/features/profile/profesor/api/profileQueries'
+import {
+    AccionesRapidasCard,
+    ConfiguracionCard,
+    DatosPersonalesCard,
+    PerfilProfesionalCard,
+    ProfileHeader,
+} from '@/features/profile/profesor/components'
 
 export const ProfesorProfilePage = () => {
   const { session } = useAuth()
