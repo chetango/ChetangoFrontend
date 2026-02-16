@@ -97,25 +97,25 @@ function ProximaClaseItem({ clase, onViewDetail }: ProximaClaseItemProps) {
   const fechaLabel = formatearFecha(clase.fecha)
 
   return (
-    <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-colors">
-      <div className="flex items-start justify-between mb-2">
-        <div>
+    <div className="p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/[0.08] active:bg-white/[0.06] transition-colors">
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <div className="min-w-0 flex-1">
           <Badge variant="info" shape="pill" className="mb-2 text-xs">
             {fechaLabel}
           </Badge>
-          <h4 className="text-white font-medium">{clase.nombre}</h4>
+          <h4 className="text-white font-medium text-sm sm:text-base truncate">{clase.nombre}</h4>
         </div>
         <button
           onClick={() => onViewDetail(clase)}
-          className="text-gray-400 hover:text-white transition-colors text-sm"
+          className="text-gray-400 hover:text-white active:text-gray-300 transition-colors text-xs sm:text-sm flex-shrink-0"
         >
           Ver detalle
         </button>
       </div>
-      <div className="flex items-center gap-4 text-sm text-gray-400">
-        <span>{formatearHora24(clase.horaInicio)} - {formatearHora24(clase.horaFin)}</span>
-        <span>{clase.ubicacion}</span>
-        <span>{clase.inscriptos} inscriptos</span>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs sm:text-sm text-gray-400">
+        <span className="flex-shrink-0">{formatearHora24(clase.horaInicio)} - {formatearHora24(clase.horaFin)}</span>
+        <span className="truncate">{clase.ubicacion}</span>
+        <span className="flex-shrink-0">{clase.inscriptos} inscriptos</span>
       </div>
     </div>
   )
@@ -136,14 +136,14 @@ function ClaseAnteriorItem({ clase, onViewResumen, onViewDetail }: ClaseAnterior
   const colorClass = porcentaje >= 80 ? 'text-emerald-400' : porcentaje >= 65 ? 'text-yellow-400' : 'text-red-400'
 
   return (
-    <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-      <div className="flex items-start justify-between mb-3">
-        <div>
+    <div className="p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-0 mb-3">
+        <div className="min-w-0 flex-1">
           <p className="text-gray-500 text-xs mb-1 capitalize">
             {formatearFecha(clase.fecha, true)}
           </p>
-          <h4 className="text-white font-medium">{clase.nombre}</h4>
-          <p className="text-gray-400 text-sm">{clase.tipo}</p>
+          <h4 className="text-white font-medium text-sm sm:text-base truncate">{clase.nombre}</h4>
+          <p className="text-gray-400 text-xs sm:text-sm truncate">{clase.tipo}</p>
         </div>
         <Badge
           variant={clase.estado === 'finalizada' ? 'success' : 'none'}
@@ -153,20 +153,20 @@ function ClaseAnteriorItem({ clase, onViewResumen, onViewDetail }: ClaseAnterior
         </Badge>
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-gray-400 text-sm">Asistencia:</span>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-gray-400 text-xs sm:text-sm">Asistencia:</span>
           <span className={`font-semibold ${colorClass}`}>{porcentaje}%</span>
-          <span className="text-gray-500 text-sm">
+          <span className="text-gray-500 text-xs sm:text-sm">
             ({clase.asistenciaReal || 0}/{clase.inscriptos})
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <GlassButton
             variant="ghost"
             size="sm"
             onClick={() => onViewResumen(clase)}
-            className="text-xs"
+            className="text-xs min-h-[44px] flex-1 sm:flex-none"
           >
             <BarChart3 className="w-3.5 h-3.5" />
             <span>Ver Resumen</span>
@@ -175,7 +175,7 @@ function ClaseAnteriorItem({ clase, onViewResumen, onViewDetail }: ClaseAnterior
             variant="ghost"
             size="sm"
             onClick={() => onViewDetail(clase)}
-            className="text-xs"
+            className="text-xs min-h-[44px] flex-1 sm:flex-none"
           >
             <Eye className="w-3.5 h-3.5" />
             <span>Ver</span>
@@ -336,15 +336,15 @@ export default function ProfesorClassesPage() {
         <FloatingParticle position="bottom-[30%] right-[18%]" color="#7c5af8" size="w-4 h-4" delay="1.5s" />
 
         {/* Main Content */}
-        <div className="relative z-10 p-4 sm:p-6 md:p-8 md:pl-[4%] md:pr-[4%] lg:pl-[6%] lg:pr-[6%]">
+        <div className="relative z-10 px-4 py-4 sm:px-6 sm:py-6 md:px-8 md:py-8 lg:px-[6%]">
           {/* Header */}
-          <div className="mb-6 md:mb-10 max-w-[1600px]">
-            <FloatingBadge color="info" className="mb-4 sm:mb-6">
+          <div className="mb-4 sm:mb-6 md:mb-8 lg:mb-10 max-w-[1600px]">
+            <FloatingBadge color="info" className="mb-3 sm:mb-4 md:mb-6">
               Vista Profesor
             </FloatingBadge>
 
             <h1
-              className="text-[#f9fafb] mb-3 sm:mb-4 tracking-tight text-3xl sm:text-4xl md:text-[48px]"
+              className="text-[#f9fafb] mb-2 sm:mb-3 md:mb-4 tracking-tight text-2xl sm:text-3xl md:text-4xl lg:text-[48px]"
               style={{ fontWeight: 600, lineHeight: '1.1', letterSpacing: '-0.03em' }}
             >
               Mis Clases
@@ -356,18 +356,18 @@ export default function ProfesorClassesPage() {
           </div>
 
           {/* Two Column Layout */}
-          <div className="max-w-[1600px] grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="max-w-[1600px] grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
             {/* Main Column: Clases de Hoy */}
             <div className="lg:col-span-7">
-              <GlassPanel className="p-6">
+              <GlassPanel className="p-4 sm:p-5 md:p-6">
                 {/* Section Header */}
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 rounded-lg bg-[#c93448]/20">
-                    <CalendarDays className="w-5 h-5 text-[#c93448]" />
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-[#c93448]/20 flex-shrink-0">
+                    <CalendarDays className="w-4 h-4 sm:w-5 sm:h-5 text-[#c93448]" />
                   </div>
-                  <div>
-                    <h2 className="text-xl font-semibold text-white">Clases de Hoy</h2>
-                    <p className="text-gray-400 text-sm capitalize">
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-base sm:text-lg md:text-xl font-semibold text-white truncate">Clases de Hoy</h2>
+                    <p className="text-gray-400 text-xs sm:text-sm capitalize truncate">
                       {diaSemanaActual}, {fechaFormateada}
                     </p>
                   </div>
@@ -396,14 +396,14 @@ export default function ProfesorClassesPage() {
               </GlassPanel>
 
               {/* Clases Anteriores - Collapsible */}
-              <GlassPanel className="p-6 mt-6">
+              <GlassPanel className="p-4 sm:p-5 md:p-6 mt-4 sm:mt-6">
                 <button
                   onClick={toggleClasesAnteriores}
-                  className="w-full flex items-center justify-between"
+                  className="w-full flex items-center justify-between min-h-[44px]"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-gray-500/20">
-                      <History className="w-5 h-5 text-gray-400" />
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="p-1.5 sm:p-2 rounded-lg bg-gray-500/20 flex-shrink-0">
+                      <History className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                     </div>
                     <h2 className="text-lg font-semibold text-white">Clases Anteriores</h2>
                   </div>
@@ -450,11 +450,11 @@ export default function ProfesorClassesPage() {
 
             {/* Sidebar: Próximas Clases */}
             <div className="lg:col-span-5">
-              <GlassPanel className="p-6 sticky top-6">
+              <GlassPanel className="p-4 sm:p-5 md:p-6 lg:sticky lg:top-6">
                 {/* Section Header */}
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 rounded-lg bg-purple-500/20">
-                    <Calendar className="w-5 h-5 text-purple-400" />
+                <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-purple-500/20 flex-shrink-0">
+                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />
                   </div>
                   <h2 className="text-lg font-semibold text-white">Próximas Clases</h2>
                 </div>
