@@ -20,9 +20,9 @@
  * ```
  */
 
-import { type ReactNode, type ElementType } from 'react';
-import { useBreakpoint } from '../../hooks/useBreakpoint';
+import { type ElementType, type ReactNode } from 'react';
 import { cn } from '../../constants/responsive';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 
 interface ResponsiveContainerProps {
   /** Render prop que recibe información del dispositivo */

@@ -16,8 +16,8 @@
  * ```
  */
 
-import { useState, useEffect } from 'react';
-import { type Breakpoint, getDeviceCategory, type DeviceCategory } from '../constants/breakpoints';
+import { useEffect, useState } from 'react';
+import { getDeviceCategory, type Breakpoint, type DeviceCategory } from '../constants/breakpoints';
 import { getCurrentBreakpoint, isTouchDevice } from '../constants/responsive';
 
 interface UseBreakpointReturn {

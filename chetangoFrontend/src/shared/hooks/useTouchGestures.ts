@@ -31,7 +31,7 @@
  */
 
 import { useDrag, useGesture } from '@use-gesture/react';
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 /**
  * Configuración para swipe
