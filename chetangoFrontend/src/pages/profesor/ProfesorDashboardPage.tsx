@@ -108,7 +108,7 @@ const ProfesorDashboardPage = () => {
       
       {/* Content */}
       <div className="relative z-10">
-        <div className="max-w-[1600px] mx-auto px-6 md:px-8 lg:px-12 py-8 md:py-12">
+        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6 md:py-8 lg:py-12">
           
           {/* Header Section */}
           <ProfesorHeader 
@@ -126,7 +126,7 @@ const ProfesorDashboardPage = () => {
           <ProfesorKPIs kpis={dashboard.kpIs} />
           
           {/* Grid: Acciones + Gráfica */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 md:mb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 md:mb-10">
             <QuickActionsProfesor />
             <AsistenciaChart grafica={dashboard.graficaAsistencia30Dias} />
           </div>

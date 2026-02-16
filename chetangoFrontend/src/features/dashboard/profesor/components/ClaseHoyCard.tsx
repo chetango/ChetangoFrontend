@@ -50,24 +50,24 @@ export const ClaseHoyCard = ({ clase, onRegistrarAsistencia }: ClaseHoyCardProps
 
   return (
     <GlassPanel
-      className={`p-6 group transition-all duration-300 ${
+      className={`p-4 sm:p-5 md:p-6 group transition-all duration-300 ${
         isEnCurso 
           ? 'ring-2 ring-[#34d399] shadow-[0_8px_32px_rgba(52,211,153,0.3)]' 
           : 'hover:scale-[1.02]'
       }`}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <h3 className="text-[#f9fafb] text-lg font-semibold mb-1">{clase.nombre}</h3>
-          <div className="flex items-center gap-2">
-            <span className="text-[#9ca3af] text-sm">{clase.nivel}</span>
-            <span className="w-1 h-1 rounded-full bg-[#6b7280]" />
-            <span className="text-[#9ca3af] text-sm capitalize">{clase.tipo}</span>
+      <div className="flex items-start justify-between gap-2 mb-3 sm:mb-4">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-[#f9fafb] text-base sm:text-lg font-semibold mb-1 truncate">{clase.nombre}</h3>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[#9ca3af] text-xs sm:text-sm">{clase.nivel}</span>
+            <span className="w-1 h-1 rounded-full bg-[#6b7280] flex-shrink-0" />
+            <span className="text-[#9ca3af] text-xs sm:text-sm capitalize">{clase.tipo}</span>
           </div>
         </div>
         <span
-          className="px-3 py-1 rounded-lg text-xs font-medium border whitespace-nowrap"
+          className="px-2 sm:px-3 py-1 rounded-lg text-xs font-medium border whitespace-nowrap flex-shrink-0"
           style={{
             background: estadoBadge.bg,
             borderColor: estadoBadge.border,
@@ -79,14 +79,14 @@ export const ClaseHoyCard = ({ clase, onRegistrarAsistencia }: ClaseHoyCardProps
       </div>
 
       {/* Horario */}
-      <div className="flex items-center gap-3 mb-4 p-3 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)]">
-        <Clock className="w-5 h-5 text-[#7c5af8]" />
-        <div className="flex-1">
-          <p className="text-[#f9fafb] font-medium">
+      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 p-2.5 sm:p-3 rounded-lg bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)]">
+        <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#7c5af8] flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <p className="text-[#f9fafb] font-medium text-sm sm:text-base">
             {formatearHora(clase.horaInicio)} - {formatearHora(clase.horaFin)}
           </p>
           {clase.minutosParaInicio !== undefined && clase.estado === 'programada' && (
-            <p className={`text-sm ${isProxima ? 'text-[#f59e0b]' : 'text-[#9ca3af]'}`}>
+            <p className={`text-xs sm:text-sm ${isProxima ? 'text-[#f59e0b]' : 'text-[#9ca3af]'}`}>
               {getTiempoRestante()}
             </p>
           )}
@@ -94,7 +94,7 @@ export const ClaseHoyCard = ({ clase, onRegistrarAsistencia }: ClaseHoyCardProps
       </div>
 
       {/* Alumnos */}
-      <div className="flex items-center gap-2 mb-5 text-[#d1d5db] text-sm">
+      <div className="flex items-center gap-2 mb-4 sm:mb-5 text-[#d1d5db] text-xs sm:text-sm">
         <Users className="w-4 h-4 text-[#9ca3af]" />
         <span>
           {clase.alumnosPresentes !== undefined
@@ -108,22 +108,23 @@ export const ClaseHoyCard = ({ clase, onRegistrarAsistencia }: ClaseHoyCardProps
       <button
         onClick={() => onRegistrarAsistencia(clase.idClase)}
         className={`
-          w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all duration-300
+          w-full flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-300 min-h-[44px]
           ${isEnCurso
             ? 'bg-gradient-to-r from-[#34d399] to-[#059669] text-white shadow-[0_4px_16px_rgba(52,211,153,0.4)] hover:shadow-[0_8px_24px_rgba(52,211,153,0.5)]'
             : 'bg-gradient-to-r from-[#7c5af8] to-[#6938ef] text-white shadow-[0_4px_16px_rgba(124,90,248,0.4)] hover:shadow-[0_8px_24px_rgba(124,90,248,0.5)]'
           }
-          hover:scale-[1.02] font-medium
+          hover:scale-[1.02] active:scale-[0.98] font-medium text-sm sm:text-base
         `}
       >
         {isEnCurso ? (
           <>
-            <Play className="w-5 h-5" />
-            Registrar Asistencia Ahora
+            <Play className="w-4 h-4 sm:w-5 sm:h-5" />
+            <span className="hidden sm:inline">Registrar Asistencia Ahora</span>
+            <span className="sm:hidden">Registrar Ahora</span>
           </>
         ) : (
           <>
-            <CheckCircle2 className="w-5 h-5" />
+            <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
             Registrar Asistencia
           </>
         )}
