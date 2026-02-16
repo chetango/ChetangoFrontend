@@ -10,7 +10,7 @@ import type { SolicitudClasePrivadaDTO, SolicitudRenovacionPaqueteDTO } from '@/
 import { getPrimaryRoleText } from '@/shared/utils'
 import { Bell, ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import styles from './MainLayout.module.scss'
 
 interface NavItem {
@@ -48,7 +48,6 @@ const MainLayout = ({
   const notificationRef = useRef<HTMLDivElement>(null)
   const profileRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
-  const navigate = useNavigate()
   
   const isAdmin = user?.roles?.includes('admin')
   const userRole = isAdmin ? 'admin' : (user?.roles?.includes('profesor') ? 'profesor' : 'alumno')

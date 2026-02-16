@@ -11,9 +11,7 @@ interface DashboardHeaderProps {
 }
 
 export const DashboardHeader = ({ 
-  userName = 'Administrador',
-  userRole = 'Administrador',
-  academyName = 'Academia Chetango'
+  userName = 'Administrador'
 }: DashboardHeaderProps) => {
   const currentTime = new Date()
 
