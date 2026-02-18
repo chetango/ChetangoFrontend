@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 
 interface QuickActionButtonProps {
   title: string
-  description: string
   icon: LucideIcon
   color: string
   path: string
@@ -15,7 +14,6 @@ interface QuickActionButtonProps {
 
 export const QuickActionButton = ({
   title,
-  description,
   icon: Icon,
   color,
   path
