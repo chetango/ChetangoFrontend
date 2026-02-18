@@ -140,8 +140,8 @@ const StudentDashboardPage = () => {
           {/* Alertas Importantes */}
           <AlertasImportantes paquete={dashboard.paqueteActivo} />
 
-          {/* Main Grid: QR + Próxima Clase - Stack en móvil, 2 columnas en desktop */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 md:mb-10">
+          {/* Main Grid: QR + Próxima Clase - 2 columnas siempre */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6">
             <CredencialDigitalCard alumno={dashboard} />
             <ProximaClaseCard clase={dashboard.proximaClase} />
           </div>
