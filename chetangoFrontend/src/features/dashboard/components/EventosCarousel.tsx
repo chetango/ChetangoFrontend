@@ -27,7 +27,7 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
   }
 
   // Swipe gestures para móvil
-  const swipeHandlers = useSwipe({
+  const { bind } = useSwipe({
     onSwipeLeft: nextEvento,
     onSwipeRight: prevEvento,
     threshold: 50
@@ -35,12 +35,10 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
 
   // Autoplay - cambiar cada 5 segundos
   useEffect(() => {
-    if (eventos.length <= 1) return
+    if (eventos.length <= 1 || isPaused) return
 
     const interval = setInterval(() => {
-      if (!isPaused) {
-        setEventoActual((prev) => (prev + 1) % eventos.length)
-      }
+      setEventoActual((prev) => (prev + 1) % eventos.length)
     }, 5000)
 
     return () => clearInterval(interval)
@@ -91,7 +89,7 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
 
           {/* Evento Card con swipe gestures */}
           <div 
-            {...swipeHandlers}
+            {...bind()}
             className="flex-1 touch-pan-y"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
@@ -117,7 +115,7 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
               </div>
               <div className="p-4 sm:p-5 md:p-6">
                 <h4 className="text-[#f9fafb] text-base sm:text-lg font-semibold mb-2">{evento.titulo}</h4>
-                <p className="text-[#9ca3af] text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">{evento.descripcion}</p>
+                <p className="text-[#9ca3af] text-xs sm:text-sm mb-3 sm:mb-4">{evento.descripcion}</p>
                 {evento.precio !== null && evento.precio > 0 && (
                   <>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">

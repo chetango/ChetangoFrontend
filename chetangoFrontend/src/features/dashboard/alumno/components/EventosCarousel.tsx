@@ -27,7 +27,7 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
   }
 
   // Swipe gestures para móvil
-  const swipeHandlers = useSwipe({
+  const { bind } = useSwipe({
     onSwipeLeft: nextEvento,
     onSwipeRight: prevEvento,
     threshold: 50
@@ -35,12 +35,10 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
 
   // Autoplay - cambiar cada 5 segundos
   useEffect(() => {
-    if (eventos.length <= 1) return
+    if (eventos.length <= 1 || isPaused) return
 
     const interval = setInterval(() => {
-      if (!isPaused) {
-        setEventoActual((prev) => (prev + 1) % eventos.length)
-      }
+      setEventoActual((prev) => (prev + 1) % eventos.length)
     }, 5000)
 
     return () => clearInterval(interval)
@@ -91,15 +89,10 @@ export const EventosCarousel = ({ eventos }: EventosCarouselProps) => {
 
           {/* Evento Card con swipe gestures */}
           <div 
-            {...swipeHandlers}
+            {...bind()}
             className="flex-1 touch-pan-y"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
-            onTouchStart={() => {
-              setIsPaused(true)
-              // Reanudar después de 2 segundos de inactividad
-              setTimeout(() => setIsPaused(false), 2000)
-            }}
           >
             <GlassPanel className="overflow-hidden group cursor-pointer">
               <div className="relative h-40 sm:h-44 md:h-48 overflow-hidden">
