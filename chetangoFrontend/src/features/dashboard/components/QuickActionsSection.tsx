@@ -10,6 +10,7 @@ export const QuickActionsSection = () => {
     {
       id: 'asistencia',
       title: 'Asistencia',
+      titleLong: 'Registrar Asistencia',
       description: 'Marcar alumno presente',
       icon: CheckCircle2,
       color: '#34d399',
@@ -18,6 +19,7 @@ export const QuickActionsSection = () => {
     {
       id: 'pago',
       title: 'Pago',
+      titleLong: 'Registrar Pago',
       description: 'Nuevo pago de alumno',
       icon: DollarSign,
       color: '#c93448',
@@ -26,6 +28,7 @@ export const QuickActionsSection = () => {
     {
       id: 'paquete',
       title: 'Paquete',
+      titleLong: 'Asignar Paquete',
       description: 'Asignar paquete a alumno',
       icon: Package,
       color: '#f59e0b',
@@ -34,6 +37,7 @@ export const QuickActionsSection = () => {
     {
       id: 'clase',
       title: 'Clase',
+      titleLong: 'Programar Clase',
       description: 'Programar nueva clase',
       icon: Calendar,
       color: '#7c5af8',
