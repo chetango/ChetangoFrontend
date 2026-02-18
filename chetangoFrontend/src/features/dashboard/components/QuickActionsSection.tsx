@@ -29,7 +29,7 @@ export const QuickActionsSection = () => {
       description: 'Asignar paquete a alumno',
       icon: Package,
       color: '#f59e0b',
-      path: '/admin/packages'
+      path: '/admin/paquetes'
     },
     {
       id: 'clase',
