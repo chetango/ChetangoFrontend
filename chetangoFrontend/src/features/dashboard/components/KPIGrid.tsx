@@ -14,14 +14,14 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
   const kpiConfigs = [
     {
       id: 'asistencias',
-      title: 'Asistencias Registradas Hoy',
+      title: 'Asistencias Hoy',
       value: kpis.asistenciasHoy,
       change: kpis.comparativaAsistenciasMesAnterior,
       comparison: 'vs mes anterior',
       icon: CheckCircle2,
-      color: '#22d3ee', // Cyan vibrante
-      bgColor: 'rgba(34, 211, 238, 0.1)',
-      glowColor: 'rgba(34, 211, 238, 0.08)'
+      color: '#06b6d4', // Cyan intenso
+      bgColor: 'rgba(6, 182, 212, 0.25)',
+      glowColor: 'rgba(6, 182, 212, 0.5)'
     },
     {
       id: 'ingresos',
@@ -30,20 +30,20 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.crecimientoIngresosMesAnterior,
       comparison: 'vs mes anterior',
       icon: DollarSign,
-      color: '#22c55e', // Verde brillante para dinero
-      bgColor: 'rgba(34, 197, 94, 0.1)',
-      glowColor: 'rgba(34, 197, 94, 0.08)'
+      color: '#10b981', // Verde esmeralda brillante
+      bgColor: 'rgba(16, 185, 129, 0.25)',
+      glowColor: 'rgba(16, 185, 129, 0.5)'
     },
     {
       id: 'clases',
       title: 'Clases Próximos 7 Días',
       value: kpis.clasesProximos7Dias,
-      change: 0,
-      comparison: `${kpis.asistenciasMes} asistencias este mes`,
+      change: kpis.comparativaAsistenciasMesAnterior,
+      comparison: 'vs mes anterior',
       icon: Calendar,
-      color: '#a855f7', // Morado más brillante
-      bgColor: 'rgba(168, 85, 247, 0.1)',
-      glowColor: 'rgba(168, 85, 247, 0.08)'
+      color: '#8b5cf6', // Morado violeta intenso
+      bgColor: 'rgba(139, 92, 246, 0.25)',
+      glowColor: 'rgba(139, 92, 246, 0.5)'
     },
     {
       id: 'paquetes',
@@ -52,9 +52,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.comparativaPaquetesVendidosMesAnterior,
       comparison: 'próximos 7 días',
       icon: Package,
-      color: '#fbbf24', // Amarillo más brillante
-      bgColor: 'rgba(251, 191, 36, 0.1)',
-      glowColor: 'rgba(251, 191, 36, 0.08)'
+      color: '#f59e0b', // Naranja ámbar vibrante
+      bgColor: 'rgba(245, 158, 11, 0.25)',
+      glowColor: 'rgba(245, 158, 11, 0.5)'
     }
   ]
 
@@ -66,9 +66,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.comparativaEgresosMesAnterior,
       comparison: 'vs mes anterior',
       icon: TrendingDown,
-      color: '#f43f5e', // Rojo-rosa más brillante
-      bgColor: 'rgba(244, 63, 94, 0.1)',
-      glowColor: 'rgba(244, 63, 94, 0.08)'
+      color: '#dc2626', // Rojo intenso vibrante
+      bgColor: 'rgba(220, 38, 38, 0.25)',
+      glowColor: 'rgba(220, 38, 38, 0.5)'
     },
     {
       id: 'ganancia',
@@ -77,9 +77,9 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
       change: kpis.comparativaGananciaMesAnterior,
       comparison: 'vs mes anterior',
       icon: TrendingUp,
-      color: kpis.gananciaNeta >= 0 ? '#22c55e' : '#f43f5e',
-      bgColor: kpis.gananciaNeta >= 0 ? 'rgba(34, 197, 94, 0.1)' : 'rgba(244, 63, 94, 0.1)',
-      glowColor: kpis.gananciaNeta >= 0 ? 'rgba(34, 197, 94, 0.08)' : 'rgba(244, 63, 94, 0.08)'
+      color: kpis.gananciaNeta >= 0 ? '#10b981' : '#dc2626',
+      bgColor: kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(220, 38, 38, 0.25)',
+      glowColor: kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.5)' : 'rgba(220, 38, 38, 0.5)'
     }
   ]
 
