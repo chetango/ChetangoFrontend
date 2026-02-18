@@ -1,16 +1,18 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 interface GlassPanelProps {
   children: ReactNode;
   className?: string;
   hover?: boolean;
   onClick?: () => void;
+  style?: CSSProperties;
 }
 
-export function GlassPanel({ children, className = '', hover = false, onClick }: GlassPanelProps) {
+export function GlassPanel({ children, className = '', hover = false, onClick, style }: GlassPanelProps) {
   return (
     <div
       onClick={onClick}
+      style={style}
       className={`
         backdrop-blur-xl
         bg-gradient-to-br from-[rgba(26,26,32,0.6)] to-[rgba(18,18,24,0.7)] 
