@@ -27,11 +27,11 @@ export const AlertsPanel = ({ alertas }: AlertsPanelProps) => {
 
   return (
     <div className="lg:col-span-1">
-      <GlassPanel className="p-4 sm:p-5 md:p-6">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <div className="flex items-center gap-2">
-            <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-[#f59e0b]" />
-            <h3 className="text-[#f9fafb] text-lg sm:text-xl font-bold">Alertas</h3>
+      <GlassPanel className="p-3 sm:p-4">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Bell className="w-4 h-4 text-[#f59e0b]" />
+            <h3 className="text-[#f9fafb] text-base sm:text-lg font-bold">Alertas</h3>
           </div>
           {alertas.length > 0 && (
             <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[rgba(239,68,68,0.15)] border border-[rgba(239,68,68,0.3)] text-[#fca5a5] text-xs">
@@ -41,7 +41,7 @@ export const AlertsPanel = ({ alertas }: AlertsPanelProps) => {
         </div>
 
         {alertas.length > 0 ? (
-          <div className="space-y-2 sm:space-y-3">
+          <div className="space-y-2">
             {alertas.map((alerta, index) => (
               <AlertItem
                 key={index}

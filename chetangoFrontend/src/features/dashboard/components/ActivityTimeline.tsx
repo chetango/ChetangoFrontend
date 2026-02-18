@@ -24,11 +24,11 @@ export const ActivityTimeline = ({ ultimosPagos, onRefresh }: ActivityTimelinePr
 
   return (
     <div className="lg:col-span-2">
-      <GlassPanel className="p-4 sm:p-5 md:p-6">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#7c5af8]" />
-            <h3 className="text-[#f9fafb] text-lg sm:text-xl font-bold">Última Actividad</h3>
+      <GlassPanel className="p-3 sm:p-4">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Clock className="w-4 h-4 text-[#7c5af8]" />
+            <h3 className="text-[#f9fafb] text-base sm:text-lg font-bold">Última Actividad</h3>
           </div>
           {onRefresh && (
             <button 
@@ -42,7 +42,7 @@ export const ActivityTimeline = ({ ultimosPagos, onRefresh }: ActivityTimelinePr
         </div>
 
         {actividades.length > 0 ? (
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-2 sm:space-y-3">
             {actividades.map((actividad) => (
               <ActivityItem
                 key={actividad.id}
@@ -62,12 +62,9 @@ export const ActivityTimeline = ({ ultimosPagos, onRefresh }: ActivityTimelinePr
 
         {/* Footer */}
         {actividades.length > 0 && (
-          <div className="mt-6 pt-4 border-t border-[rgba(255,255,255,0.08)] flex items-center justify-between">
-            <p className="text-[#6b7280] text-xs">
-              Mostrando {actividades.length} actividades recientes
-            </p>
-            <button className="text-[#7c5af8] text-xs font-medium hover:underline">
-              Ver todo el historial →
+          <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.08)]">
+            <button className="text-[#c93448] text-xs font-medium hover:underline">
+              Ver todo →
             </button>
           </div>
         )}

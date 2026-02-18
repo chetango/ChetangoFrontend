@@ -46,22 +46,22 @@ export const ChartsSection = ({ graficaAsistencias, graficaIngresos }: ChartsSec
   const datosIngresos = transformarDatosIngresos(graficaIngresos)
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 md:mb-10">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-5">
       
       {/* Asistencias Semana */}
-      <GlassPanel className="p-4 sm:p-5 md:p-6">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
+      <GlassPanel className="p-3 sm:p-4">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
           <div>
-            <h3 className="text-[#f9fafb] text-lg sm:text-xl font-bold mb-1">Asistencias de la Semana</h3>
-            <p className="text-[#9ca3af] text-xs sm:text-sm">Tendencia semanal de asistencia</p>
+            <h3 className="text-[#f9fafb] text-base sm:text-lg font-bold mb-0.5">Asistencias de la Semana</h3>
+            <p className="text-[#9ca3af] text-xs">Tendencia semanal</p>
           </div>
-          <div className="p-2 rounded-lg bg-[rgba(52,211,153,0.15)] border border-[rgba(52,211,153,0.3)]">
-            <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-[#34d399]" />
+          <div className="p-1.5 rounded-lg bg-[rgba(52,211,153,0.15)] border border-[rgba(52,211,153,0.3)]">
+            <Activity className="w-4 h-4 text-[#34d399]" />
           </div>
         </div>
 
         {datosAsistencias.length > 0 ? (
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={180}>
             <LineChart data={datosAsistencias}>
               <defs>
                 <linearGradient id="colorAsistencias" x1="0" y1="0" x2="0" y2="1">
@@ -107,19 +107,19 @@ export const ChartsSection = ({ graficaAsistencias, graficaIngresos }: ChartsSec
       </GlassPanel>
 
       {/* Ingresos 6 Meses */}
-      <GlassPanel className="p-4 sm:p-5 md:p-6">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
+      <GlassPanel className="p-3 sm:p-4">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
           <div>
-            <h3 className="text-[#f9fafb] text-lg sm:text-xl font-bold mb-1">Ingresos Últimos 6 Meses</h3>
-            <p className="text-[#9ca3af] text-xs sm:text-sm">Evolución mensual de ingresos</p>
+            <h3 className="text-[#f9fafb] text-base sm:text-lg font-bold mb-0.5">Ingresos Últimos 6 Meses</h3>
+            <p className="text-[#9ca3af] text-xs">Evolución mensual</p>
           </div>
-          <div className="p-2 rounded-lg bg-[rgba(201,52,72,0.15)] border border-[rgba(201,52,72,0.3)]">
-            <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-[#c93448]" />
+          <div className="p-1.5 rounded-lg bg-[rgba(201,52,72,0.15)] border border-[rgba(201,52,72,0.3)]">
+            <DollarSign className="w-4 h-4 text-[#c93448]" />
           </div>
         </div>
 
         {datosIngresos.length > 0 ? (
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={180}>
             <BarChart data={datosIngresos}>
               <defs>
                 <linearGradient id="colorIngresos" x1="0" y1="0" x2="0" y2="1">

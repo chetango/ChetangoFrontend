@@ -21,11 +21,11 @@ interface KPICardProps {
 
 const KPICard = ({ title, value, subtitle, icon: Icon, color, bgColor }: KPICardProps) => (
   <GlassPanel 
-    className="p-4 sm:p-5 md:p-6 group hover:scale-[1.03] active:scale-[1.01] transition-all duration-300 cursor-pointer"
+    className="p-3 sm:p-4 group hover:scale-[1.03] active:scale-[1.01] transition-all duration-300 cursor-pointer"
   >
-    <div className="flex items-start justify-between mb-3 sm:mb-4">
+    <div className="flex items-start justify-between mb-2 sm:mb-3">
       <div
-        className="p-2 sm:p-2.5 md:p-3 backdrop-blur-md rounded-xl"
+        className="p-2 backdrop-blur-md rounded-xl"
         style={{
           background: bgColor,
           color: color
@@ -34,8 +34,8 @@ const KPICard = ({ title, value, subtitle, icon: Icon, color, bgColor }: KPICard
         <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
       </div>
     </div>
-    <h3 className="text-[#f9fafb] text-xl sm:text-2xl md:text-3xl font-bold mb-1">{value}</h3>
-    <p className="text-[#9ca3af] text-xs sm:text-sm mb-1">{title}</p>
+    <h3 className="text-[#f9fafb] text-2xl sm:text-3xl font-bold mb-1">{value}</h3>
+    <p className="text-[#9ca3af] text-xs sm:text-sm mb-0.5">{title}</p>
     <p className="text-[#6b7280] text-[10px] sm:text-xs">{subtitle}</p>
   </GlassPanel>
 )
@@ -81,7 +81,7 @@ export const ProfesorKPIs = ({ kpis }: ProfesorKPIsProps) => {
   ]
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
+    <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
       {kpiData.map((kpi) => (
         <KPICard key={kpi.id} {...kpi} />
       ))}

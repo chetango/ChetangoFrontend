@@ -42,26 +42,26 @@ export const ActivityItem = ({
   }
 
   return (
-    <div className="flex items-start gap-4 pb-4 border-b border-[rgba(255,255,255,0.05)] last:border-b-0 last:pb-0">
+    <div className="flex items-start gap-3 pb-3 border-b border-[rgba(255,255,255,0.05)] last:border-b-0 last:pb-0">
       {/* Icon */}
       <div 
-        className="p-2.5 rounded-lg flex-shrink-0"
+        className="p-2 rounded-lg flex-shrink-0"
         style={{ 
           background: hexToRgba(color, 0.15),
           color: color
         }}
       >
-        <Icon className="w-4 h-4" />
+        <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <p className="text-[#f9fafb] text-sm mb-1">{descripcion}</p>
-        <p className="text-[#6b7280] text-xs">{formatearFechaRelativa(fecha)}</p>
+        <p className="text-[#f9fafb] text-xs sm:text-sm mb-0.5">{descripcion}</p>
+        <p className="text-[#6b7280] text-[10px] sm:text-xs">{formatearFechaRelativa(fecha)}</p>
       </div>
 
       {/* Status Indicator */}
-      <div className="w-2 h-2 rounded-full flex-shrink-0 mt-1.5" style={{ background: color }} />
+      <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5" style={{ background: color }} />
     </div>
   )
 }

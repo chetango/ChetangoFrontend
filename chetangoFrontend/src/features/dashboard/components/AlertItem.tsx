@@ -54,16 +54,16 @@ export const AlertItem = ({
 
   return (
     <div 
-      className="p-4 rounded-xl backdrop-blur-xl border transition-all duration-300 hover:scale-[1.02] cursor-pointer group"
+      className="p-3 sm:p-4 rounded-xl backdrop-blur-xl border transition-all duration-200 hover:scale-[1.01] cursor-pointer group"
       style={{ 
         background: colors.bg,
         borderColor: colors.border
       }}
       onClick={onAction}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-2 sm:gap-3">
         <div 
-          className="p-2 rounded-lg flex-shrink-0"
+          className="p-1.5 sm:p-2 rounded-lg flex-shrink-0"
           style={{ 
             background: hexToRgba(colors.icon, 0.2)
           }}
@@ -71,16 +71,8 @@ export const AlertItem = ({
           <Icon className="w-4 h-4" style={{ color: colors.icon }} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[#f9fafb] text-sm font-medium mb-1">{titulo}</p>
-          <p className="text-[#9ca3af] text-xs mb-2">{descripcion}</p>
-          {onAction && (
-            <button 
-              className="text-xs font-medium group-hover:underline"
-              style={{ color: colors.text }}
-            >
-              Ver detalles →
-            </button>
-          )}
+          <p className="text-[#f9fafb] text-xs sm:text-sm font-medium mb-0.5 sm:mb-1">{titulo}</p>
+          <p className="text-[#9ca3af] text-[10px] sm:text-xs">{descripcion}</p>
         </div>
       </div>
     </div>

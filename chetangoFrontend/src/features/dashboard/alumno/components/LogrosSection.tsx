@@ -26,26 +26,26 @@ export const LogrosSection = ({ logros }: LogrosSectionProps) => {
   }
 
   return (
-    <div className="mb-6 sm:mb-8 md:mb-10">
-      <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-        <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-[#f59e0b]" />
-        <h3 className="text-[#f9fafb] text-lg sm:text-xl font-semibold">Tus Logros</h3>
+    <div className="mb-3 sm:mb-4 md:mb-6">
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <Trophy className="w-4 h-4 text-[#f59e0b]" />
+        <h3 className="text-[#f9fafb] text-base sm:text-lg font-semibold">Tus Logros</h3>
         <div className="flex-1 h-[2px] bg-gradient-to-r from-[rgba(255,255,255,0.08)] to-transparent" />
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         {logros.map((logro) => {
           const Icon = iconMap[logro.icono] || Trophy
           
           return (
             <GlassPanel
               key={logro.id}
-              className={`p-3 sm:p-4 md:p-6 text-center transition-all duration-300 ${
+              className={`p-2 sm:p-3 text-center transition-all duration-300 ${
                 logro.desbloqueado ? 'hover:scale-[1.05] active:scale-[0.98] cursor-pointer' : 'opacity-50'
               }`}
             >
               <div
-                className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto mb-2 sm:mb-3 md:mb-4 rounded-full flex items-center justify-center ${
+                className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-1.5 sm:mb-2 rounded-full flex items-center justify-center ${
                   logro.desbloqueado ? 'bg-gradient-to-br shadow-lg' : 'bg-[rgba(255,255,255,0.05)]'
                 }`}
                 style={logro.desbloqueado ? {
@@ -54,14 +54,14 @@ export const LogrosSection = ({ logros }: LogrosSectionProps) => {
                 } : {}}
               >
                 <Icon 
-                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8" 
+                  className="w-5 h-5 sm:w-6 sm:h-6" 
                   style={{ color: logro.desbloqueado ? logro.color : '#6b7280' }} 
                 />
               </div>
-              <h4 className="text-[#f9fafb] text-xs sm:text-sm md:text-base font-medium mb-1">{logro.nombre}</h4>
-              <p className="text-[#9ca3af] text-xs sm:text-sm line-clamp-2">{logro.descripcion}</p>
+              <h4 className="text-[#f9fafb] text-[10px] sm:text-xs font-medium mb-0.5">{logro.nombre}</h4>
+              <p className="text-[#9ca3af] text-[9px] sm:text-[10px] line-clamp-2">{logro.descripcion}</p>
               {!logro.desbloqueado && (
-                <p className="text-[#6b7280] text-xs mt-1 sm:mt-2">🔒 Bloqueado</p>
+                <p className="text-[#6b7280] text-[9px] sm:text-[10px] mt-1">🔒 Bloqueado</p>
               )}
             </GlassPanel>
           )

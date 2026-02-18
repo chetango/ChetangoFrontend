@@ -86,14 +86,14 @@ export const KPIGrid = ({ kpis }: KPIGridProps) => {
   return (
     <>
       {/* Primera fila: 4 tarjetas principales */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 mb-2 sm:mb-3">
         {kpiConfigs.map((kpi) => (
           <KPICard key={kpi.id} {...kpi} />
         ))}
       </div>
 
       {/* Segunda fila: 2 tarjetas financieras */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
         {kpiConfigsFinancial.map((kpi) => (
           <KPICard key={kpi.id} {...kpi} />
         ))}

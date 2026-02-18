@@ -56,7 +56,7 @@ export const SolicitudesNotifications = ({
   ).slice(0, maxItems)
 
   return (
-    <div>
+    <div className="mb-3 sm:mb-4">
       <div className="flex items-center gap-3 mb-6">
         <Bell className="w-5 h-5 text-[#c93448]" />
         <h3 className="text-[#f9fafb] text-xl font-semibold">

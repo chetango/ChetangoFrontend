@@ -44,9 +44,16 @@ export const NotificationDropdown = ({
   }
 
   return (
-    <div className="absolute top-full right-0 mt-2 w-[380px] max-h-[500px] overflow-hidden z-50">
+    <div 
+      className="absolute top-full mt-2 w-[calc(100vw-2rem)] sm:w-[360px] max-w-[360px] z-[100]"
+      style={{
+        left: window.innerWidth < 640 ? '50%' : 'auto',
+        right: window.innerWidth >= 640 ? '0' : 'auto',
+        transform: window.innerWidth < 640 ? 'translateX(-50%)' : 'none'
+      }}
+    >
       <div 
-        className="p-0 rounded-xl shadow-2xl overflow-hidden"
+        className="max-h-[450px] overflow-hidden rounded-xl shadow-2xl"
         style={{
           background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.98), rgba(13, 13, 13, 0.98))',
           backdropFilter: 'blur(20px)',
@@ -76,7 +83,7 @@ export const NotificationDropdown = ({
         </div>
 
         {/* Content */}
-        <div className="max-h-[350px] overflow-y-auto">
+        <div className="max-h-[300px] overflow-y-auto">
           {isLoading ? (
             <div className="p-8 text-center">
               <Loader2 className="w-8 h-8 text-[#7c5af8] animate-spin mx-auto mb-2" />
