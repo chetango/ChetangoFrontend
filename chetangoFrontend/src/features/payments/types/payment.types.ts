@@ -4,6 +4,8 @@
 
 export type PaymentStatus = 'pendiente_verificacion' | 'verificado' | 'rechazado'
 
+export type Sede = 1 | 2 // 1 = Medellín, 2 = Manizales
+
 export interface PaymentMethod {
   idMetodoPago: string
   nombre: string
@@ -33,6 +35,8 @@ export interface Payment {
   fechaVerificacion?: string
   usuarioVerificacion?: string
   cantidadPaquetes: number
+  sede: Sede
+  sedeNombre: string
 }
 
 export interface PaymentPackage {

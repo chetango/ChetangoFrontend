@@ -8,11 +8,14 @@ import { useLocation } from 'react-router-dom'
 import { useDeleteUserMutation, useUserDetailQuery, useUsersQuery } from '../features/users/api/usersQueries'
 import { CreateUserModal } from '../features/users/components'
 import type { UserFilters, UserRole, UserStatus } from '../features/users/types/user.types'
+import type { SedeFilterValue } from '../shared/components/SedeFilter'
+import { SedeFilter } from '../shared/components/SedeFilter'
 
 const UsersPage = () => {
   const location = useLocation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editUserId, setEditUserId] = useState<string | null>(null)
+  const [sedeFilter, setSedeFilter] = useState<SedeFilterValue>('all')
   const [filters, setFilters] = useState<UserFilters>({
     pageNumber: 1,
     pageSize: 10,
@@ -21,6 +24,13 @@ const UsersPage = () => {
 
   const { data, isLoading } = useUsersQuery(filters)
   const deleteUserMutation = useDeleteUserMutation()
+  
+  // Filtrar usuarios por sede (client-side)
+  const filteredUsers = React.useMemo(() => {
+    if (!data?.items) return []
+    if (sedeFilter === 'all') return data.items
+    return data.items.filter(user => user.sede === sedeFilter)
+  }, [data?.items, sedeFilter])
   
   // Solo cargar detalles del usuario si estamos editando
   const { data: userDetail } = useUserDetailQuery(editUserId || '')
@@ -166,6 +176,11 @@ const UsersPage = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          {/* Sede Filter */}
+          <div className="flex-shrink-0">
+            <SedeFilter value={sedeFilter} onChange={setSedeFilter} variant="compact" />
+          </div>
+
           {/* Role Filter */}
           <select
             onChange={(e) => handleRoleFilter(e.target.value ? (e.target.value as UserRole) : undefined)}
@@ -236,14 +251,14 @@ const UsersPage = () => {
                     </div>
                   </td>
                 </tr>
-              ) : data?.items?.length === 0 ? (
+              ) : filteredUsers?.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-[#9ca3af]">
                     No se encontraron usuarios
                   </td>
                 </tr>
               ) : (
-                (data?.items || []).map((user) => (
+                (filteredUsers || []).map((user) => (
                   <tr
                     key={user.idUsuario}
                     className="border-b border-[rgba(64,64,64,0.3)] hover:bg-[rgba(255,255,255,0.02)] transition-colors"

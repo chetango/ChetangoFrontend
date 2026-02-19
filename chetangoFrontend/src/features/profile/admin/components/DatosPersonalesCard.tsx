@@ -100,6 +100,23 @@ export const DatosPersonalesCard = ({ profile }: DatosPersonalesCardProps) => {
           <p className="text-[#6b7280] text-xs mt-1">El correo no puede ser modificado</p>
         </div>
 
+        {/* Sede (no editable) */}
+        <div>
+          <label className="block text-[#9ca3af] text-sm mb-2">Sede</label>
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-[#9ca3af]" />
+            <span className="text-[#f9fafb] font-medium">{profile.sedeNombre}</span>
+            <span className="px-2 py-1 rounded-full text-xs font-medium border" style={{
+              backgroundColor: profile.sede === 1 ? 'rgba(34, 197, 94, 0.1)' : 'rgba(59, 130, 246, 0.1)',
+              borderColor: profile.sede === 1 ? 'rgba(34, 197, 94, 0.3)' : 'rgba(59, 130, 246, 0.3)',
+              color: profile.sede === 1 ? '#22c55e' : '#3b82f6'
+            }}>
+              {profile.sede === 1 ? '🏢 Principal' : '🏢 Sucursal'}
+            </span>
+          </div>
+          <p className="text-[#6b7280] text-xs mt-1">La sede está definida por el administrador del sistema</p>
+        </div>
+
         {/* Teléfono */}
         <div>
           <label className="block text-[#9ca3af] text-sm mb-2">Teléfono</label>

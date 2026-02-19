@@ -39,6 +39,8 @@ import {
 } from '@/features/reports/utils/pdfGenerator'
 import { AlertCircle, TrendingUp } from 'lucide-react'
 import { useState } from 'react'
+import type { SedeFilterValue } from '../shared/components/SedeFilter'
+import { SedeFilter } from '../shared/components/SedeFilter'
 
 // ============================================
 // COMPONENT
@@ -51,6 +53,7 @@ const ReportsPage = () => {
     fechaHasta: undefined,
   })
 
+  const [sedeFilter, setSedeFilter] = useState<SedeFilterValue>('all')
   const [selectedReport, setSelectedReport] = useState<ReportType | null>(null)
   const [isExporting, setIsExporting] = useState(false)
 
@@ -233,6 +236,13 @@ const ReportsPage = () => {
         <h2 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">
           Filtros Globales
         </h2>
+        
+        {/* Sede Filter */}
+        <div className="mb-4">
+          <SedeFilter value={sedeFilter} onChange={setSedeFilter} variant="compact" showLabel />
+        </div>
+
+        {/* Date Range Filter */}
         <DateRangeFilterComponent
           value={dateFilter}
           onChange={setDateFilter}

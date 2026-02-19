@@ -19,6 +19,8 @@ export interface AdminProfile {
   departamento: string
   permisos: string[]
   ultimaActividad: string
+  sede: 1 | 2 // 1 = Medellín, 2 = Manizales
+  sedeNombre: string
   datosAcademia: DatosAcademia
   configuracion: ConfiguracionAdmin
 }

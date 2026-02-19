@@ -19,6 +19,9 @@ import {
     QuickActionsSection,
     useDashboard
 } from '@/features/dashboard'
+import { FinancialDesgloseSede } from '@/features/dashboard/components/FinancialDesgloseSede'
+import type { SedeFilter } from '@/features/dashboard/components/TabsSedeFilter'
+import { TabsSedeFilter } from '@/features/dashboard/components/TabsSedeFilter'
 import { RegisterPaymentModal } from '@/features/payments/components/RegisterPaymentModal'
 import { SolicitudesNotifications } from '@/features/solicitudes'
 import type { SolicitudClasePrivadaDTO, SolicitudRenovacionPaqueteDTO } from '@/features/solicitudes/types/solicitudesTypes'
@@ -34,6 +37,7 @@ const DashboardPage = () => {
   const [isClasePrivadaModalOpen, setIsClasePrivadaModalOpen] = useState(false)
   const [renovacionSeleccionada, setRenovacionSeleccionada] = useState<SolicitudRenovacionPaqueteDTO | null>(null)
   const [clasePrivadaSeleccionada, setClasePrivadaSeleccionada] = useState<SolicitudClasePrivadaDTO | null>(null)
+  const [sedeFilter, setSedeFilter] = useState<SedeFilter>('all')
   const isCatalogsLoading = loadingTiposClase || loadingProfesores
 
   const notaRenovacion = useMemo(() => {
@@ -210,8 +214,19 @@ const DashboardPage = () => {
             academyName="Academia Chetango"
           />
 
+          {/* Tabs Sede Filter */}
+          <TabsSedeFilter 
+            selectedSede={sedeFilter} 
+            onSedeChange={setSedeFilter}
+          />
+
           {/* KPIs Grid */}
-          {dashboard.kpIs && <KPIGrid kpis={dashboard.kpIs} />}
+          {dashboard.kpIs && <KPIGrid kpis={dashboard.kpIs} sedeFilter={sedeFilter} />}
+
+          {/* Financial Desglose - Solo visible en vista "Todas" */}
+          {sedeFilter === 'all' && dashboard.kpIs && (
+            <FinancialDesgloseSede kpis={dashboard.kpIs} />
+          )}
 
           {/* Quick Actions */}
           <QuickActionsSection />

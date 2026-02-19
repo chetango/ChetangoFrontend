@@ -35,6 +35,8 @@ export interface DashboardResponse {
 export interface DashboardKPIs {
   totalAlumnosActivos: number
   ingresosEsteMes: number
+  ingresosMedellinEsteMes: number
+  ingresosManizalesEsteMes: number
   clasesProximos7Dias: number
   paquetesActivos: number
   paquetesVencidos: number
@@ -43,6 +45,8 @@ export interface DashboardKPIs {
   asistenciasHoy: number
   asistenciasMes: number
   egresosEsteMes: number
+  egresosMedellinEsteMes: number
+  egresosManizalesEsteMes: number
   gananciaNeta: number
   crecimientoIngresosMesAnterior?: number
   comparativaAsistenciasMesAnterior?: number

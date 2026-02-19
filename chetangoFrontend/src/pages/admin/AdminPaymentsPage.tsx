@@ -21,6 +21,8 @@ import { VerifiedPaymentCard } from '../../features/payments/components/Verified
 import { VerifyPaymentModal } from '../../features/payments/components/VerifyPaymentModal'
 import type { Payment } from '../../features/payments/types/payment.types'
 import type { EditarPagoRequest } from '../../features/payments/types/paymentTypes'
+import type { SedeFilterValue } from '../../shared/components/SedeFilter'
+import { SedeFilter } from '../../shared/components/SedeFilter'
 
 const AdminPaymentsPage = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false)
@@ -28,6 +30,7 @@ const AdminPaymentsPage = () => {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null)
+  const [sedeFilter, setSedeFilter] = useState<SedeFilterValue>('all')
 
   const { data: pendingPayments, isLoading: loadingPending, refetch: refetchPending } = usePendingPaymentsQuery()
   const { data: verifiedPayments, isLoading: loadingVerified, refetch: refetchVerified } = useVerifiedPaymentsQuery()
@@ -74,6 +77,19 @@ const AdminPaymentsPage = () => {
       minimumFractionDigits: 0,
     }).format(amount)
   }
+
+  // Filtrar pagos por sede
+  const filteredPendingPayments = sedeFilter === 'all' 
+    ? pendingPayments 
+    : pendingPayments?.filter(p => p.sede === sedeFilter)
+
+  const filteredVerifiedPayments = sedeFilter === 'all'
+    ? verifiedPayments
+    : verifiedPayments?.filter(p => p.sede === sedeFilter)
+
+  const filteredAllVerifiedPayments = sedeFilter === 'all'
+    ? allVerifiedPayments
+    : allVerifiedPayments?.filter(p => p.sede === sedeFilter)
 
   return (
     <div className="p-4 sm:p-6 md:p-8 max-w-[1600px] mx-auto">
@@ -143,6 +159,11 @@ const AdminPaymentsPage = () => {
         )}
       </div>
 
+      {/* Filtro de Sede */}
+      <div className="my-4 sm:my-6">
+        <SedeFilter value={sedeFilter} onChange={setSedeFilter} variant="compact" />
+      </div>
+
       {/* Dashboard Kanban */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Columna 1: Pendientes de Verificación */}
@@ -151,7 +172,7 @@ const AdminPaymentsPage = () => {
             <Clock className="text-[#fbbf24]" size={18} />
             <h2 className="text-[#f9fafb] text-base sm:text-lg font-semibold">Pendientes</h2>
             <span className="ml-auto bg-[rgba(245,158,11,0.15)] text-[#fbbf24] px-2 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium">
-              {pendingPayments?.length || 0}
+              {filteredPendingPayments?.length || 0}
             </span>
           </div>
 
@@ -160,8 +181,8 @@ const AdminPaymentsPage = () => {
               <div className="flex items-center justify-center py-12">
                 <div className="w-8 h-8 border-2 border-[#fbbf24]/30 border-t-[#fbbf24] rounded-full animate-spin" />
               </div>
-            ) : pendingPayments && pendingPayments.length > 0 ? (
-              pendingPayments.map((payment) => (
+            ) : filteredPendingPayments && filteredPendingPayments.length > 0 ? (
+              filteredPendingPayments.map((payment) => (
                 <PendingPaymentCard
                   key={payment.idPago}
                   payment={payment}
@@ -186,7 +207,7 @@ const AdminPaymentsPage = () => {
             <CheckCircle className="text-[#4ade80]" size={18} />
             <h2 className="text-[#f9fafb] text-base sm:text-lg font-semibold">Verificados Hoy</h2>
             <span className="ml-auto bg-[rgba(34,197,94,0.15)] text-[#4ade80] px-2 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium">
-              {verifiedPayments?.length || 0}
+              {filteredVerifiedPayments?.length || 0}
             </span>
           </div>
 
@@ -195,8 +216,8 @@ const AdminPaymentsPage = () => {
               <div className="flex items-center justify-center py-12">
                 <div className="w-8 h-8 border-2 border-[#4ade80]/30 border-t-[#4ade80] rounded-full animate-spin" />
               </div>
-            ) : verifiedPayments && verifiedPayments.length > 0 ? (
-              verifiedPayments.map((payment) => (
+            ) : filteredVerifiedPayments && filteredVerifiedPayments.length > 0 ? (
+              filteredVerifiedPayments.map((payment) => (
                 <VerifiedPaymentCard
                   key={payment.idPago}
                   payment={payment}
@@ -220,6 +241,9 @@ const AdminPaymentsPage = () => {
           <div className="flex items-center gap-2 mb-3 sm:mb-4">
             <DollarSign className="text-[#9ca3af]" size={18} />
             <h2 className="text-[#f9fafb] text-base sm:text-lg font-semibold">Últimos Pagos</h2>
+            <span className="ml-auto bg-[rgba(156,163,175,0.15)] text-[#9ca3af] px-2 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium">
+              {filteredAllVerifiedPayments?.length || 0}
+            </span>
           </div>
 
           <div className="space-y-2 sm:space-y-3 max-h-[400px] sm:max-h-[calc(100vh-400px)] overflow-y-auto pr-2">
@@ -227,8 +251,8 @@ const AdminPaymentsPage = () => {
               <div className="flex items-center justify-center py-12">
                 <div className="w-8 h-8 border-2 border-[#9ca3af]/30 border-t-[#9ca3af] rounded-full animate-spin" />
               </div>
-            ) : allVerifiedPayments && allVerifiedPayments.length > 0 ? (
-              allVerifiedPayments.slice(0, 10).map((payment) => (
+            ) : filteredAllVerifiedPayments && filteredAllVerifiedPayments.length > 0 ? (
+              filteredAllVerifiedPayments.slice(0, 10).map((payment) => (
                 <VerifiedPaymentCard
                   key={payment.idPago}
                   payment={payment}
@@ -250,7 +274,7 @@ const AdminPaymentsPage = () => {
 
       {/* Historial de Pagos de Alumnos */}
       <HistorialPagosAlumnosSection
-        pagos={allVerifiedPayments || []}
+        pagos={filteredAllVerifiedPayments || []}
         isLoading={loadingRecent}
         formatCurrency={formatCurrency}
         onVerDetalle={handleViewDetail}

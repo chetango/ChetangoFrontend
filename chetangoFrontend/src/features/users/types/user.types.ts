@@ -6,6 +6,8 @@ export type UserRole = 'admin' | 'profesor' | 'alumno'
 
 export type UserStatus = 'pendiente_azure' | 'activo' | 'inactivo'
 
+export type Sede = 1 | 2 // 1 = Medellín, 2 = Manizales
+
 export interface User {
   idUsuario: string
   nombreUsuario: string
@@ -17,6 +19,8 @@ export interface User {
   estado: UserStatus
   rol: UserRole  // API devuelve rol singular
   roles?: UserRole[]  // Mantener opcional para compatibilidad
+  sede: Sede
+  sedeNombre: string
   idProfesor?: string
   idAlumno?: string
 }
