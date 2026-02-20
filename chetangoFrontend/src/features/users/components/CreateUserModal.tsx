@@ -30,7 +30,6 @@ export const CreateUserModal = ({
   const [userData, setUserData] = useState<Partial<CreateUserRequest>>({})
   const [credentials, setCredentials] = useState({
     email: '',
-    temporaryPassword: '',
     sendWhatsApp: true,
     sendEmail: true,
   })
@@ -45,7 +44,6 @@ export const CreateUserModal = ({
       setUserData({})
       setCredentials({
         email: '',
-        temporaryPassword: '',
         sendWhatsApp: true,
         sendEmail: true,
       })
@@ -156,7 +154,6 @@ export const CreateUserModal = ({
         datosProfesor: userData.datosProfesor,
         datosAlumno: userData.datosAlumno,
         correoAzure: credentials.email,
-        contrasenaTemporalAzure: credentials.temporaryPassword,
         enviarWhatsApp: credentials.sendWhatsApp,
         enviarEmail: credentials.sendEmail,
       }
@@ -178,7 +175,6 @@ export const CreateUserModal = ({
     setUserData({})
     setCredentials({
       email: '',
-      temporaryPassword: '',
       sendWhatsApp: true,
       sendEmail: true,
     })

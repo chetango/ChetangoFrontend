@@ -7,7 +7,7 @@ import { ArrowLeft, ExternalLink, Mail, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 
 interface AzureCredentialsStepProps {
-  onNext: (credentials: { email: string; temporaryPassword: string; sendWhatsApp: boolean; sendEmail: boolean }) => void
+  onNext: (credentials: { email: string; sendWhatsApp: boolean; sendEmail: boolean }) => void
   onBack: () => void
   userEmail: string
 }
@@ -16,13 +16,12 @@ export const AzureCredentialsStep = ({ onNext, onBack, userEmail }: AzureCredent
   const containerRef = useModalScroll(true)
 
   const [email, setEmail] = useState(userEmail)
-  const [temporaryPassword, setTemporaryPassword] = useState('')
   const [sendWhatsApp, setSendWhatsApp] = useState(true)
   const [sendEmail, setSendEmail] = useState(true)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onNext({ email, temporaryPassword, sendWhatsApp, sendEmail })
+    onNext({ email, sendWhatsApp, sendEmail })
   }
 
   return (
@@ -59,8 +58,9 @@ export const AzureCredentialsStep = ({ onNext, onBack, userEmail }: AzureCredent
               <li>Abre el portal de Azure Entra ID en una nueva pestaña</li>
               <li>Ve a <strong>Usuarios</strong> → <strong>Nuevo usuario</strong></li>
               <li>Crea el usuario con el email: <span className="text-[#c93448] font-mono">{userEmail}</span></li>
-              <li>Genera una contraseña temporal y márcala para cambiar en primer inicio</li>
-              <li>Copia las credenciales y pégalas abajo</li>
+              <li>Azure generará automáticamente una contraseña temporal</li>
+              <li>El usuario recibirá su contraseña y deberá cambiarla en el primer inicio</li>
+              <li>Confirma el email creado y continúa</li>
             </ol>
             <a
               href="https://portal.azure.com/#view/Microsoft_AAD_UsersAndTenants/UserManagementMenuBlade/~/AllUsers"
@@ -73,46 +73,29 @@ export const AzureCredentialsStep = ({ onNext, onBack, userEmail }: AzureCredent
             </a>
           </div>
 
-          {/* Credenciales */}
+          {/* Confirmación de Email */}
           <div>
-            <h3 className="text-[#f9fafb] font-semibold mb-4">🔑 Credenciales Generadas</h3>
+            <h3 className="text-[#f9fafb] font-semibold mb-4">👤 Confirmar Usuario</h3>
             
-            <div className="space-y-4">
-              <div>
-                <label className="block text-[#9ca3af] text-sm mb-2">Email de Azure *</label>
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors font-mono text-sm"
-                  placeholder="usuario@chetango.onmicrosoft.com"
-                />
-                <p className="text-[#6b7280] text-xs mt-1">
-                  Confirma o edita el email generado en Azure
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-[#9ca3af] text-sm mb-2">Contraseña Temporal *</label>
-                <input
-                  type="text"
-                  required
-                  value={temporaryPassword}
-                  onChange={(e) => setTemporaryPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors font-mono text-sm"
-                  placeholder="Pega aquí la contraseña temporal generada"
-                />
-                <p className="text-[#6b7280] text-xs mt-1">
-                  Esta contraseña se enviará al usuario y deberá cambiarla en su primer inicio de sesión
-                </p>
-              </div>
+            <div>
+              <label className="block text-[#9ca3af] text-sm mb-2">Email de Azure *</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors font-mono text-sm"
+                placeholder="usuario@chetango.onmicrosoft.com"
+              />
+              <p className="text-[#6b7280] text-xs mt-1">
+                Confirma que el usuario fue creado exitosamente en Azure con este email
+              </p>
             </div>
           </div>
 
           {/* Notificaciones */}
           <div>
-            <h3 className="text-[#f9fafb] font-semibold mb-4">📢 Enviar Credenciales</h3>
+            <h3 className="text-[#f9fafb] font-semibold mb-4">📢 Notificar al Usuario</h3>
             
             <div className="space-y-3">
               <label className="flex items-center gap-3 cursor-pointer group">
@@ -128,7 +111,7 @@ export const AzureCredentialsStep = ({ onNext, onBack, userEmail }: AzureCredent
                     <span className="font-medium">Enviar por WhatsApp</span>
                   </div>
                   <p className="text-[#9ca3af] text-xs mt-0.5">
-                    Envía un mensaje con las credenciales al número registrado
+                    Envía un mensaje con el email de acceso al número registrado
                   </p>
                 </div>
               </label>
@@ -146,7 +129,7 @@ export const AzureCredentialsStep = ({ onNext, onBack, userEmail }: AzureCredent
                     <span className="font-medium">Enviar por Email</span>
                   </div>
                   <p className="text-[#9ca3af] text-xs mt-0.5">
-                    Envía un correo con las credenciales al email personal registrado
+                    Envía un correo con instrucciones de acceso al email personal registrado
                   </p>
                 </div>
               </label>
@@ -155,7 +138,7 @@ export const AzureCredentialsStep = ({ onNext, onBack, userEmail }: AzureCredent
             {!sendWhatsApp && !sendEmail && (
               <div className="mt-3 p-3 bg-[rgba(245,158,11,0.1)] border border-[rgba(245,158,11,0.2)] rounded-lg">
                 <p className="text-[#fbbf24] text-sm">
-                  ⚠️ No se enviará notificación. Deberás compartir las credenciales manualmente.
+                  ⚠️ No se enviará notificación. Deberás compartir el email de acceso manualmente.
                 </p>
               </div>
             )}

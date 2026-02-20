@@ -81,7 +81,6 @@ export interface CreateUserRequest {
   
   // Credenciales de Azure (agregado por admin)
   correoAzure: string
-  contrasenaTemporalAzure: string
   enviarWhatsApp: boolean
   enviarEmail: boolean
   
