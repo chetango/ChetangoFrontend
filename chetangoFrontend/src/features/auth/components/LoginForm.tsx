@@ -6,6 +6,7 @@
 
 import { useAuth } from '@/features/auth'
 import { AlertCircle } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 
 interface LoginFormProps {
   onSuccess?: () => void
@@ -14,6 +15,35 @@ interface LoginFormProps {
 
 export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
   const { login, authState } = useAuth()
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  // Force video play on mount - Fix mobile autoplay issue
+  useEffect(() => {
+    const playVideo = async () => {
+      if (videoRef.current) {
+        try {
+          await videoRef.current.play()
+        } catch (error) {
+          // Retry on user interaction (click/touch anywhere)
+          const forcePlay = async () => {
+            try {
+              await videoRef.current?.play()
+              document.removeEventListener('click', forcePlay)
+              document.removeEventListener('touchstart', forcePlay)
+            } catch (err) {
+              console.log('Video autoplay blocked, waiting for user interaction')
+            }
+          }
+          document.addEventListener('click', forcePlay, { once: true })
+          document.addEventListener('touchstart', forcePlay, { once: true })
+        }
+      }
+    }
+    
+    // Try to play after a short delay to ensure video is loaded
+    const timer = setTimeout(playVideo, 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleLogin = async () => {
     try {
@@ -219,10 +249,12 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
                 
                 {/* Video del Logo Animado con ciclo de visibilidad */}
                 <video
+                  ref={videoRef}
                   autoPlay
                   loop
                   muted
                   playsInline
+                  preload="auto"
                   className="w-full h-full object-contain animate-video-visibility-cycle"
                 >
                   <source src="/Video-LogoChetango.mp4" type="video/mp4" />
