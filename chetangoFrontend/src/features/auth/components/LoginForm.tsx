@@ -286,7 +286,11 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
                   muted
                   playsInline
                   preload="auto"
+                  disablePictureInPicture
+                  disableRemotePlayback
+                  controlsList="nodownload nofullscreen noremoteplayback"
                   className="w-full h-full object-contain animate-video-visibility-cycle"
+                  style={{ pointerEvents: 'none' }}
                 >
                   <source src="/Video-LogoChetango.mp4" type="video/mp4" />
                   Tu navegador no soporta el elemento de video.
