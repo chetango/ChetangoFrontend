@@ -2,6 +2,7 @@
 // PENDING PAYMENT CARD
 // ============================================
 
+import { ClickableAvatar } from '@/features/users'
 import { Check, Clock, Eye, FileText, X } from 'lucide-react'
 import type { Payment } from '../types/payment.types'
 
@@ -52,13 +53,12 @@ export const PendingPaymentCard = ({
     <div className="bg-[rgba(64,64,64,0.2)] border border-[rgba(245,158,11,0.3)] rounded-lg p-4 hover:border-[rgba(245,158,11,0.5)] transition-all group">
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-12 h-12 rounded-full bg-[rgba(201,52,72,0.15)] border-2 border-[rgba(201,52,72,0.3)] flex items-center justify-center text-[#c93448] font-semibold text-lg overflow-hidden">
-          {/* {payment.fotoAlumno ? (
-            <img src={payment.fotoAlumno} alt={payment.nombreAlumno} className="w-full h-full object-cover" />
-          ) : ( */}
-            {payment.nombreAlumno.charAt(0).toUpperCase()}
-          {/* )} */}
-        </div>
+        <ClickableAvatar
+          userId={payment.idAlumno}
+          userType="alumno"
+          nombre={payment.nombreAlumno}
+          size="md"
+        />
         <div className="flex-1 min-w-0">
           <h3 className="text-[#f9fafb] font-medium truncate">{payment.nombreAlumno}</h3>
           <div className="flex items-center gap-2 text-xs text-[#9ca3af]">

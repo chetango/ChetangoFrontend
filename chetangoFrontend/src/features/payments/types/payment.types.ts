@@ -24,6 +24,7 @@ export interface PackageType {
 
 export interface Payment {
   idPago: string
+  idAlumno: string
   fechaPago: string
   montoTotal: number
   nombreMetodoPago: string

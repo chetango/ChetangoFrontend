@@ -4,6 +4,7 @@
 
 export { AlumnoCard } from './AlumnoCard'
 export { AlumnoSearchTabs } from './AlumnoSearchTabs'
+export { DeletePaymentModal } from './DeletePaymentModal'
 export { EditPaymentModal } from './EditPaymentModal'
 export { HistorialPagosAlumnosSection } from './HistorialPagosAlumnosSection'
 export { PackageSelector } from './PackageSelector'

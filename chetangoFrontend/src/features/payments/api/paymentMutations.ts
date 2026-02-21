@@ -2,16 +2,16 @@
 // PAYMENT MUTATIONS - REACT QUERY HOOKS
 // ============================================
 
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { httpClient } from '@/shared/api/httpClient'
-import { toast } from 'sonner'
-import { paymentKeys } from './paymentQueries'
 import type { ApiError } from '@/shared/api/interceptors'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import type {
-  CrearPagoRequest,
-  CrearPagoResponse,
-  EditarPagoRequest,
+    CrearPagoRequest,
+    CrearPagoResponse,
+    EditarPagoRequest,
 } from '../types/paymentTypes'
+import { paymentKeys } from './paymentQueries'
 
 // ============================================
 // MUTATION TYPES
@@ -122,6 +122,48 @@ export function useUpdatePagoMutation() {
       // Only show toast if error wasn't already handled by interceptor
       if (!error.handled) {
         const message = error.message || 'Error al actualizar el pago'
+        toast.error(message)
+      }
+    },
+  })
+}
+
+/**
+ * Deletes a payment (soft delete)
+ * DELETE /api/pagos/{id}
+ *
+ * Validates:
+ * - Payment exists
+ * - Payment has no packages with attendance records
+ * - Only admin can delete
+ *
+ * Response: 204 No Content on success
+ *
+ * Error handling:
+ * - 401: Redirect to login (handled by authInterceptor)
+ * - 403: Toast "No tienes permisos..." (handled by errorInterceptor)
+ * - 400: Toast with error message (e.g., "El pago tiene paquetes con asistencias registradas")
+ * - 404: Toast "El pago especificado no existe"
+ */
+export function useDeletePagoMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation<void, ApiError, string>({
+    mutationFn: async (idPago: string): Promise<void> => {
+      await httpClient.delete(`/api/pagos/${idPago}`)
+    },
+
+    onSuccess: () => {
+      toast.success('Pago eliminado exitosamente')
+
+      // Invalidate all payment queries to refresh lists and stats
+      queryClient.invalidateQueries({ queryKey: paymentKeys.all })
+    },
+
+    onError: (error: ApiError) => {
+      // Only show toast if error wasn't already handled by interceptor
+      if (!error.handled) {
+        const message = error.message || 'Error al eliminar el pago'
         toast.error(message)
       }
     },

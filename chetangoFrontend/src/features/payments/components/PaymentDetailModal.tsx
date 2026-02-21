@@ -70,10 +70,10 @@ export function PaymentDetailModal({
     : []
 
   return (
-    <div className="absolute inset-0 z-[100] flex items-start justify-center pt-20 px-4 pb-8 overflow-y-auto">
+    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-start justify-center pt-20 px-4 pb-8 overflow-y-auto">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm -z-10"
+        className="absolute inset-0 -z-10"
         onClick={onClose}
       />
 

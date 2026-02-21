@@ -2,6 +2,7 @@
 // VERIFIED PAYMENT CARD
 // ============================================
 
+import { ClickableAvatar } from '@/features/users'
 import { CheckCircle, Edit, Eye, FileText, Trash2 } from 'lucide-react'
 import type { Payment } from '../types/payment.types'
 
@@ -54,20 +55,19 @@ export const VerifiedPaymentCard = ({
       <div className="flex items-center justify-between mb-3">
         <span className="inline-flex items-center gap-1 px-2 py-1 bg-[rgba(34,197,94,0.15)] text-[#4ade80] text-xs rounded-full border border-[rgba(34,197,94,0.3)]">
           <CheckCircle size={12} />
-          Verificado
+          {payment.estadoPago}
         </span>
         <span className="text-xs text-[#9ca3af]">{formatDate(payment.fechaPago)}</span>
       </div>
 
       {/* Alumno y Monto */}
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 rounded-full bg-[rgba(201,52,72,0.15)] border-2 border-[rgba(201,52,72,0.3)] flex items-center justify-center text-[#c93448] font-semibold overflow-hidden">
-          {/* {payment.fotoAlumno ? (
-            <img src={payment.fotoAlumno} alt={payment.nombreAlumno} className="w-full h-full object-cover" />
-          ) : ( */}
-            {payment.nombreAlumno.charAt(0).toUpperCase()}
-          {/* )} */}
-        </div>
+        <ClickableAvatar
+          userId={payment.idAlumno}
+          userType="alumno"
+          nombre={payment.nombreAlumno}
+          size="md"
+        />
         <div className="flex-1 min-w-0">
           <h4 className="text-[#f9fafb] font-medium text-sm truncate">{payment.nombreAlumno}</h4>
           <div className="text-xl font-bold text-[#4ade80]">{formatCurrency(payment.montoTotal)}</div>

@@ -4,7 +4,7 @@
 
 import { AlertCircle, CheckCircle, Clock, DollarSign, Plus, TrendingUp } from 'lucide-react'
 import { useState } from 'react'
-import { useUpdatePagoMutation } from '../../features/payments/api/paymentMutations'
+import { useDeletePagoMutation, useUpdatePagoMutation } from '../../features/payments/api/paymentMutations'
 import { useMetodosPagoQuery, usePagoDetailQuery } from '../../features/payments/api/paymentQueries'
 import {
     useAllVerifiedPaymentsQuery,
@@ -12,6 +12,7 @@ import {
     usePendingPaymentsQuery,
     useVerifiedPaymentsQuery,
 } from '../../features/payments/api/paymentsQueries'
+import { DeletePaymentModal } from '../../features/payments/components/DeletePaymentModal'
 import { EditPaymentModal } from '../../features/payments/components/EditPaymentModal'
 import { HistorialPagosAlumnosSection } from '../../features/payments/components/HistorialPagosAlumnosSection'
 import { PaymentDetailModal } from '../../features/payments/components/PaymentDetailModal'
@@ -29,6 +30,7 @@ const AdminPaymentsPage = () => {
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false)
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null)
   const [sedeFilter, setSedeFilter] = useState<SedeFilterValue>('all')
 
@@ -40,6 +42,7 @@ const AdminPaymentsPage = () => {
   const { data: metodosPago } = useMetodosPagoQuery()
   
   const updatePagoMutation = useUpdatePagoMutation()
+  const deletePagoMutation = useDeletePagoMutation()
 
   const handleVerifyClick = (payment: Payment) => {
     setSelectedPayment(payment)
@@ -59,6 +62,32 @@ const AdminPaymentsPage = () => {
   const handleEditPayment = () => {
     setIsDetailModalOpen(false)
     setIsEditModalOpen(true)
+  }
+
+  const handleEditFromCard = (payment: Payment) => {
+    setSelectedPayment(payment)
+    setIsEditModalOpen(true)
+  }
+
+  const handleDeletePayment = (payment: Payment) => {
+    setSelectedPayment(payment)
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!selectedPayment) return
+
+    try {
+      await deletePagoMutation.mutateAsync(selectedPayment.idPago)
+      setIsDeleteModalOpen(false)
+      setSelectedPayment(null)
+      refetchPending()
+      refetchVerified()
+      refetchAllVerified()
+      refetchStats()
+    } catch {
+      // Error handled by mutation
+    }
   }
 
   const handleSubmitEdit = async (idPago: string, data: EditarPagoRequest) => {
@@ -222,8 +251,8 @@ const AdminPaymentsPage = () => {
                   key={payment.idPago}
                   payment={payment}
                   onViewDetail={handleViewDetail}
-                  onEdit={(p) => console.log('Edit', p)}
-                  onDelete={(p) => console.log('Delete', p)}
+                  onEdit={handleEditFromCard}
+                  onDelete={handleDeletePayment}
                 />
               ))
             ) : (
@@ -257,8 +286,8 @@ const AdminPaymentsPage = () => {
                   key={payment.idPago}
                   payment={payment}
                   onViewDetail={handleViewDetail}
-                  onEdit={(p) => console.log('Edit', p)}
-                  onDelete={(p) => console.log('Delete', p)}
+                  onEdit={handleEditFromCard}
+                  onDelete={handleDeletePayment}
                 />
               ))
             ) : (
@@ -326,6 +355,18 @@ const AdminPaymentsPage = () => {
           setIsEditModalOpen(false)
         }}
         onSubmit={handleSubmitEdit}
+      />
+
+      <DeletePaymentModal
+        payment={selectedPayment}
+        isOpen={isDeleteModalOpen}
+        isDeleting={deletePagoMutation.isPending}
+        formatCurrency={formatCurrency}
+        onClose={() => {
+          setIsDeleteModalOpen(false)
+          setSelectedPayment(null)
+        }}
+        onConfirm={handleConfirmDelete}
       />
     </div>
   )

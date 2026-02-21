@@ -3,6 +3,7 @@
 // Sección expandible con tabla de pagos completados
 // ============================================
 
+import { ClickableAvatar } from '@/features/users'
 import { Calendar, ChevronDown, ChevronUp, CreditCard, DollarSign, Eye, Search, User } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import type { Payment } from '../types/payment.types'
@@ -256,7 +257,15 @@ export const HistorialPagosAlumnosSection = ({
                       <div className="flex-1 grid grid-cols-1 md:grid-cols-5 gap-4">
                         <div>
                           <p className="text-[#9ca3af] text-xs mb-1">Alumno</p>
-                          <p className="text-[#f9fafb] font-semibold">{pago.nombreAlumno}</p>
+                          <div className="flex items-center gap-2">
+                            <ClickableAvatar
+                              userId={pago.idAlumno}
+                              userType="alumno"
+                              nombre={pago.nombreAlumno}
+                              size="sm"
+                            />
+                            <p className="text-[#f9fafb] font-semibold">{pago.nombreAlumno}</p>
+                          </div>
                         </div>
                         <div>
                           <p className="text-[#9ca3af] text-xs mb-1">Fecha Pago</p>
@@ -275,13 +284,13 @@ export const HistorialPagosAlumnosSection = ({
                         <div>
                           <p className="text-[#9ca3af] text-xs mb-1">Estado</p>
                           <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                            pago.estadoPago === 'verificado' 
+                            pago.estadoPago === 'Verificado' 
                               ? 'bg-[rgba(34,197,94,0.15)] text-[#4ade80]'
-                              : pago.estadoPago === 'pendiente_verificacion'
+                              : pago.estadoPago === 'Pendiente Verificación'
                               ? 'bg-[rgba(245,158,11,0.15)] text-[#fbbf24]'
                               : 'bg-[rgba(239,68,68,0.15)] text-[#ef4444]'
                           }`}>
-                            {pago.estadoPago === 'verificado' ? 'Verificado' : pago.estadoPago === 'pendiente_verificacion' ? 'Pendiente' : 'Rechazado'}
+                            {pago.estadoPago}
                           </span>
                         </div>
                         <div>
