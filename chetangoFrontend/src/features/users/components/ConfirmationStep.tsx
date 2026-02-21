@@ -10,7 +10,6 @@ interface ConfirmationStepProps {
   userData: Partial<CreateUserRequest>
   credentials: {
     email: string
-    temporaryPassword: string
     sendWhatsApp: boolean
     sendEmail: boolean
   }
@@ -142,10 +141,9 @@ export const ConfirmationStep = ({
                   <span className="text-[#9ca3af]">Email Azure:</span>
                   <span className="text-[#f9fafb] font-mono">{credentials.email}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-[#9ca3af]">Contraseña Temporal:</span>
-                  <span className="text-[#f9fafb] font-mono">{'*'.repeat(credentials.temporaryPassword.length)}</span>
-                </div>
+                <p className="text-[#6b7280] text-xs mt-2">
+                  La contraseña temporal será gestionada por Azure y enviada al usuario en su primer acceso.
+                </p>
               </div>
             </div>
           )}
