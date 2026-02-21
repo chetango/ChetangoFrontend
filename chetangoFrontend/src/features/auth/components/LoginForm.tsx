@@ -17,32 +17,63 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
   const { login, authState } = useAuth()
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  // Force video play on mount - Fix mobile autoplay issue
+  // Force video play on mount - Fix mobile autoplay issue with aggressive retry
   useEffect(() => {
-    const playVideo = async () => {
-      if (videoRef.current) {
+    let attempts = 0
+    const maxAttempts = 10
+    
+    const attemptPlay = async () => {
+      if (videoRef.current && attempts < maxAttempts) {
+        try {
+          // Reset video to beginning
+          videoRef.current.currentTime = 0
+          await videoRef.current.play()
+          console.log('Video playing successfully')
+          return true
+        } catch (error) {
+          attempts++
+          console.log(`Video play attempt ${attempts} failed, retrying...`)
+          
+          // Keep retrying with exponential backoff
+          if (attempts < maxAttempts) {
+            setTimeout(attemptPlay, 100 * attempts)
+          }
+          return false
+        }
+      }
+      return false
+    }
+
+    // First attempt immediately
+    attemptPlay()
+
+    // Aggressive fallback: play on ANY user interaction
+    const interactions = ['click', 'touchstart', 'touchend', 'mousedown', 'keydown']
+    
+    const handleInteraction = async () => {
+      if (videoRef.current && videoRef.current.paused) {
         try {
           await videoRef.current.play()
-        } catch (error) {
-          // Retry on user interaction (click/touch anywhere)
-          const forcePlay = async () => {
-            try {
-              await videoRef.current?.play()
-              document.removeEventListener('click', forcePlay)
-              document.removeEventListener('touchstart', forcePlay)
-            } catch (err) {
-              console.log('Video autoplay blocked, waiting for user interaction')
-            }
-          }
-          document.addEventListener('click', forcePlay, { once: true })
-          document.addEventListener('touchstart', forcePlay, { once: true })
+          // Remove all listeners after successful play
+          interactions.forEach(event => {
+            document.removeEventListener(event, handleInteraction)
+          })
+        } catch (err) {
+          // Silently fail
         }
       }
     }
-    
-    // Try to play after a short delay to ensure video is loaded
-    const timer = setTimeout(playVideo, 100)
-    return () => clearTimeout(timer)
+
+    // Add multiple event listeners for maximum compatibility
+    interactions.forEach(event => {
+      document.addEventListener(event, handleInteraction, { once: true, passive: true })
+    })
+
+    return () => {
+      interactions.forEach(event => {
+        document.removeEventListener(event, handleInteraction)
+      })
+    }
   }, [])
 
   const handleLogin = async () => {
