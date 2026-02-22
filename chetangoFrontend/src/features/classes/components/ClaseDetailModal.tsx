@@ -59,7 +59,11 @@ export function getClaseEstadoFromDate(fecha: string): ClaseEstado {
  * @returns Formatted date string (e.g., "Lunes, 15 de Enero de 2026")
  */
 export function formatDateDisplay(fecha: string): string {
-  const date = new Date(fecha)
+  // Parse as local date to avoid timezone offset issues
+  // When receiving "2026-02-21", we want Feb 21 regardless of timezone
+  const [year, month, day] = fecha.split('T')[0].split('-').map(Number)
+  const date = new Date(year, month - 1, day)
+  
   return date.toLocaleDateString('es-ES', {
     weekday: 'long',
     year: 'numeric',

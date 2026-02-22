@@ -228,7 +228,7 @@ const InfoItem = ({ label, value }: { label: string; value?: string }) => {
   return (
     <div>
       <p className="text-[#6b7280] text-xs mb-1">{label}</p>
-      <p className="text-[#f9fafb]">{value}</p>
+      <p className="text-[#f9fafb] break-words">{value}</p>
     </div>
   )
 }
