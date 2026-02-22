@@ -212,10 +212,10 @@ export function ClaseFormModal({
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
   // Determinar si la clase ya pasó (para deshabilitar edición de fecha/hora)
-  const claseYaPaso = mode === 'edit' && initialData && 
+  const claseYaPaso: boolean = !!(mode === 'edit' && initialData && 
     initialData.fecha && 
     initialData.horaInicio &&
-    new Date(`${initialData.fecha}T${initialData.horaInicio}`) <= new Date()
+    new Date(`${initialData.fecha}T${initialData.horaInicio}`) <= new Date())
 
   // Reset form when modal opens/closes or mode changes
   useEffect(() => {
