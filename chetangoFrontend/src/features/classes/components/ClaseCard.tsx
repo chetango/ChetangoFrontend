@@ -231,9 +231,9 @@ export function ClaseCard({
         {onViewDetail && (
           <GlassButton
             variant="ghost"
-            size="sm"
+            size="xs"
             onClick={() => onViewDetail(clase.idClase)}
-            className="text-xs"
+            className="text-[10px] px-2 py-1"
           >
             Detalle
           </GlassButton>
@@ -243,9 +243,9 @@ export function ClaseCard({
         {canNavigateToAttendance && (
           <GlassButton
             variant="secondary"
-            size="sm"
+            size="xs"
             onClick={handleNavigateToAttendance}
-            className="text-xs flex items-center gap-1"
+            className="text-[10px] flex items-center gap-1 px-2 py-1"
           >
             <span>Asistencia</span>
             <ArrowRight className="w-3 h-3" />
@@ -259,10 +259,10 @@ export function ClaseCard({
         {canComplete && onComplete && (
           <GlassButton
             variant="secondary"
-            size="sm"
+            size="xs"
             onClick={() => onComplete(clase.idClase)}
             title="Completar clase y generar pagos"
-            className="text-xs flex items-center gap-1 !bg-emerald-500/20 !border-emerald-500/40 hover:!bg-emerald-500/30"
+            className="text-[10px] flex items-center gap-1 px-2 py-1 !bg-emerald-500/20 !border-emerald-500/40 hover:!bg-emerald-500/30"
           >
             <CheckCircle className="w-3 h-3" />
             <span>Completar</span>
