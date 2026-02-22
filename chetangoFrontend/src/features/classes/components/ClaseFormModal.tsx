@@ -211,6 +211,12 @@ export function ClaseFormModal({
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
 
+  // Determinar si la clase ya pasó (para deshabilitar edición de fecha/hora)
+  const claseYaPaso = mode === 'edit' && initialData && 
+    initialData.fecha && 
+    initialData.horaInicio &&
+    new Date(`${initialData.fecha}T${initialData.horaInicio}`) <= new Date()
+
   // Reset form when modal opens/closes or mode changes
   useEffect(() => {
     if (isOpen) {
@@ -421,7 +427,13 @@ export function ClaseFormModal({
               min={mode === 'create' ? getTodayDate() : undefined}
               icon={<Calendar className="w-4 h-4" />}
               error={touched.fecha ? errors.fecha : undefined}
+              disabled={claseYaPaso}
             />
+            {claseYaPaso && (
+              <p className="text-xs text-amber-400/80 mt-1">
+                ⚠️ No se puede cambiar la fecha de una clase que ya pasó
+              </p>
+            )}
           </div>
 
           {/* Hora Inicio y Fin - Requirements: 5.2 */}
@@ -437,6 +449,7 @@ export function ClaseFormModal({
                 onBlur={() => handleBlur('horaInicio')}
                 icon={<Clock className="w-4 h-4" />}
                 error={touched.horaInicio ? errors.horaInicio : undefined}
+                disabled={claseYaPaso}
               />
             </div>
             <div>
@@ -450,8 +463,14 @@ export function ClaseFormModal({
                 onBlur={() => handleBlur('horaFin')}
                 icon={<Clock className="w-4 h-4" />}
                 error={touched.horaFin ? errors.horaFin : undefined}
+                disabled={claseYaPaso}
               />
             </div>
+            {claseYaPaso && (
+              <p className="text-xs text-amber-400/80 mt-1 col-span-2">
+                ⚠️ No se puede cambiar el horario de una clase que ya pasó
+              </p>
+            )}
           </div>
 
           {/* Tipo de Clase - Requirements: 5.2 */}
