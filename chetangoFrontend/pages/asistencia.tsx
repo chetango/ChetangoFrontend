@@ -4,29 +4,29 @@
  * Layout Asimétrico Creativo 2025
  */
 
-import { useState } from 'react';
-import { 
-  AmbientGlows,
-  TypographyBackdrop,
-  StatCardMini,
-  GlassOrb,
-  FloatingParticle,
-  FloatingBadge,
-  CreativeAnimations
-} from '../components/creative-elements';
-import { GlassPanel, Input, Select, Badge, Chip } from '../components/design-system';
-import { 
-  Search, 
-  Calendar, 
-  Users, 
-  CheckCircle2, 
-  XCircle, 
-  Clock,
-  Sparkles,
-  Package,
-  Snowflake,
-  AlertCircle
+import {
+    AlertCircle,
+    Calendar,
+    CheckCircle2,
+    Clock,
+    Package,
+    Search,
+    Snowflake,
+    Sparkles,
+    Users,
+    XCircle
 } from 'lucide-react';
+import { useState } from 'react';
+import {
+    AmbientGlows,
+    CreativeAnimations,
+    FloatingBadge,
+    FloatingParticle,
+    GlassOrb,
+    StatCardMini,
+    TypographyBackdrop
+} from '../components/creative-elements';
+import { Chip, GlassPanel } from '../components/design-system';
 
 // Mock data
 const ESTUDIANTES_MOCK = [
@@ -88,11 +88,18 @@ export default function Asistencia() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  // Filtrar estudiantes por búsqueda
-  const estudiantesFiltrados = estudiantes.filter(est => 
-    est.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    est.documento.includes(searchTerm)
-  );
+  // Filtrar estudiantes por búsqueda y ordenar: presentes primero, ausentes después
+  const estudiantesFiltrados = estudiantes
+    .filter(est => 
+      est.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      est.documento.includes(searchTerm)
+    )
+    .sort((a, b) => {
+      // Presentes primero (true antes que false)
+      if (a.asistencia && !b.asistencia) return -1;
+      if (!a.asistencia && b.asistencia) return 1;
+      return 0;
+    });
 
   // Contadores
   const presentes = estudiantes.filter(e => e.asistencia).length;
