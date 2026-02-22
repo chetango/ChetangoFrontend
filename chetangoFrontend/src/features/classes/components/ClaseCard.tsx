@@ -181,7 +181,7 @@ export function ClaseCard({
   }
 
   return (
-    <GlassPanel hover={canEdit} className={`p-4 min-w-[380px] ${cardOpacity}`}>
+    <GlassPanel hover={canEdit} className={`p-4 min-w-[280px] ${cardOpacity}`}>
       {/* Header: Tipo + Estado Badge */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
