@@ -235,7 +235,7 @@ export function ClaseCard({
             onClick={() => onViewDetail(clase.idClase)}
             className="text-xs"
           >
-            Ver Detalle
+            Detalle
           </GlassButton>
         )}
 
@@ -247,7 +247,7 @@ export function ClaseCard({
             onClick={handleNavigateToAttendance}
             className="text-xs flex items-center gap-1"
           >
-            <span>Ir a Asistencia</span>
+            <span>Asistencia</span>
             <ArrowRight className="w-3 h-3" />
           </GlassButton>
         )}
