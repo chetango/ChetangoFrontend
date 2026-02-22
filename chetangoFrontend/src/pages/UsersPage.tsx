@@ -19,13 +19,12 @@ const UsersPage = () => {
   const [filters, setFilters] = useState<UserFilters>({
     pageNumber: 1,
     pageSize: 10,
-    estado: 'activo', // Solo mostrar usuarios activos por defecto
   })
 
   const { data, isLoading } = useUsersQuery(filters)
   const deleteUserMutation = useDeleteUserMutation()
   
-  // Filtrar usuarios por sede (client-side)
+  // Aplicar filtro de sede localmente (la API no soporta filtro de sede aún)
   const filteredUsers = React.useMemo(() => {
     if (!data?.items) return []
     if (sedeFilter === 'all') return data.items
