@@ -38,7 +38,7 @@ export const useAuth = (): AuthContextType => {
   }
 
   // LOGIN
-  const login = useCallback(async (returnUrl?: string) => {
+  const login = useCallback(async (returnUrl?: string, forceAccountSelection?: boolean) => {
     try {
       dispatch(setLoading(true))
       dispatch(clearError())
@@ -48,8 +48,15 @@ export const useAuth = (): AuthContextType => {
         sessionStorage.setItem('returnUrl', returnUrl)
       }
       
+      // Decidir si forzar selección de cuenta
+      // - Si viene de logout (forceAccountSelection=true): Forzar selección
+      // - Si es visita normal: Intentar login silencioso primero
+      const loginConfig = forceAccountSelection 
+        ? { ...loginRequest, prompt: 'select_account' as const }
+        : loginRequest
+      
       // Usar redirect para External ID
-      await instance.loginRedirect(loginRequest)
+      await instance.loginRedirect(loginConfig)
       
       // No dispatch setInitialized aquí porque redirect cambia de página
     } catch (error) {
@@ -58,17 +65,46 @@ export const useAuth = (): AuthContextType => {
     }
   }, [instance, dispatch, handleError])
 
-  // LOGOUT
+  // LOGOUT COMPLETO - Limpia TODA la sesión para permitir cambio de usuario
   const logout = useCallback(async () => {
     try {
       dispatch(setLoading(true))
-      // Usar redirect para External ID
-      await instance.logoutRedirect({
-        postLogoutRedirectUri: window.location.origin + '/login'
+      
+      // 1. Limpiar sessionStorage completamente
+      sessionStorage.clear()
+      
+      // 2. Limpiar localStorage por si acaso (aunque no lo usamos)
+      localStorage.clear()
+      
+      // 3. Limpiar cookies manualmente
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`)
       })
+      
+      // 4. Marcar que el logout fue intencional (para forzar selección en próximo login)
+      sessionStorage.setItem('logoutIntencional', 'true')
+      
+      // 5. Logout de Azure AD
+      // Esto asegura que la próxima vez pregunte qué cuenta usar
+      await instance.logoutRedirect({
+        postLogoutRedirectUri: window.location.origin + '/login',
+        // Opcional: descomentar si quieres que elimine la cuenta del browser también
+        // account: accounts[0]
+      })
+      
+      // NOTA: No necesitas dispatch(setLoading(false)) porque logoutRedirect
+      // hace un redirect completo y la página se recarga
     } catch (error) {
       handleError(error, { fallbackMessage: 'Error de logout' })
       dispatch(setLoading(false))
+      
+      // Si falla el logout de Azure, al menos limpiamos local y redirigimos
+      sessionStorage.clear()
+      localStorage.clear()
+      sessionStorage.setItem('logoutIntencional', 'true')
+      window.location.href = '/login'
     }
   }, [instance, dispatch, handleError])
 

@@ -41,6 +41,8 @@ export const msalConfig: Configuration = {
 }
 
 // REQUEST DE LOGIN - incluye scope de API para obtener token con permisos
+// NOTA: No incluye 'prompt' aquí para permitir sesión recordada
+// El prompt se agrega dinámicamente en useAuth cuando viene de logout
 export const loginRequest = {
   scopes: MSAL_CONFIG.SCOPES,
 }

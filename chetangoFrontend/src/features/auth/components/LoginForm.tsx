@@ -78,7 +78,17 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
 
   const handleLogin = async () => {
     try {
-      await login()
+      // Verificar si viene de un logout intencional
+      const logoutIntencional = sessionStorage.getItem('logoutIntencional') === 'true'
+      
+      // Limpiar la marca de logout intencional
+      if (logoutIntencional) {
+        sessionStorage.removeItem('logoutIntencional')
+      }
+      
+      // Si viene de logout, forzar selección de cuenta
+      // Si no, usar sesión recordada (si existe)
+      await login(undefined, logoutIntencional)
       onSuccess?.()
     } catch (error) {
       // Error handling is managed by the auth hook
