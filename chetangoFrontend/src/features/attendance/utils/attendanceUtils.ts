@@ -13,27 +13,40 @@ import type {
 } from '../types/attendanceTypes'
 
 /**
- * Filters students by search term (name or document)
+ * Filters students by search term (name or document) and sorts them with present students first
  * Case-insensitive matching for name, exact substring for document
+ * Sorting: Present students first, then absent students
  *
  * @param students - Array of student attendance records
  * @param searchTerm - Search term to filter by
- * @returns Filtered array of students
+ * @returns Filtered and sorted array of students
  */
 export function filterStudentsBySearch(
   students: StudentAttendance[],
   searchTerm: string
 ): StudentAttendance[] {
+  let filteredStudents: StudentAttendance[]
+
   if (!searchTerm.trim()) {
-    return students
+    filteredStudents = students
+  } else {
+    const normalizedSearch = searchTerm.toLowerCase().trim()
+
+    filteredStudents = students.filter((student) => {
+      const nameMatch = student.nombreCompleto.toLowerCase().includes(normalizedSearch)
+      const documentMatch = student.documentoIdentidad.includes(searchTerm.trim())
+      return nameMatch || documentMatch
+    })
   }
 
-  const normalizedSearch = searchTerm.toLowerCase().trim()
+  // Sort: Present students first, absent students last
+  return filteredStudents.sort((a, b) => {
+    const aPresente = a.asistencia.estado === 'Presente'
+    const bPresente = b.asistencia.estado === 'Presente'
 
-  return students.filter((student) => {
-    const nameMatch = student.nombreCompleto.toLowerCase().includes(normalizedSearch)
-    const documentMatch = student.documentoIdentidad.includes(searchTerm.trim())
-    return nameMatch || documentMatch
+    if (aPresente && !bPresente) return -1
+    if (!aPresente && bPresente) return 1
+    return 0
   })
 }
 
