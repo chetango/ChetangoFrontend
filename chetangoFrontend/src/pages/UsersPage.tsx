@@ -35,6 +35,11 @@ const UsersPage = () => {
   // Solo cargar detalles del usuario si estamos editando
   const { data: userDetail } = useUserDetailQuery(editUserId || '')
   
+  // Resetear paginación cuando cambia el filtro de sede
+  React.useEffect(() => {
+    setFilters(prev => ({ ...prev, pageNumber: 1 }))
+  }, [sedeFilter])
+  
   // Abrir modal de edición si se navega con editUserId en el state
   React.useEffect(() => {
     if (location.state?.editUserId) {
@@ -328,7 +333,7 @@ const UsersPage = () => {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2">
               <button
-                onClick={() => setFilters((prev) => ({ ...prev, pageNumber: (prev.pageNumber || 1) - 1 }))}
+                onClick={() => setFilters((prev) => ({ ...prev, pageNumber: (prev.pageNumber ?? 1) - 1 }))}
                 disabled={filters.pageNumber === 1}
                 className="px-3 sm:px-4 py-2 rounded-lg bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] text-[#f9fafb] text-xs sm:text-sm disabled:opacity-30 disabled:cursor-not-allowed transition-all min-h-[40px]"
               >
@@ -338,7 +343,7 @@ const UsersPage = () => {
                 {Array.from({ length: data?.totalPages || 0 }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
-                    onClick={() => setFilters((prev) => ({ ...prev, page }))}
+                    onClick={() => setFilters((prev) => ({ ...prev, pageNumber: page }))}
                     className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg transition-all text-sm ${
                       page === filters.pageNumber
                         ? 'bg-[#c93448] text-white'
@@ -350,7 +355,7 @@ const UsersPage = () => {
                 ))}
               </div>
               <button
-                onClick={() => setFilters((prev) => ({ ...prev, pageNumber: (prev.pageNumber || 1) + 1 }))}
+                onClick={() => setFilters((prev) => ({ ...prev, pageNumber: (prev.pageNumber ?? 1) + 1 }))}
                 disabled={filters.pageNumber === data.totalPages}
                 className="px-3 sm:px-4 py-2 rounded-lg bg-[rgba(255,255,255,0.05)] hover:bg-[rgba(255,255,255,0.08)] text-[#f9fafb] text-xs sm:text-sm disabled:opacity-30 disabled:cursor-not-allowed transition-all min-h-[40px]"
               >
