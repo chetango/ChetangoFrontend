@@ -491,15 +491,31 @@ export const RegisterPaymentModal = ({
                               handlePackageTypeChange(index, selectedTipo)
                             }
                           }}
-                          className="w-full px-3 py-2 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] text-sm focus:outline-none focus:border-[#c93448] transition-colors"
+                          size={8}
+                          className="w-full px-3 py-2 rounded-lg bg-[rgba(26,26,26,0.95)] border border-[rgba(201,52,72,0.3)] text-[#f9fafb] text-sm focus:outline-none focus:ring-2 focus:ring-[#c93448] focus:border-transparent transition-all overflow-y-auto [&>option]:py-2 [&>option]:px-3 [&>option:hover]:bg-[rgba(201,52,72,0.2)] [&>option:checked]:bg-[rgba(201,52,72,0.3)] [&>option:checked]:text-white [&>option]:bg-[rgba(40,40,40,0.8)] [&>option]:border-b [&>option]:border-[rgba(64,64,64,0.3)] [&>option:last-child]:border-b-0"
+                          style={{ 
+                            height: 'auto',
+                            minHeight: '200px',
+                            maxHeight: '280px'
+                          }}
                         >
-                          <option value="">Seleccionar tipo...</option>
+                          <option value="" disabled className="text-[#6b7280] italic bg-[rgba(201,52,72,0.1)]">
+                            ⬇️ Selecciona un paquete de la lista...
+                          </option>
                           {tiposPaquetes?.map((tipo: PackageType) => (
-                            <option key={tipo.idTipoPaquete} value={tipo.idTipoPaquete}>
+                            <option 
+                              key={tipo.idTipoPaquete} 
+                              value={tipo.idTipoPaquete}
+                              className="hover:bg-[rgba(201,52,72,0.2)]"
+                            >
                               {tipo.nombre} - ${tipo.precio.toLocaleString()} ({tipo.numeroClases} clases, {tipo.diasVigencia} días)
                             </option>
                           ))}
                         </select>
+                        <p className="text-[#6b7280] text-[10px] mt-1 flex items-center gap-1">
+                          <span>💡</span>
+                          <span>Haz scroll para ver todos los paquetes disponibles</span>
+                        </p>
                       </div>
                       
                       {/* Info del paquete seleccionado */}

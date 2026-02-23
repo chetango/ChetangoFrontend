@@ -160,15 +160,25 @@ const UsersPage = () => {
 
       {/* Filters & Actions */}
       <div className="mb-4 sm:mb-6 flex flex-col gap-2 sm:gap-3 md:gap-4">
-        {/* Search */}
+        {/* Search - PROMINENTE */}
         <div className="relative">
-          <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-[#6b7280] w-4 h-4 sm:w-5 sm:h-5" />
+          <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            <Search className="text-[#c93448] w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="hidden sm:inline text-[#9ca3af] text-xs border-l border-[rgba(255,255,255,0.1)] pl-2">
+              Busca en todas las sedes
+            </span>
+          </div>
           <input
             type="text"
-            placeholder="Buscar por nombre, email o documento..."
+            placeholder="🔍 Buscar usuario por nombre, email o documento... (Todas las sedes)"
             onChange={(e) => handleSearch(e.target.value)}
-            className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg bg-[rgba(64,64,64,0.2)] border border-[rgba(64,64,64,0.3)] text-[#f9fafb] text-sm sm:text-base placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] transition-colors"
+            className="w-full pl-12 sm:pl-56 pr-4 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[rgba(201,52,72,0.08)] to-[rgba(64,64,64,0.15)] border-2 border-[rgba(201,52,72,0.3)] text-[#f9fafb] text-sm sm:text-base placeholder:text-[#9ca3af] focus:outline-none focus:border-[#c93448] focus:from-[rgba(201,52,72,0.15)] focus:to-[rgba(64,64,64,0.2)] transition-all shadow-lg"
           />
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b7280] text-xs hidden md:block">
+            <kbd className="px-2 py-1 bg-[rgba(255,255,255,0.05)] rounded border border-[rgba(255,255,255,0.1)]">
+              Enter
+            </kbd>
+          </div>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">

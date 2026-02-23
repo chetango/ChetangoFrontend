@@ -1,4 +1,4 @@
-import type { AxiosInstance, AxiosError } from 'axios'
+import type { AxiosError, AxiosInstance } from 'axios'
 import { toast } from 'sonner'
 
 /**
