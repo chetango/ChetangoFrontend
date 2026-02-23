@@ -132,7 +132,7 @@ const UsersPage = () => {
 
   const getStatusBadge = (estado: UserStatus) => {
     const styles = {
-      activo: 'bg-[rgba(34,197,94,0.25)] text-[#10b981] border-[rgba(34,197,94,0.5)]',
+      activo: 'bg-[rgba(16,185,129,0.3)] text-[#22c55e] border-[rgba(16,185,129,0.6)]',
       inactivo: 'bg-[rgba(156,163,175,0.25)] text-[#d1d5db] border-[rgba(156,163,175,0.5)]',
       pendiente_azure: 'bg-[rgba(245,158,11,0.25)] text-[#f59e0b] border-[rgba(245,158,11,0.5)]',
     }
@@ -142,7 +142,7 @@ const UsersPage = () => {
       pendiente_azure: '● Pendiente Azure',
     }
     return (
-      <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${styles[estado] || 'bg-[rgba(156,163,175,0.25)] text-[#d1d5db] border-[rgba(156,163,175,0.5)]'}`}>
+      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium border whitespace-nowrap ${styles[estado] || 'bg-[rgba(156,163,175,0.25)] text-[#d1d5db] border-[rgba(156,163,175,0.5)]'}`}>
         {labels[estado] || `● ${estado}`}
       </span>
     )
