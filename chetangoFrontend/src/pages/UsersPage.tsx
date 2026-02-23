@@ -124,7 +124,7 @@ const UsersPage = () => {
       alumno: '🧑‍🎓 Alumno',
     }
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${styles[rol]}`}>
+      <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${styles[rol]}`}>
         {labels[rol]}
       </span>
     )
@@ -142,7 +142,7 @@ const UsersPage = () => {
       pendiente_azure: 'Pendiente Azure',
     }
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${styles[estado]}`}>
+      <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${styles[estado]}`}>
         {labels[estado]}
       </span>
     )
@@ -220,22 +220,22 @@ const UsersPage = () => {
           <table className="w-full">
             <thead className="bg-[rgba(26,26,26,0.5)] border-b border-[rgba(64,64,64,0.3)]">
               <tr>
-                <th className="text-left px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
+                <th className="text-left px-3 sm:px-4 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
                   Usuario
                 </th>
-                <th className="text-left px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
+                <th className="text-left px-3 sm:px-4 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
                   Contacto
                 </th>
-                <th className="text-left px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
+                <th className="text-left px-2 sm:px-3 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
                   Sede
                 </th>
-                <th className="text-left px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
+                <th className="text-left px-2 sm:px-3 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
                   Rol
                 </th>
-                <th className="text-left px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
+                <th className="text-left px-2 sm:px-3 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
                   Estado
                 </th>
-                <th className="text-right px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
+                <th className="text-right px-2 sm:px-3 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
                   Acciones
                 </th>
               </tr>
@@ -262,7 +262,7 @@ const UsersPage = () => {
                     key={user.idUsuario}
                     className="border-b border-[rgba(64,64,64,0.3)] hover:bg-[rgba(255,255,255,0.02)] transition-colors"
                   >
-                    <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+                    <td className="px-3 sm:px-4 py-3 sm:py-4">
                       <div>
                         <p className="text-[#f9fafb] font-medium text-sm sm:text-base">{user.nombreUsuario}</p>
                         <p className="text-[#9ca3af] text-xs sm:text-sm">
@@ -270,15 +270,15 @@ const UsersPage = () => {
                         </p>
                       </div>
                     </td>
-                    <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+                    <td className="px-3 sm:px-4 py-3 sm:py-4">
                       <div>
                         <p className="text-[#f9fafb] text-xs sm:text-sm">{user.correo}</p>
                         <p className="text-[#9ca3af] text-xs sm:text-sm">{user.telefono}</p>
                       </div>
                     </td>
-                    <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+                    <td className="px-2 sm:px-3 py-3 sm:py-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                        className={`inline-block px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
                           user.sede === 1
                             ? 'bg-[rgba(16,185,129,0.15)] text-[#10b981] border-[rgba(16,185,129,0.3)]'
                             : 'bg-[rgba(59,130,246,0.15)] text-[#3b82f6] border-[rgba(59,130,246,0.3)]'
@@ -287,10 +287,10 @@ const UsersPage = () => {
                         {user.sede === 1 ? '🏢 Medellín' : '🏢 Manizales'}
                       </span>
                     </td>
-                    <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">{getRoleBadge(user.rol || user.roles)}</td>
-                    <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">{getStatusBadge(user.estado)}</td>
-                    <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
-                      <div className="flex items-center justify-end gap-1 sm:gap-2">
+                    <td className="px-2 sm:px-3 py-3 sm:py-4">{getRoleBadge(user.rol || user.roles)}</td>
+                    <td className="px-2 sm:px-3 py-3 sm:py-4">{getStatusBadge(user.estado)}</td>
+                    <td className="px-2 sm:px-3 py-3 sm:py-4">
+                      <div className="flex items-center justify-end gap-1">
                         {user.estado === 'pendiente_azure' && (
                           <button
                             className="p-2 text-[#10b981] hover:bg-[rgba(16,185,129,0.1)] rounded-lg transition-colors min-w-[40px] min-h-[40px]"
