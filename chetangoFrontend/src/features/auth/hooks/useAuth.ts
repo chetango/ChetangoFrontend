@@ -4,6 +4,7 @@ import { clearError, setInitialized, setLoading } from '@/features/auth/store/au
 import type { AuthContextType, SessionType } from '@/features/auth/types/authTypes'
 import { mapAccountToUser } from '@/features/auth/types/authTypes'
 import { useErrorHandler } from '@/shared/hooks/useErrorHandler'
+import { tokenAcquisitionService } from '@/shared/services/auth/TokenAcquisitionService'
 import { useMsal } from '@azure/msal-react'
 import { useCallback, useEffect } from 'react'
 
@@ -70,23 +71,26 @@ export const useAuth = (): AuthContextType => {
     try {
       dispatch(setLoading(true))
       
-      // 1. Limpiar sessionStorage completamente
+      // 1. Reset de servicios (importante hacerlo primero)
+      tokenAcquisitionService.reset()
+      
+      // 2. Limpiar sessionStorage completamente
       sessionStorage.clear()
       
-      // 2. Limpiar localStorage por si acaso (aunque no lo usamos)
+      // 3. Limpiar localStorage por si acaso (aunque no lo usamos)
       localStorage.clear()
       
-      // 3. Limpiar cookies manualmente
+      // 4. Limpiar cookies manualmente
       document.cookie.split(";").forEach((c) => {
         document.cookie = c
           .replace(/^ +/, "")
           .replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/`)
       })
       
-      // 4. Marcar que el logout fue intencional (para forzar selección en próximo login)
+      // 5. Marcar que el logout fue intencional (para forzar selección en próximo login)
       sessionStorage.setItem('logoutIntencional', 'true')
       
-      // 5. Logout de Azure AD
+      // 6. Logout de Azure AD
       // Esto asegura que la próxima vez pregunte qué cuenta usar
       await instance.logoutRedirect({
         postLogoutRedirectUri: window.location.origin + '/login',
@@ -101,6 +105,7 @@ export const useAuth = (): AuthContextType => {
       dispatch(setLoading(false))
       
       // Si falla el logout de Azure, al menos limpiamos local y redirigimos
+      tokenAcquisitionService.reset()
       sessionStorage.clear()
       localStorage.clear()
       sessionStorage.setItem('logoutIntencional', 'true')
