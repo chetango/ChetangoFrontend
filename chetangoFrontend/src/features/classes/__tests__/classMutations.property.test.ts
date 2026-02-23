@@ -69,7 +69,7 @@ export function isValidEditarClaseRequest(request: EditarClaseRequest): boolean 
   if (typeof request.idTipoClase !== 'string' || !request.idTipoClase) {
     return false
   }
-  if (typeof request.idProfesor !== 'string' || !request.idProfesor) {
+  if (!Array.isArray(request.profesores) || request.profesores.length === 0) {
     return false
   }
   if (typeof request.fechaHoraInicio !== 'string' || !request.fechaHoraInicio) {
@@ -151,7 +151,13 @@ const crearClaseRequestArb: fc.Arbitrary<CrearClaseRequest> = fc.record({
  */
 const editarClaseRequestArb: fc.Arbitrary<EditarClaseRequest> = fc.record({
   idTipoClase: fc.uuid(),
-  idProfesor: fc.uuid(),
+  profesores: fc.array(
+    fc.record({
+      idProfesor: fc.uuid(),
+      rolEnClase: fc.constantFrom('Principal', 'Monitor'),
+    }),
+    { minLength: 1, maxLength: 3 }
+  ),
   fechaHoraInicio: isoDateTimeArb,
   duracionMinutos: fc.integer({ min: 1, max: 480 }),
   cupoMaximo: fc.integer({ min: 1, max: 50 }),
@@ -314,14 +320,18 @@ describe('Property 12: Update Clase Request Format', () => {
     )
   })
 
-  it('should have idProfesor as a valid UUID string', () => {
+  it('should have profesores as non-empty array with valid structure', () => {
     fc.assert(
       fc.property(editarClaseRequestArb, (request) => {
-        expect(typeof request.idProfesor).toBe('string')
-        expect(request.idProfesor.length).toBeGreaterThan(0)
-        // UUID format check
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-        expect(uuidRegex.test(request.idProfesor)).toBe(true)
+        expect(Array.isArray(request.profesores)).toBe(true)
+        expect(request.profesores.length).toBeGreaterThan(0)
+        // Each profesor must have valid UUID and role
+        request.profesores.forEach(p => {
+          expect(typeof p.idProfesor).toBe('string')
+          expect(['Principal', 'Monitor']).toContain(p.rolEnClase)
+          const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+          expect(uuidRegex.test(p.idProfesor)).toBe(true)
+        })
         return true
       }),
       { numRuns: 100 }

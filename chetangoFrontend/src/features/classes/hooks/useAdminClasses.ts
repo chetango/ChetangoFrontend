@@ -35,9 +35,8 @@ import type {
 } from '../types/classTypes'
 import {
     calcularDuracionMinutos,
-    encontrarProfesorPrincipal,
     formatearFechaHoraISO,
-    formatearHoraConSegundos,
+    formatearHoraConSegundos
 } from '../utils/claseHelpers'
 
 // ============================================
