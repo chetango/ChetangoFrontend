@@ -39,10 +39,11 @@ export const useUsersQuery = (filters: UserFilters) => {
     queryKey: usersKeys.list(filters),
     queryFn: async () => {
       const params = new URLSearchParams()
-      if (filters.busqueda) params.append('busqueda', filters.busqueda)
+      if (filters.searchTerm) params.append('searchTerm', filters.searchTerm)
       if (filters.rol && filters.rol !== 'todos') params.append('rol', filters.rol)
       if (filters.estado && filters.estado !== 'todos') params.append('estado', filters.estado)
-      if (filters.pageNumber) params.append('pageNumber', filters.pageNumber.toString())
+      if (filters.sede && filters.sede !== 'all') params.append('sede', filters.sede.toString())
+      if (filters.pageNumber) params.append('page', filters.pageNumber.toString())
       if (filters.pageSize) params.append('pageSize', filters.pageSize.toString())
 
       const response = await api.get<PaginatedUsersBackend>(`/api/usuarios?${params.toString()}`)

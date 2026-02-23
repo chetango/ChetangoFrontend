@@ -15,29 +15,17 @@ const UsersPage = () => {
   const location = useLocation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editUserId, setEditUserId] = useState<string | null>(null)
-  const [sedeFilter, setSedeFilter] = useState<SedeFilterValue>('all')
   const [filters, setFilters] = useState<UserFilters>({
     pageNumber: 1,
     pageSize: 10,
+    sede: 'all',
   })
 
   const { data, isLoading } = useUsersQuery(filters)
   const deleteUserMutation = useDeleteUserMutation()
   
-  // Aplicar filtro de sede localmente (la API no soporta filtro de sede aún)
-  const filteredUsers = React.useMemo(() => {
-    if (!data?.items) return []
-    if (sedeFilter === 'all') return data.items
-    return data.items.filter(user => user.sede === sedeFilter)
-  }, [data?.items, sedeFilter])
-  
   // Solo cargar detalles del usuario si estamos editando
   const { data: userDetail } = useUserDetailQuery(editUserId || '')
-  
-  // Resetear paginación cuando cambia el filtro de sede
-  React.useEffect(() => {
-    setFilters(prev => ({ ...prev, pageNumber: 1 }))
-  }, [sedeFilter])
   
   // Abrir modal de edición si se navega con editUserId en el state
   React.useEffect(() => {
@@ -58,7 +46,11 @@ const UsersPage = () => {
   }, [userDetail])
 
   const handleSearch = (searchTerm: string) => {
-    setFilters((prev) => ({ ...prev, busqueda: searchTerm, pageNumber: 1 }))
+    setFilters((prev) => ({ ...prev, searchTerm, pageNumber: 1 }))
+  }
+
+  const handleSedeFilter = (sede: SedeFilterValue) => {
+    setFilters((prev) => ({ ...prev, sede, pageNumber: 1 }))
   }
 
   const handleRoleFilter = (rol?: UserRole) => {
@@ -182,7 +174,7 @@ const UsersPage = () => {
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           {/* Sede Filter */}
           <div className="flex-shrink-0">
-            <SedeFilter value={sedeFilter} onChange={setSedeFilter} variant="compact" />
+            <SedeFilter value={filters.sede || 'all'} onChange={handleSedeFilter} variant="compact" />
           </div>
 
           {/* Role Filter */}
@@ -235,6 +227,9 @@ const UsersPage = () => {
                   Contacto
                 </th>
                 <th className="text-left px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
+                  Sede
+                </th>
+                <th className="text-left px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
                   Rol
                 </th>
                 <th className="text-left px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-[#9ca3af] text-xs sm:text-sm font-semibold whitespace-nowrap">
@@ -248,21 +243,21 @@ const UsersPage = () => {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-[#9ca3af]">
+                  <td colSpan={6} className="px-6 py-12 text-center text-[#9ca3af]">
                     <div className="flex items-center justify-center gap-3">
                       <div className="w-6 h-6 border-2 border-[#c93448]/30 border-t-[#c93448] rounded-full animate-spin" />
                       Cargando usuarios...
                     </div>
                   </td>
                 </tr>
-              ) : filteredUsers?.length === 0 ? (
+              ) : data?.items?.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-[#9ca3af]">
+                  <td colSpan={6} className="px-6 py-12 text-center text-[#9ca3af]">
                     No se encontraron usuarios
                   </td>
                 </tr>
               ) : (
-                (filteredUsers || []).map((user) => (
+                (data?.items || []).map((user) => (
                   <tr
                     key={user.idUsuario}
                     className="border-b border-[rgba(64,64,64,0.3)] hover:bg-[rgba(255,255,255,0.02)] transition-colors"
@@ -280,6 +275,17 @@ const UsersPage = () => {
                         <p className="text-[#f9fafb] text-xs sm:text-sm">{user.correo}</p>
                         <p className="text-[#9ca3af] text-xs sm:text-sm">{user.telefono}</p>
                       </div>
+                    </td>
+                    <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                          user.sede === 1
+                            ? 'bg-[rgba(16,185,129,0.15)] text-[#10b981] border-[rgba(16,185,129,0.3)]'
+                            : 'bg-[rgba(59,130,246,0.15)] text-[#3b82f6] border-[rgba(59,130,246,0.3)]'
+                        }`}
+                      >
+                        {user.sede === 1 ? '🏢 Medellín' : '🏢 Manizales'}
+                      </span>
                     </td>
                     <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">{getRoleBadge(user.rol || user.roles)}</td>
                     <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">{getStatusBadge(user.estado)}</td>

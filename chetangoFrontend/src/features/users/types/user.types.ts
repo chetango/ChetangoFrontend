@@ -126,9 +126,10 @@ export interface DeleteUserRequest {
 
 // Filter types
 export interface UserFilters {
-  busqueda?: string
+  searchTerm?: string
   rol?: UserRole | 'todos'
   estado?: UserStatus | 'todos'
+  sede?: Sede | 'all'
   pageNumber?: number
   pageSize?: number
 }
