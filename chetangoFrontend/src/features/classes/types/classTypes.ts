@@ -143,7 +143,7 @@ export interface CrearClaseRequest {
  */
 export interface EditarClaseRequest {
   idTipoClase: string // Guid
-  idProfesor: string // Guid
+  profesores: ProfesorClaseRequest[] // Lista de profesores con sus roles
   fechaHoraInicio: string // DateTime ISO 8601 (fecha + hora)
   duracionMinutos: number
   cupoMaximo: number

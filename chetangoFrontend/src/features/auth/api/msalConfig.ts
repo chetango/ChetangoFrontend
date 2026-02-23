@@ -1,6 +1,6 @@
+import { MSAL_CONFIG } from '@/shared/constants/app'
 import type { Configuration } from '@azure/msal-browser'
 import { LogLevel } from '@azure/msal-browser'
-import { MSAL_CONFIG } from '@/shared/constants/app'
 
 // CONFIGURACIÓN MSAL PARA MICROSOFT ENTRA EXTERNAL ID
 export const msalConfig: Configuration = {

@@ -311,18 +311,16 @@ export function useAdminClasses() {
   /**
    * Updates an existing class
    * Requirements: 6.3
+   * Usa el NUEVO formato de múltiples profesores con roles
    */
   const handleUpdateClase = useCallback(
     async (idClase: string, formData: ClaseFormData) => {
-      // Obtener el profesor principal del array
-      const profesorPrincipal = encontrarProfesorPrincipal(formData.profesores)
-      if (!profesorPrincipal) {
-        throw new Error('No se encontró un profesor principal')
-      }
-
       const request: EditarClaseRequest = {
         idTipoClase: formData.idTipoClase,
-        idProfesor: profesorPrincipal.idProfesor,
+        profesores: formData.profesores.map(p => ({
+          idProfesor: p.idProfesor,
+          rolEnClase: p.rolEnClase
+        })),
         fechaHoraInicio: formatearFechaHoraISO(formData.fecha, formData.horaInicio),
         duracionMinutos: calcularDuracionMinutos(formData.horaInicio, formData.horaFin),
         cupoMaximo: formData.cupoMaximo,
