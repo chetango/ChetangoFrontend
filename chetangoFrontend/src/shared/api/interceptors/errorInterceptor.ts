@@ -6,7 +6,7 @@ import { toast } from 'sonner'
  * Requirements: 11.1, 11.2, 11.3, 11.4, 11.5
  */
 export const ERROR_MESSAGES = {
-  400: 'Datos inválidos',
+  400: 'Solicitud inválida',
   403: 'No tienes permisos para acceder a esta función',
   404: 'El recurso solicitado no existe',
   500: 'Error del servidor. Intenta de nuevo.',
