@@ -114,9 +114,9 @@ const UsersPage = () => {
     }
     
     const styles = {
-      admin: 'bg-[rgba(139,92,246,0.15)] text-[#a78bfa] border-[rgba(139,92,246,0.3)]',
-      profesor: 'bg-[rgba(59,130,246,0.15)] text-[#60a5fa] border-[rgba(59,130,246,0.3)]',
-      alumno: 'bg-[rgba(34,197,94,0.15)] text-[#4ade80] border-[rgba(34,197,94,0.3)]',
+      admin: 'bg-[rgba(139,92,246,0.25)] text-[#a78bfa] border-[rgba(139,92,246,0.5)]',
+      profesor: 'bg-[rgba(59,130,246,0.25)] text-[#60a5fa] border-[rgba(59,130,246,0.5)]',
+      alumno: 'bg-[rgba(34,197,94,0.25)] text-[#4ade80] border-[rgba(34,197,94,0.5)]',
     }
     const labels = {
       admin: '👨‍💼 Admin',
@@ -132,9 +132,9 @@ const UsersPage = () => {
 
   const getStatusBadge = (estado: UserStatus) => {
     const styles = {
-      activo: 'bg-[rgba(34,197,94,0.15)] text-[#4ade80] border-[rgba(34,197,94,0.3)]',
-      inactivo: 'bg-[rgba(156,163,175,0.15)] text-[#9ca3af] border-[rgba(156,163,175,0.3)]',
-      pendiente_azure: 'bg-[rgba(245,158,11,0.15)] text-[#fbbf24] border-[rgba(245,158,11,0.3)]',
+      activo: 'bg-[rgba(34,197,94,0.25)] text-[#4ade80] border-[rgba(34,197,94,0.5)]',
+      inactivo: 'bg-[rgba(156,163,175,0.25)] text-[#9ca3af] border-[rgba(156,163,175,0.5)]',
+      pendiente_azure: 'bg-[rgba(245,158,11,0.25)] text-[#fbbf24] border-[rgba(245,158,11,0.5)]',
     }
     const labels = {
       activo: 'Activo',
@@ -280,8 +280,8 @@ const UsersPage = () => {
                       <span
                         className={`inline-block px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
                           user.sede === 1
-                            ? 'bg-[rgba(16,185,129,0.15)] text-[#10b981] border-[rgba(16,185,129,0.3)]'
-                            : 'bg-[rgba(59,130,246,0.15)] text-[#3b82f6] border-[rgba(59,130,246,0.3)]'
+                            ? 'bg-[rgba(16,185,129,0.25)] text-[#10b981] border-[rgba(16,185,129,0.5)]'
+                            : 'bg-[rgba(59,130,246,0.25)] text-[#3b82f6] border-[rgba(59,130,246,0.5)]'
                         }`}
                       >
                         {user.sede === 1 ? '🏢 Medellín' : '🏢 Manizales'}
