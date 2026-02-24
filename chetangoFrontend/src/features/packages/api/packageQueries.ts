@@ -2,16 +2,16 @@
 // PACKAGE QUERIES - REACT QUERY HOOKS
 // ============================================
 
-import { useQuery } from '@tanstack/react-query'
 import { httpClient } from '@/shared/api/httpClient'
 import type { ApiError } from '@/shared/api/interceptors'
+import { useQuery } from '@tanstack/react-query'
 import type {
-  AlumnoDTO,
-  TipoPaqueteDTO,
-  PaqueteDetalleDTO,
-  PaqueteListItemDTO,
-  PaginatedResponse,
-  PaquetesQueryParams,
+    AlumnoDTO,
+    PaginatedResponse,
+    PaqueteDetalleDTO,
+    PaqueteListItemDTO,
+    PaquetesQueryParams,
+    TipoPaqueteDTO,
 } from '../types/packageTypes'
 
 // ============================================

@@ -254,10 +254,6 @@ export default function AdminClassesPage() {
     setFilterFecha,
     clearFilters,
 
-    // Selected profesor
-    selectedProfesorId,
-    setSelectedProfesorId,
-
     // Stats
     stats,
 
@@ -393,10 +389,7 @@ export default function AdminClassesPage() {
   // Handle profesor filter change
   const handleProfesorChange = useCallback((value: string) => {
     setFilterProfesor(value)
-    if (value !== 'todos') {
-      setSelectedProfesorId(value)
-    }
-  }, [setFilterProfesor, setSelectedProfesorId])
+  }, [setFilterProfesor])
 
   // Check if any filters are active
   const hasActiveFilters = useMemo(() => {
@@ -568,17 +561,13 @@ export default function AdminClassesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {clasesByDate[date].map((clase) => {
                   const estado = getClaseEstado(clase.fecha)
-                  // Find profesor name
-                  const profesor = profesores.find(
-                    (p) => p.idProfesor === selectedProfesorId
-                  )
 
                   return (
                     <ClaseCard
                       key={clase.idClase}
                       clase={clase}
                       estado={estado}
-                      nombreProfesor={profesor?.nombreCompleto}
+                      nombreProfesor={clase.nombreProfesor}
                       onEdit={handleOpenEditModal}
                       onCancel={handleOpenCancelConfirmation}
                       onComplete={handleOpenCompleteConfirmation}

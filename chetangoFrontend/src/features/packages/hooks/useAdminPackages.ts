@@ -10,8 +10,8 @@ import {
     useDescongelarPaqueteMutation,
 } from '../api/packageMutations'
 import {
-    useAlumnosQuery,
     useAllPaquetesQuery,
+    useAlumnosQuery,
     usePaqueteDetailQuery,
     useTiposPaqueteQuery,
 } from '../api/packageQueries'

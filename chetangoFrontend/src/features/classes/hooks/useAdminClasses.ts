@@ -4,7 +4,6 @@
 // ============================================
 
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
-import { useQueries } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import {
     useCreateClaseMutation,
@@ -12,6 +11,7 @@ import {
     useUpdateClaseMutation,
 } from '../api/classMutations'
 import {
+    useAllClasesQuery,
     useClaseDetailQuery,
     useClasesByProfesorQuery,
     useProfesoresQuery,
@@ -156,87 +156,37 @@ export function useAdminClasses() {
   const profesoresQuery = useProfesoresQuery()
 
   // ============================================
-  // CLASSES QUERY STATE
+  // CLASSES QUERY STATE - OPTIMIZED
   // ============================================
-
-  // Selected profesor for fetching classes
-  const [selectedProfesorId, setSelectedProfesorId] = useState<string>('')
 
   // Query params for pagination and date filtering
   const [queryParams, setQueryParams] = useState<ClasesQueryParams>({
     fechaDesde: '',
     fechaHasta: '',
     pagina: 1,
-    tamanoPagina: 50,
+    tamanoPagina: 500, // Large page size to get all classes
   })
 
-  // When "todos" is selected, query all professors in parallel
-  const profesoresList = profesoresQuery.data || []
+  // Use optimized single query when "todos" is selected, otherwise query by profesor
   const shouldQueryAll = filters.filterProfesor === 'todos'
   
-  // Query individual profesor
+  // Query for single profesor
   const singleProfesorQuery = useClasesByProfesorQuery(
-    selectedProfesorId,
+    filters.filterProfesor !== 'todos' ? filters.filterProfesor : '',
     queryParams,
-    !!selectedProfesorId && !shouldQueryAll
+    filters.filterProfesor !== 'todos' && !!filters.filterProfesor
   )
 
-  // Query all profesores when "todos" is selected
-  const allProfesoresQueries = useQueries({
-    queries: shouldQueryAll ? profesoresList.map((prof) => ({
-      queryKey: ['clases', prof.idProfesor, queryParams],
-      queryFn: async () => {
-        const { httpClient } = await import('@/shared/api/httpClient')
-        const queryParamsObj = new URLSearchParams()
-        if (queryParams.fechaDesde) queryParamsObj.append('fechaDesde', queryParams.fechaDesde)
-        if (queryParams.fechaHasta) queryParamsObj.append('fechaHasta', queryParams.fechaHasta)
-        if (queryParams.pagina) queryParamsObj.append('pageNumber', queryParams.pagina.toString())
-        if (queryParams.tamanoPagina) queryParamsObj.append('pageSize', queryParams.tamanoPagina.toString())
-        const queryString = queryParamsObj.toString()
-        const url = `/api/profesores/${prof.idProfesor}/clases${queryString ? `?${queryString}` : ''}`
-        const response = await httpClient.get(url)
-        return response.data
-      },
-      enabled: shouldQueryAll,
-    })) : [],
-  })
+  // Query for all clases (optimized single endpoint)
+  const allClasesQuery = useAllClasesQuery(queryParams)
 
-  // Combine results from all queries
+  // Combine results based on filter selection
   const clasesQuery = useMemo(() => {
     if (shouldQueryAll) {
-      // Flatten all results
-      const allData = allProfesoresQueries
-        .filter(q => q.data)
-        .flatMap(q => q.data?.items || [])
-      
-      // DEDUPLICAR: Una clase puede aparecer en múltiples profesores (Principal + Monitor)
-      // Usar Map para mantener solo una instancia por idClase
-      const uniqueClasesMap = new Map<string, ClaseListItemDTO>()
-      allData.forEach(clase => {
-        uniqueClasesMap.set(clase.idClase, clase)
-      })
-      
-      // Convertir Map a array
-      const uniqueClases = Array.from(uniqueClasesMap.values())
-      
-      return {
-        data: { 
-          items: uniqueClases, 
-          totalItems: uniqueClases.length, 
-          totalPages: 1,
-          paginaActual: 1,
-          totalPaginas: 1,
-          totalRegistros: uniqueClases.length,
-          tienePaginaAnterior: false,
-          tienePaginaSiguiente: false,
-        },
-        isLoading: allProfesoresQueries.some(q => q.isLoading),
-        error: allProfesoresQueries.find(q => q.error)?.error || null,
-        refetch: () => allProfesoresQueries.forEach(q => q.refetch()),
-      }
+      return allClasesQuery
     }
     return singleProfesorQuery
-  }, [shouldQueryAll, allProfesoresQueries, singleProfesorQuery])
+  }, [shouldQueryAll, allClasesQuery, singleProfesorQuery])
 
   // ============================================
   // DETAIL QUERY
@@ -367,7 +317,6 @@ export function useAdminClasses() {
   const handleSetFilterProfesor = useCallback(
     (id: string) => {
       dispatch(setFilterProfesor(id))
-      setSelectedProfesorId(id === 'todos' ? '' : id)
     },
     [dispatch]
   )
@@ -442,8 +391,6 @@ export function useAdminClasses() {
     // Query params
     queryParams,
     setQueryParams,
-    selectedProfesorId,
-    setSelectedProfesorId,
 
     // Stats
     stats,

@@ -23,6 +23,7 @@ export const classKeys = {
   profesores: () => [...classKeys.all, 'profesores'] as const,
   clasesByProfesor: (idProfesor: string, params: ClasesQueryParams) =>
     [...classKeys.all, 'by-profesor', idProfesor, params] as const,
+  allClases: (params: ClasesQueryParams) => [...classKeys.all, 'admin-list', params] as const,
   claseDetail: (idClase: string) => [...classKeys.all, 'detail', idClase] as const,
 }
 
@@ -102,6 +103,34 @@ export function useClasesByProfesorQuery(
       return response.data
     },
     enabled: enabled && !!idProfesor,
+  })
+}
+
+/**
+ * Fetches ALL classes from the system for admin view (single optimized query)
+ * GET /api/clases
+ * @param params - Query parameters for filtering and pagination
+ * @returns PaginatedResponse with ClaseListItemDTO items
+ * 
+ * This replaces the N+1 queries problem where we fetched classes for each professor individually.
+ * Now we fetch all classes in a single request with a large page size.
+ */
+export function useAllClasesQuery(params: ClasesQueryParams) {
+  return useQuery({
+    queryKey: classKeys.allClases(params),
+    queryFn: async (): Promise<PaginatedResponse<ClaseListItemDTO>> => {
+      const queryParams = new URLSearchParams()
+      if (params.fechaDesde) queryParams.append('fechaDesde', params.fechaDesde)
+      if (params.fechaHasta) queryParams.append('fechaHasta', params.fechaHasta)
+      if (params.pagina) queryParams.append('pageNumber', params.pagina.toString())
+      if (params.tamanoPagina) queryParams.append('pageSize', params.tamanoPagina.toString())
+
+      const queryString = queryParams.toString()
+      const url = `/api/clases${queryString ? `?${queryString}` : ''}`
+      const response = await httpClient.get<PaginatedResponse<ClaseListItemDTO>>(url)
+      return response.data
+    },
+    staleTime: 2 * 60 * 1000, // 2 minutes
   })
 }
 
