@@ -7,8 +7,8 @@
  * Uso opcional: Agregar en MainLayout o AppProviders
  */
 
-import { WifiOff, Wifi } from 'lucide-react'
 import { useNetworkStatus } from '@/shared/hooks/useNetworkStatus'
+import { Wifi, WifiOff } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export const NetworkStatusBanner = () => {

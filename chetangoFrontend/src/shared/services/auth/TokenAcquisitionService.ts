@@ -8,7 +8,7 @@
  * Responsabilidad única: Coordinar la obtención de tokens de acceso
  */
 
-import type { PublicClientApplication, AccountInfo, SilentRequest } from '@azure/msal-browser'
+import type { AccountInfo, PublicClientApplication, SilentRequest } from '@azure/msal-browser'
 import { BrowserAuthError, InteractionRequiredAuthError } from '@azure/msal-browser'
 
 // ============================================

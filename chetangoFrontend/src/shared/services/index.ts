@@ -4,18 +4,17 @@
  */
 
 // Auth Services
-export { 
-  TokenAcquisitionService,
-  tokenAcquisitionService,
-  TokenAcquisitionError,
-  type TokenAcquisitionOptions,
-  type TokenAcquisitionResult,
+export {
+    TokenAcquisitionError, TokenAcquisitionService,
+    tokenAcquisitionService, type TokenAcquisitionOptions,
+    type TokenAcquisitionResult
 } from './auth/TokenAcquisitionService'
 
 // Network Services
 export {
-  NetworkStatusService,
-  networkStatusService,
-  type NetworkStatus,
-  type NetworkStatusCallback,
+    NetworkStatusService,
+    networkStatusService,
+    type NetworkStatus,
+    type NetworkStatusCallback
 } from './network/NetworkStatusService'
+

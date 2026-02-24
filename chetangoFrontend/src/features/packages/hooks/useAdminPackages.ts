@@ -3,7 +3,7 @@
 // ============================================
 
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
     useCongelarPaqueteMutation,
     useCreatePaqueteMutation,
@@ -11,6 +11,7 @@ import {
 } from '../api/packageMutations'
 import {
     useAlumnosQuery,
+    useAllPaquetesQuery,
     usePaqueteDetailQuery,
     useTiposPaqueteQuery,
 } from '../api/packageQueries'
@@ -192,13 +193,12 @@ export function useAdminPackages() {
   })
 
   // ============================================
-  // PACKAGES STATE
+  // PACKAGES STATE - OPTIMIZED SINGLE QUERY
   // ============================================
 
-  // All packages aggregated from all alumnos
-  const [allPaquetes, setAllPaquetes] = useState<PaqueteListItemDTO[]>([])
-  const [isLoadingPaquetes, setIsLoadingPaquetes] = useState(true)
-  const [paquetesError, setPaquetesError] = useState<Error | null>(null)
+  // Fetch ALL packages in a single optimized query instead of N+1 queries
+  // This replaces the previous approach of fetching packages for each alumno individually
+  const allPaquetesQuery = useAllPaquetesQuery(1000) // Fetch up to 1000 packages
 
   // Detail query for modal
   const [detailPaqueteId, setDetailPaqueteId] = useState<string | null>(null)
@@ -213,68 +213,19 @@ export function useAdminPackages() {
   const descongelarMutation = useDescongelarPaqueteMutation()
 
   // ============================================
-  // FETCH ALL PACKAGES FROM ALL ALUMNOS
-  // ============================================
-
-  const fetchAllPaquetes = useCallback(async () => {
-    if (!alumnosQuery.data || alumnosQuery.data.length === 0) {
-      setAllPaquetes([])
-      setIsLoadingPaquetes(false)
-      return
-    }
-
-    setIsLoadingPaquetes(true)
-    setPaquetesError(null)
-
-    try {
-      // Import httpClient dynamically to avoid circular dependencies
-      const { httpClient } = await import('@/shared/api/httpClient')
-
-      // Fetch packages for all alumnos in parallel
-      const promises = alumnosQuery.data.map(async (alumno) => {
-        try {
-          const response = await httpClient.get<{
-            items: PaqueteListItemDTO[]
-          }>(`/api/alumnos/${alumno.idAlumno}/paquetes?pageSize=100&soloActivos=false`)
-          return response.data.items || []
-        } catch {
-          // If fetching for one alumno fails, return empty array
-          return []
-        }
-      })
-
-      const results = await Promise.all(promises)
-      const aggregated = results.flat()
-
-      setAllPaquetes(aggregated)
-    } catch (error) {
-      setPaquetesError(error instanceof Error ? error : new Error('Error fetching packages'))
-      setAllPaquetes([])
-    } finally {
-      setIsLoadingPaquetes(false)
-    }
-  }, [alumnosQuery.data])
-
-  // Fetch packages when alumnos are loaded
-  useEffect(() => {
-    if (alumnosQuery.data && !alumnosQuery.isLoading) {
-      fetchAllPaquetes()
-    }
-  }, [alumnosQuery.data, alumnosQuery.isLoading, fetchAllPaquetes])
-
-  // ============================================
   // FILTERED PACKAGES (client-side filtering)
   // Property 12: Filtered Stats Accuracy
   // ============================================
 
   const filteredPaquetes = useMemo(() => {
+    const allPaquetes = allPaquetesQuery.data?.items || []
     return applyAllFilters(
       allPaquetes,
       filters.searchTerm,
       filters.filterEstado,
       filters.filterTipoPaquete
     )
-  }, [allPaquetes, filters.searchTerm, filters.filterEstado, filters.filterTipoPaquete])
+  }, [allPaquetesQuery.data?.items, filters.searchTerm, filters.filterEstado, filters.filterTipoPaquete])
 
   // ============================================
   // STATS CALCULATION
@@ -311,11 +262,11 @@ export function useAdminPackages() {
       const result = await createMutation.mutateAsync(request)
 
       // Refetch packages after creation
-      await fetchAllPaquetes()
+      await allPaquetesQuery.refetch()
 
       return result
     },
-    [createMutation, tiposPaqueteQuery.data, fetchAllPaquetes]
+    [createMutation, tiposPaqueteQuery.data, allPaquetesQuery]
   )
 
   /**
@@ -334,9 +285,9 @@ export function useAdminPackages() {
       await congelarMutation.mutateAsync({ idPaquete, data })
 
       // Refetch packages after freezing
-      await fetchAllPaquetes()
+      await allPaquetesQuery.refetch()
     },
-    [congelarMutation, fetchAllPaquetes]
+    [congelarMutation, allPaquetesQuery]
   )
 
   /**
@@ -348,9 +299,9 @@ export function useAdminPackages() {
       await descongelarMutation.mutateAsync({ idPaquete, idCongelacion })
 
       // Refetch packages after unfreezing
-      await fetchAllPaquetes()
+      await allPaquetesQuery.refetch()
     },
-    [descongelarMutation, fetchAllPaquetes]
+    [descongelarMutation, allPaquetesQuery]
   )
 
   // ============================================
@@ -441,9 +392,9 @@ export function useAdminPackages() {
 
     // Packages
     paquetes: filteredPaquetes,
-    allPaquetes,
-    isPaquetesLoading: isLoadingPaquetes || alumnosQuery.isLoading,
-    paquetesError,
+    allPaquetes: allPaquetesQuery.data?.items || [],
+    isPaquetesLoading: allPaquetesQuery.isLoading || alumnosQuery.isLoading,
+    paquetesError: allPaquetesQuery.error,
 
     // Detail
     paqueteDetail: paqueteDetailQuery.data,
@@ -480,6 +431,6 @@ export function useAdminPackages() {
     handleCompleteRenewal,
 
     // Refetch
-    refetchPaquetes: fetchAllPaquetes,
+    refetchPaquetes: allPaquetesQuery.refetch,
   }
 }

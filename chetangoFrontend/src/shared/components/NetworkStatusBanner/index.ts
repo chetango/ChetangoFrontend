@@ -1,1 +1,2 @@
-export { NetworkStatusBanner } from './NetworkStatusBanner'
+export { NetworkStatusBanner } from './NetworkStatusBanner';
+

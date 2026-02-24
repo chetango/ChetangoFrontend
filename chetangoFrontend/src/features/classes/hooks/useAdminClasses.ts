@@ -204,18 +204,29 @@ export function useAdminClasses() {
   // Combine results from all queries
   const clasesQuery = useMemo(() => {
     if (shouldQueryAll) {
+      // Flatten all results
       const allData = allProfesoresQueries
         .filter(q => q.data)
         .flatMap(q => q.data?.items || [])
       
+      // DEDUPLICAR: Una clase puede aparecer en múltiples profesores (Principal + Monitor)
+      // Usar Map para mantener solo una instancia por idClase
+      const uniqueClasesMap = new Map<string, ClaseListItemDTO>()
+      allData.forEach(clase => {
+        uniqueClasesMap.set(clase.idClase, clase)
+      })
+      
+      // Convertir Map a array
+      const uniqueClases = Array.from(uniqueClasesMap.values())
+      
       return {
         data: { 
-          items: allData, 
-          totalItems: allData.length, 
+          items: uniqueClases, 
+          totalItems: uniqueClases.length, 
           totalPages: 1,
           paginaActual: 1,
           totalPaginas: 1,
-          totalRegistros: allData.length,
+          totalRegistros: uniqueClases.length,
           tienePaginaAnterior: false,
           tienePaginaSiguiente: false,
         },

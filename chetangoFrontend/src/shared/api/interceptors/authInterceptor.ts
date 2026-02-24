@@ -13,10 +13,10 @@
  */
 
 import { ROUTES } from '@/shared/constants/routes'
-import { tokenAcquisitionService, TokenAcquisitionError } from '@/shared/services/auth/TokenAcquisitionService'
+import { TokenAcquisitionError, tokenAcquisitionService } from '@/shared/services/auth/TokenAcquisitionService'
 import { networkStatusService } from '@/shared/services/network/NetworkStatusService'
 import type { AccountInfo, PublicClientApplication, SilentRequest } from '@azure/msal-browser'
-import type { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from 'axios'
+import type { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 
 // ============================================
 // TYPES

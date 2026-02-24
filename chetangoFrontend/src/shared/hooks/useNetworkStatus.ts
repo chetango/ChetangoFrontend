@@ -5,8 +5,8 @@
  * Se actualiza automáticamente cuando cambia el estado de la red.
  */
 
-import { useEffect, useState } from 'react'
 import { networkStatusService, type NetworkStatus } from '@/shared/services/network/NetworkStatusService'
+import { useEffect, useState } from 'react'
 
 export const useNetworkStatus = () => {
   const [status, setStatus] = useState<NetworkStatus>(() => networkStatusService.getStatus())

@@ -141,6 +141,40 @@ export function usePaquetesByAlumnoQuery(
 }
 
 /**
+ * Fetches ALL packages from the system for admin view (single optimized query)
+ * GET /api/paquetes
+ * @param params - Query parameters for filtering and pagination
+ * @returns PaginatedResponse<PaqueteListItemDTO>
+ * 
+ * This replaces the N+1 queries problem where we fetched packages for each student individually.
+ * Now we fetch all packages in a single request with a large page size.
+ * 
+ * Error handling: 11.1, 11.2, 11.3, 11.4, 11.5
+ */
+export function useAllPaquetesQuery(pageSize: number = 1000) {
+  return useQuery<PaginatedResponse<PaqueteListItemDTO>, ApiError>({
+    queryKey: [...packageKeys.all, 'admin-list', pageSize] as const,
+    queryFn: async (): Promise<PaginatedResponse<PaqueteListItemDTO>> => {
+      const queryParams = new URLSearchParams()
+      queryParams.append('pageSize', pageSize.toString())
+      queryParams.append('pageNumber', '1')
+
+      const url = `/api/paquetes?${queryParams.toString()}`
+      const response = await httpClient.get<PaginatedResponse<PaqueteListItemDTO>>(url)
+      return response.data
+    },
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    retry: (failureCount, error) => {
+      // Don't retry on 401, 403, 404 errors
+      if (error.status === 401 || error.status === 403 || error.status === 404) {
+        return false
+      }
+      return failureCount < 2
+    },
+  })
+}
+
+/**
  * Fetches detailed information for a specific package
  * GET /api/paquetes/{id}
  * @param idPaquete - Package UUID

@@ -529,7 +529,7 @@ export default function AdminPackagesPage() {
               )}
               <GlassButton
                 variant="icon"
-                onClick={refetchPaquetes}
+                onClick={() => refetchPaquetes()}
                 title="Actualizar lista"
                 className="!p-2.5 sm:!p-2 min-h-[44px] min-w-[44px]"
               >
@@ -545,7 +545,7 @@ export default function AdminPackagesPage() {
         {paquetesError ? (
           <ErrorState
             message="No se pudieron cargar los paquetes. Verifica tu conexión e intenta de nuevo."
-            onRetry={refetchPaquetes}
+            onRetry={() => refetchPaquetes()}
           />
         ) : isPaquetesLoading ? (
           <TableSkeletons />
