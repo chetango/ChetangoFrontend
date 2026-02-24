@@ -77,7 +77,7 @@ export const PackageDepletedNotification = ({
 
             {/* Icono de advertencia */}
             <div 
-              className="absolute -bottom-2 -right-2 text-2xl bg-[#1a1a2e] rounded-full p-1"
+              className="absolute -bottom-2 -right-2 text-2xl"
               style={{ animation: 'warning-blink 1.5s ease-in-out infinite' }}
             >
               ⚠️
