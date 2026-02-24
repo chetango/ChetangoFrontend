@@ -36,8 +36,8 @@ export const PackageDepletedNotification = ({
   }
 
   const handleViewDetails = () => {
-    // Navegar a la página de paquetes con filtro de agotados
-    navigate('/admin/packages?filterEstado=Agotado')
+    // Navegar a la página de paquetes con filtro de "Agotado"
+    navigate('/admin/paquetes?filterEstado=Agotado')
   }
 
   const handleBackdropClick = () => {
@@ -67,7 +67,7 @@ export const PackageDepletedNotification = ({
           <div className="absolute inset-0 bg-[#f59e0b] blur-xl opacity-60 rounded-full" />
           
           {/* Icono de paquete/caja */}
-          <div className="relative w-20 h-20 bg-gradient-to-br from-[#f59e0b] to-[#ef4444] rounded-2xl shadow-2xl flex items-center justify-center">
+          <div className="relative w-20 h-20 bg-gradient-to-br from-[#f59e0b] to-[#ef4444] rounded-full shadow-2xl flex items-center justify-center">
             <span className="text-4xl">📦</span>
             
             {/* Badge de notificación con número */}

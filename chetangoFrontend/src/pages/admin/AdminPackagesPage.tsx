@@ -23,6 +23,7 @@ import { useAdminPackages } from '@/features/packages/hooks'
 import type { CongelacionDTO, PaqueteFormData, PaqueteListItemDTO } from '@/features/packages/types/packageTypes'
 import { AlertCircle, Package, Plus, RefreshCw } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 // ============================================
 // SKELETON LOADERS
@@ -218,6 +219,12 @@ function ErrorState({ message, onRetry }: ErrorStateProps) {
 
 export default function AdminPackagesPage() {
   // ============================================
+  // URL PARAMS
+  // ============================================
+  
+  const [searchParams] = useSearchParams()
+  
+  // ============================================
   // HOOK INTEGRATION
   // ============================================
 
@@ -318,6 +325,21 @@ export default function AdminPackagesPage() {
 
     return () => clearTimeout(timer)
   }, [searchInput, setSearchTerm])
+
+  // Apply URL params to filters when available
+  useEffect(() => {
+    const estadoParam = searchParams.get('filterEstado')
+    
+    // Valores válidos de estado
+    const validEstados = ['Activo', 'Agotado', 'Congelado', 'Vencido']
+    
+    if (estadoParam && validEstados.includes(estadoParam)) {
+      // Solo aplicar el filtro si es diferente al actual
+      if (filters.filterEstado !== estadoParam) {
+        setFilterEstado(estadoParam)
+      }
+    }
+  }, [searchParams, filters.filterEstado, setFilterEstado])
 
   // Handle renewal state - open create modal when renewal starts
   useEffect(() => {

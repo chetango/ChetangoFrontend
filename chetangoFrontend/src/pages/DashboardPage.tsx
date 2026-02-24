@@ -42,6 +42,16 @@ const DashboardPage = () => {
   const [showPackagesNotification, setShowPackagesNotification] = useState(true)
   const isCatalogsLoading = loadingTiposClase || loadingProfesores
 
+  // DEBUG: Log para verificar datos de paquetes agotados
+  if (dashboard?.kpIs) {
+    console.log('📦 Dashboard KPIs:', {
+      paquetesAgotados: dashboard.kpIs.paquetesAgotados,
+      paquetesAgotadosMedellin: dashboard.kpIs.paquetesAgotadosMedellin,
+      paquetesAgotadosManizales: dashboard.kpIs.paquetesAgotadosManizales,
+      showNotification: dashboard.kpIs.paquetesAgotados > 0 && showPackagesNotification
+    })
+  }
+
   const notaRenovacion = useMemo(() => {
     if (!renovacionSeleccionada) return undefined
 
