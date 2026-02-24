@@ -48,6 +48,7 @@ import { useSearchParams } from 'react-router-dom'
 const AdminAttendancePage = () => {
   const [searchParams] = useSearchParams()
   const claseIdFromUrl = searchParams.get('claseId')
+  const fechaFromUrl = searchParams.get('fecha')
 
   const {
     dateRange,
@@ -72,7 +73,16 @@ const AdminAttendancePage = () => {
     attendanceSummary?.alumnos ?? []
   )
 
+  // Apply URL params to filters when available
   useEffect(() => {
+    // Set date from URL if provided
+    if (fechaFromUrl && fechaFromUrl !== selectedDate) {
+      setSelectedDate(fechaFromUrl)
+    }
+  }, [fechaFromUrl, selectedDate, setSelectedDate])
+
+  useEffect(() => {
+    // Set class from URL if provided and classes are loaded
     if (claseIdFromUrl && classes?.clases) {
       const targetClass = classes.clases.find(c => c.idClase === claseIdFromUrl)
       if (targetClass) {

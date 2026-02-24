@@ -162,7 +162,9 @@ export function ClaseCard({
   // Handle navigation to attendance page
   // Requirements: 12.1, 12.2
   const handleNavigateToAttendance = () => {
-    navigate(`/admin/attendance?claseId=${clase.idClase}`)
+    // Extract date in YYYY-MM-DD format from clase.fecha (ISO string)
+    const fecha = clase.fecha.split('T')[0]
+    navigate(`/admin/attendance?claseId=${clase.idClase}&fecha=${fecha}`)
   }
 
   // Opacity for cancelled classes
