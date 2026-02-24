@@ -22,6 +22,7 @@ import {
 import { FinancialDesgloseSede } from '@/features/dashboard/components/FinancialDesgloseSede'
 import type { SedeFilter } from '@/features/dashboard/components/TabsSedeFilter'
 import { TabsSedeFilter } from '@/features/dashboard/components/TabsSedeFilter'
+import { PackageDepletedNotification } from '@/features/packages/components/PackageDepletedNotification'
 import { RegisterPaymentModal } from '@/features/payments/components/RegisterPaymentModal'
 import { SolicitudesNotifications } from '@/features/solicitudes'
 import type { SolicitudClasePrivadaDTO, SolicitudRenovacionPaqueteDTO } from '@/features/solicitudes/types/solicitudesTypes'
@@ -38,6 +39,7 @@ const DashboardPage = () => {
   const [renovacionSeleccionada, setRenovacionSeleccionada] = useState<SolicitudRenovacionPaqueteDTO | null>(null)
   const [clasePrivadaSeleccionada, setClasePrivadaSeleccionada] = useState<SolicitudClasePrivadaDTO | null>(null)
   const [sedeFilter, setSedeFilter] = useState<SedeFilter>('all')
+  const [showPackagesNotification, setShowPackagesNotification] = useState(true)
   const isCatalogsLoading = loadingTiposClase || loadingProfesores
 
   const notaRenovacion = useMemo(() => {
@@ -202,6 +204,18 @@ const DashboardPage = () => {
       
       {/* Ambient Background - Más visible */}
       <AmbientGlows variant="default" />
+
+      {/* Notificación de Paquetes Agotados */}
+      {dashboard.kpIs?.paquetesAgotados > 0 && showPackagesNotification && (
+        <PackageDepletedNotification
+          data={{
+            total: dashboard.kpIs.paquetesAgotados,
+            medellin: dashboard.kpIs.paquetesAgotadosMedellin || 0,
+            manizales: dashboard.kpIs.paquetesAgotadosManizales || 0,
+          }}
+          onDismiss={() => setShowPackagesNotification(false)}
+        />
+      )}
       
       {/* Content */}
       <div className="relative z-10">

@@ -41,6 +41,9 @@ export interface DashboardKPIs {
   paquetesActivos: number
   paquetesVencidos: number
   paquetesPorVencer: number
+  paquetesAgotados: number
+  paquetesAgotadosMedellin: number
+  paquetesAgotadosManizales: number
   paquetesVendidos: number
   asistenciasHoy: number
   asistenciasMes: number
