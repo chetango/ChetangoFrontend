@@ -290,7 +290,7 @@ const UsersPage = () => {
           {/* Role Filter */}
           <select
             onChange={(e) => handleRoleFilter(e.target.value ? (e.target.value as UserRole) : undefined)}
-            className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(255,255,255,0.4)] text-[#f9fafb] text-sm sm:text-base focus:outline-none focus:border-[#c93448] transition-colors min-h-[44px] shadow-sm [&>option]:bg-[rgba(40,40,40,0.95)] [&>option]:py-2"
+            className="px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(255,255,255,0.4)] text-[#f9fafb] text-sm sm:text-base focus:outline-none focus:border-[#c93448] transition-colors shadow-sm [&>option]:bg-[rgba(40,40,40,0.95)] [&>option]:py-2 w-auto"
           >
             <option value="">Todos los roles</option>
             <option value="admin">👨‍💼 Administradores</option>
