@@ -94,10 +94,8 @@ export interface CreateUserRequest {
 }
 
 export interface ActivateUserRequest {
-  idUsuario: string
-  passwordTemporal: string
-  enviarWhatsApp: boolean
-  enviarEmail: boolean
+  correoAzure: string
+  contrasenaTemporalAzure: string
 }
 
 export interface UpdateUserRequest {

@@ -134,10 +134,13 @@ const UsersPage = () => {
     console.log('DEBUG - Reactivando usuario:', reactivateUserId)
     
     try {
+      // Para reactivación, enviamos credenciales vacías ya que el usuario ya las tiene
       await activateUserMutation.mutateAsync({
-        idUsuario: reactivateUserId,
-        azureUserId: '', // Se maneja en el backend si ya existe
-        enviarEmail: false,
+        userId: reactivateUserId,
+        data: {
+          correoAzure: '',
+          contrasenaTemporalAzure: '',
+        },
       })
       console.log('DEBUG - Usuario reactivado exitosamente')
       setIsReactivateModalOpen(false)

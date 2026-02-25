@@ -102,13 +102,12 @@ export const useActivateUserMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (data: ActivateUserRequest) => {
-      const response = await api.post(`/api/usuarios/${data.idUsuario}/activar`, data)
+    mutationFn: async ({ userId, data }: { userId: string; data: ActivateUserRequest }) => {
+      const response = await api.post(`/api/usuarios/${userId}/activate`, data)
       return response.data
     },
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: usersKeys.lists() })
-      queryClient.invalidateQueries({ queryKey: usersKeys.detail(variables.idUsuario) })
     },
   })
 }
