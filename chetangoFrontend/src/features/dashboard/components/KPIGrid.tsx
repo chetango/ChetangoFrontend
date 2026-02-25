@@ -62,42 +62,6 @@ export const KPIGrid = ({ kpis, sedeFilter = 'all' }: KPIGridProps) => {
     }
   ]
 
-  const kpiConfigsFinancialAll = [
-    {
-      id: 'ingresos',
-      title: 'Ingresos Total Mes',
-      value: `$${kpis.ingresosEsteMes.toLocaleString('es-CL')}`,
-      change: kpis.crecimientoIngresosMesAnterior,
-      comparison: 'vs mes anterior',
-      icon: DollarSign,
-      color: '#10b981',
-      bgColor: 'rgba(16, 185, 129, 0.25)',
-      glowColor: 'rgba(16, 185, 129, 0.5)'
-    },
-    {
-      id: 'egresos',
-      title: 'Egresos Total Mes',
-      value: `$${kpis.egresosEsteMes.toLocaleString('es-CL')}`,
-      change: kpis.comparativaEgresosMesAnterior,
-      comparison: 'vs mes anterior',
-      icon: TrendingDown,
-      color: '#dc2626',
-      bgColor: 'rgba(220, 38, 38, 0.25)',
-      glowColor: 'rgba(220, 38, 38, 0.5)'
-    },
-    {
-      id: 'ganancia',
-      title: 'Ganancia Neta',
-      value: `$${kpis.gananciaNeta.toLocaleString('es-CL')}`,
-      change: kpis.comparativaGananciaMesAnterior,
-      comparison: 'vs mes anterior',
-      icon: TrendingUp,
-      color: kpis.gananciaNeta >= 0 ? '#10b981' : '#dc2626',
-      bgColor: kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(220, 38, 38, 0.25)',
-      glowColor: kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.5)' : 'rgba(220, 38, 38, 0.5)'
-    }
-  ]
-
   // Vista específica de sede (Medellín o Manizales)
   const ingresosSede = sedeFilter === 'medellin' ? kpis.ingresosMedellinEsteMes : kpis.ingresosManizalesEsteMes
   const egresosSede = sedeFilter === 'medellin' ? kpis.egresosMedellinEsteMes : kpis.egresosManizalesEsteMes
