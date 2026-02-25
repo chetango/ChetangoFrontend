@@ -5,8 +5,8 @@
 import { Edit, Plus, Search, Trash2, UserCheck, UserX } from 'lucide-react'
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useDeleteUserMutation, useUserDetailQuery, useUsersQuery } from '../features/users/api/usersQueries'
-import { CreateUserModal, DeleteUserModal } from '../features/users/components'
+import { useActivateUserMutation, useDeleteUserMutation, useUserDetailQuery, useUsersQuery } from '../features/users/api/usersQueries'
+import { CreateUserModal, DeleteUserModal, ReactivateUserModal } from '../features/users/components'
 import type { UserFilters, UserRole, UserStatus } from '../features/users/types/user.types'
 import type { SedeFilterValue } from '../shared/components/SedeFilter'
 import { SedeFilter } from '../shared/components/SedeFilter'
@@ -15,9 +15,12 @@ const UsersPage = () => {
   const location = useLocation()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isReactivateModalOpen, setIsReactivateModalOpen] = useState(false)
   const [editUserId, setEditUserId] = useState<string | null>(null)
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null)
   const [deleteUserName, setDeleteUserName] = useState<string>('')
+  const [reactivateUserId, setReactivateUserId] = useState<string | null>(null)
+  const [reactivateUserName, setReactivateUserName] = useState<string>('')
   const [activeTab, setActiveTab] = useState<'activos' | 'inactivos'>('activos')
   const [filters, setFilters] = useState<UserFilters>({
     pageNumber: 1,
@@ -28,6 +31,7 @@ const UsersPage = () => {
 
   const { data, isLoading } = useUsersQuery(filters)
   const deleteUserMutation = useDeleteUserMutation()
+  const activateUserMutation = useActivateUserMutation()
   
   // Solo cargar detalles del usuario si estamos editando
   const { data: userDetail } = useUserDetailQuery(editUserId || '')
@@ -114,6 +118,33 @@ const UsersPage = () => {
       setDeleteUserName('')
     } catch (error) {
       console.error('Error eliminando usuario:', error)
+    }
+  }
+
+  const handleReactivateUser = (idUsuario: string, nombreUsuario: string) => {
+    console.log('DEBUG - Abriendo modal de reactivación para:', idUsuario, nombreUsuario)
+    setReactivateUserId(idUsuario)
+    setReactivateUserName(nombreUsuario)
+    setIsReactivateModalOpen(true)
+  }
+
+  const handleConfirmReactivate = async () => {
+    if (!reactivateUserId) return
+    
+    console.log('DEBUG - Reactivando usuario:', reactivateUserId)
+    
+    try {
+      await activateUserMutation.mutateAsync({
+        idUsuario: reactivateUserId,
+        azureUserId: '', // Se maneja en el backend si ya existe
+        enviarEmail: false,
+      })
+      console.log('DEBUG - Usuario reactivado exitosamente')
+      setIsReactivateModalOpen(false)
+      setReactivateUserId(null)
+      setReactivateUserName('')
+    } catch (error) {
+      console.error('Error reactivando usuario:', error)
     }
   }
 
@@ -364,7 +395,7 @@ const UsersPage = () => {
                           <button
                             className="p-2 text-[#10b981] hover:bg-[rgba(16,185,129,0.1)] rounded-lg transition-colors min-w-[40px] min-h-[40px]"
                             title="Reactivar usuario"
-                            onClick={() => console.log('TODO: Reactivar usuario', user.idUsuario)}
+                            onClick={() => handleReactivateUser(user.idUsuario, user.nombreUsuario)}
                           >
                             <UserCheck size={16} className="sm:w-[18px] sm:h-[18px]" />
                           </button>
@@ -477,6 +508,19 @@ const UsersPage = () => {
         onConfirm={handleConfirmDelete}
         userName={deleteUserName}
         isLoading={deleteUserMutation.isPending}
+      />
+
+      {/* Reactivate Modal */}
+      <ReactivateUserModal
+        isOpen={isReactivateModalOpen}
+        onClose={() => {
+          setIsReactivateModalOpen(false)
+          setReactivateUserId(null)
+          setReactivateUserName('')
+        }}
+        onConfirm={handleConfirmReactivate}
+        userName={reactivateUserName}
+        isLoading={activateUserMutation.isPending}
       />
     </div>
   )

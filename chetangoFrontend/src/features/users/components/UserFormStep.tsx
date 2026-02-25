@@ -18,6 +18,7 @@ interface UserFormStepProps {
 interface ValidationErrors {
   telefono?: string
   fechaNacimiento?: string
+  numeroDocumento?: string
 }
 
 export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }: UserFormStepProps) => {
@@ -85,6 +86,30 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
     return undefined
   }
 
+  // Validar número de documento
+  const validateNumeroDocumento = (numero: string): string | undefined => {
+    if (!numero) return undefined
+    
+    // Remover espacios y guiones
+    const numeroLimpio = numero.replace(/[\s-]/g, '')
+    
+    // Validar que solo contenga números
+    if (!/^\d+$/.test(numeroLimpio)) {
+      return 'El documento solo debe contener números'
+    }
+    
+    // Validar longitud mínima (5 dígitos) y máxima (15 dígitos)
+    if (numeroLimpio.length < 5) {
+      return 'El documento debe tener al menos 5 dígitos'
+    }
+    
+    if (numeroLimpio.length > 15) {
+      return 'El documento no debe exceder 15 dígitos'
+    }
+    
+    return undefined
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -96,6 +121,9 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
     
     const fechaError = validateFechaNacimiento(formData.fechaNacimiento)
     if (fechaError) newErrors.fechaNacimiento = fechaError
+    
+    const documentoError = validateNumeroDocumento(formData.numeroDocumento || '')
+    if (documentoError) newErrors.numeroDocumento = documentoError
     
     setErrors(newErrors)
     
@@ -117,6 +145,9 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
     }
     if (field === 'fechaNacimiento' && errors.fechaNacimiento) {
       setErrors(prev => ({ ...prev, fechaNacimiento: undefined }))
+    }
+    if (field === 'numeroDocumento' && errors.numeroDocumento) {
+      setErrors(prev => ({ ...prev, numeroDocumento: undefined }))
     }
   }
 
@@ -197,7 +228,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   required
                   value={formData.nombreUsuario || ''}
                   onChange={(e) => updateField('nombreUsuario', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.2)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all"
+                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.35)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all hover:border-[rgba(255,255,255,0.5)]"
                   placeholder="Ej: Juan Pérez González"
                 />
               </div>
@@ -210,7 +241,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.correo || ''}
                   onChange={(e) => updateField('correo', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.2)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
+                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.35)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all hover:border-[rgba(255,255,255,0.5)] disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
                   placeholder="usuario@chetango.com"
                 />
               </div>
@@ -225,7 +256,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all ${
                     errors.telefono 
                       ? 'border-[#ef4444] focus:border-[#ef4444]' 
-                      : 'border-[rgba(255,255,255,0.2)] focus:border-[#c93448]'
+                      : 'border-[rgba(255,255,255,0.35)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.5)]'
                   }`}
                   placeholder="+57 300 123 4567"
                 />
@@ -234,7 +265,9 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                     <span>⚠️</span> {errors.telefono}
                   </p>
                 )}
-                <p className="text-[#6b7280] text-xs mt-1">Mínimo 7 dígitos</p>
+                {!errors.telefono && (
+                  <p className="text-[#6b7280] text-xs mt-1">Mínimo 7 dígitos</p>
+                )}
               </div>
 
               <div className="col-span-2 md:col-span-1">
@@ -244,7 +277,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.tipoDocumento || 'Cédula de Ciudadanía'}
                   onChange={(e) => updateField('tipoDocumento', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.2)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
+                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.35)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all hover:border-[rgba(255,255,255,0.5)] disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
                 >
                   <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
                 </select>
@@ -258,9 +291,21 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.numeroDocumento || ''}
                   onChange={(e) => updateField('numeroDocumento', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.2)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
+                  className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)] ${
+                    errors.numeroDocumento
+                      ? 'border-[#ef4444] focus:border-[#ef4444]'
+                      : 'border-[rgba(255,255,255,0.35)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.5)]'
+                  }`}
                   placeholder="1234567890"
                 />
+                {errors.numeroDocumento && (
+                  <p className="text-[#ef4444] text-xs mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.numeroDocumento}
+                  </p>
+                )}
+                {!errors.numeroDocumento && (
+                  <p className="text-[#6b7280] text-xs mt-1">Entre 5 y 15 dígitos</p>
+                )}
               </div>
 
               <div className="col-span-2 md:col-span-1">
@@ -277,7 +322,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                     className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all [color-scheme:dark] cursor-pointer ${
                       errors.fechaNacimiento
                         ? 'border-[#ef4444] focus:border-[#ef4444]'
-                        : 'border-[rgba(255,255,255,0.2)] focus:border-[#c93448]'
+                        : 'border-[rgba(255,255,255,0.35)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.5)]'
                     }`}
                     style={{
                       colorScheme: 'dark'
