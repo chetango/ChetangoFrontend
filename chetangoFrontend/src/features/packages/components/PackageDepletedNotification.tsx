@@ -59,15 +59,18 @@ export const PackageDepletedNotification = ({
             ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
             hover:scale-110
           `}
-          style={{
-            animation: 'float 3s ease-in-out infinite, pulse-warning 2s ease-in-out infinite'
-          }}
         >
           {/* Glow effect - amarillo/naranja para advertencia */}
-          <div className="absolute inset-0 bg-[#f59e0b] blur-xl opacity-60 rounded-full" />
+          <div 
+            className="absolute inset-0 bg-[#f59e0b] blur-xl opacity-60 rounded-full"
+            style={{ animation: 'pulse-warning 2s ease-in-out infinite' }}
+          />
           
-          {/* Icono de paquete/caja */}
-          <div className="relative w-20 h-20 bg-gradient-to-br from-[#f59e0b] to-[#ef4444] rounded-2xl flex items-center justify-center">
+          {/* Burbuja circular naranja */}
+          <div 
+            className="relative w-20 h-20 bg-gradient-to-br from-[#f59e0b] to-[#ef4444] rounded-full flex items-center justify-center shadow-2xl"
+            style={{ animation: 'float 3s ease-in-out infinite' }}
+          >
             <span className="text-4xl">📦</span>
             
             {/* Badge de notificación con número */}
