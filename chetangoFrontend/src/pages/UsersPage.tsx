@@ -6,7 +6,7 @@ import { Edit, Plus, Search, Trash2, UserCheck, UserX } from 'lucide-react'
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useDeleteUserMutation, useUserDetailQuery, useUsersQuery } from '../features/users/api/usersQueries'
-import { CreateUserModal } from '../features/users/components'
+import { CreateUserModal, DeleteUserModal } from '../features/users/components'
 import type { UserFilters, UserRole, UserStatus } from '../features/users/types/user.types'
 import type { SedeFilterValue } from '../shared/components/SedeFilter'
 import { SedeFilter } from '../shared/components/SedeFilter'
@@ -14,11 +14,16 @@ import { SedeFilter } from '../shared/components/SedeFilter'
 const UsersPage = () => {
   const location = useLocation()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [editUserId, setEditUserId] = useState<string | null>(null)
+  const [deleteUserId, setDeleteUserId] = useState<string | null>(null)
+  const [deleteUserName, setDeleteUserName] = useState<string>('')
+  const [activeTab, setActiveTab] = useState<'activos' | 'inactivos'>('activos')
   const [filters, setFilters] = useState<UserFilters>({
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 20,
     sede: 'all',
+    estado: 'activo',
   })
 
   const { data, isLoading } = useUsersQuery(filters)
@@ -61,6 +66,15 @@ const UsersPage = () => {
     setFilters((prev) => ({ ...prev, estado, pageNumber: 1 }))
   }
 
+  const handleTabChange = (tab: 'activos' | 'inactivos') => {
+    setActiveTab(tab)
+    setFilters((prev) => ({
+      ...prev,
+      estado: tab === 'activos' ? 'activo' : 'inactivo',
+      pageNumber: 1,
+    }))
+  }
+
   const handleCreateUser = () => {
     setEditUserId(null)
     setIsModalOpen(true)
@@ -84,14 +98,24 @@ const UsersPage = () => {
     setEditUserId(null)
   }
 
-  const handleDeleteUser = async (idUsuario: string) => {
-    console.log('DEBUG - Intentando eliminar usuario:', idUsuario)
-    if (!confirm('¿Estás seguro de que deseas eliminar este usuario?')) return
+  const handleDeleteUser = async (idUsuario: string, nombreUsuario: string) => {
+    console.log('DEBUG - Abriendo modal de eliminación para:', idUsuario, nombreUsuario)
+    setDeleteUserId(idUsuario)
+    setDeleteUserName(nombreUsuario)
+    setIsDeleteModalOpen(true)
+  }
+
+  const handleConfirmDelete = async (motivo: string) => {
+    if (!deleteUserId) return
+    
+    console.log('DEBUG - Eliminando usuario:', deleteUserId, 'Motivo:', motivo)
     
     try {
-      console.log('DEBUG - Ejecutando mutación de eliminación...')
-      await deleteUserMutation.mutateAsync({ idUsuario })
-      console.log('DEBUG - Usuario eliminado exitosamente')
+      await deleteUserMutation.mutateAsync({ idUsuario: deleteUserId })
+      console.log('DEBUG - Usuario desactivado exitosamente')
+      setIsDeleteModalOpen(false)
+      setDeleteUserId(null)
+      setDeleteUserName('')
     } catch (error) {
       console.error('Error eliminando usuario:', error)
     }
@@ -158,6 +182,52 @@ const UsersPage = () => {
         </p>
       </div>
 
+      {/* Tabs - Activos / Inactivos */}
+      <div className="mb-4 sm:mb-6">
+        <div className="flex gap-2 border-b border-[rgba(255,255,255,0.1)]">
+          <button
+            onClick={() => handleTabChange('activos')}
+            className={`px-4 sm:px-6 py-3 font-medium transition-all relative ${
+              activeTab === 'activos'
+                ? 'text-[#c93448]'
+                : 'text-[#9ca3af] hover:text-[#f9fafb]'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              Activos
+              {data && activeTab === 'activos' && (
+                <span className="px-2 py-0.5 rounded-full bg-[rgba(201,52,72,0.2)] text-[#c93448] text-xs font-bold">
+                  {data.totalCount}
+                </span>
+              )}
+            </span>
+            {activeTab === 'activos' && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#c93448]" />
+            )}
+          </button>
+          <button
+            onClick={() => handleTabChange('inactivos')}
+            className={`px-4 sm:px-6 py-3 font-medium transition-all relative ${
+              activeTab === 'inactivos'
+                ? 'text-[#f59e0b]'
+                : 'text-[#9ca3af] hover:text-[#f9fafb]'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              Inactivos
+              {data && activeTab === 'inactivos' && (
+                <span className="px-2 py-0.5 rounded-full bg-[rgba(245,158,11,0.2)] text-[#f59e0b] text-xs font-bold">
+                  {data.totalCount}
+                </span>
+              )}
+            </span>
+            {activeTab === 'inactivos' && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#f59e0b]" />
+            )}
+          </button>
+        </div>
+      </div>
+
       {/* Filters & Actions */}
       <div className="mb-4 sm:mb-6 flex flex-col gap-2 sm:gap-3 md:gap-4">
         {/* Search - PROMINENTE */}
@@ -196,17 +266,6 @@ const UsersPage = () => {
             <option value="admin">Administradores</option>
             <option value="profesor">Profesores</option>
             <option value="alumno">Alumnos</option>
-          </select>
-
-          {/* Status Filter */}
-          <select
-            onChange={(e) => handleStatusFilter(e.target.value ? (e.target.value as UserStatus) : undefined)}
-            className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-[rgba(64,64,64,0.2)] border border-[rgba(64,64,64,0.3)] text-[#f9fafb] text-sm sm:text-base focus:outline-none focus:border-[#c93448] transition-colors min-h-[44px]"
-          >
-            <option value="">Todos los estados</option>
-            <option value="activo">Activos</option>
-            <option value="inactivo">Inactivos</option>
-            <option value="pendiente_azure">Pendientes Azure</option>
           </select>
 
           {/* Create Button */}
@@ -270,7 +329,11 @@ const UsersPage = () => {
                 (data?.items || []).map((user) => (
                   <tr
                     key={user.idUsuario}
-                    className="border-b border-[rgba(64,64,64,0.3)] hover:bg-[rgba(255,255,255,0.02)] transition-colors"
+                    className={`border-b border-[rgba(64,64,64,0.3)] transition-colors ${
+                      user.estado === 'inactivo'
+                        ? 'bg-[rgba(156,163,175,0.05)] opacity-60 hover:opacity-80'
+                        : 'hover:bg-[rgba(255,255,255,0.02)]'
+                    }`}
                   >
                     <td className="px-3 sm:px-4 py-3 sm:py-4">
                       <div>
@@ -301,6 +364,15 @@ const UsersPage = () => {
                     <td className="px-2 sm:px-3 py-3 sm:py-4">{getStatusBadge(user.estado)}</td>
                     <td className="px-2 sm:px-3 py-3 sm:py-4">
                       <div className="flex items-center justify-end gap-1">
+                        {user.estado === 'inactivo' && (
+                          <button
+                            className="p-2 text-[#10b981] hover:bg-[rgba(16,185,129,0.1)] rounded-lg transition-colors min-w-[40px] min-h-[40px]"
+                            title="Reactivar usuario"
+                            onClick={() => console.log('TODO: Reactivar usuario', user.idUsuario)}
+                          >
+                            <UserCheck size={16} className="sm:w-[18px] sm:h-[18px]" />
+                          </button>
+                        )}
                         {user.estado === 'pendiente_azure' && (
                           <button
                             className="p-2 text-[#10b981] hover:bg-[rgba(16,185,129,0.1)] rounded-lg transition-colors min-w-[40px] min-h-[40px]"
@@ -317,20 +389,24 @@ const UsersPage = () => {
                             <UserX size={16} className="sm:w-[18px] sm:h-[18px]" />
                           </button>
                         )}
-                        <button
-                          className="p-2 text-[#60a5fa] hover:bg-[rgba(96,165,250,0.1)] rounded-lg transition-colors min-w-[40px] min-h-[40px]"
-                          title="Editar usuario"
-                          onClick={() => handleEditUser((user as any).usuarioId || user.idUsuario)}
-                        >
-                          <Edit size={16} className="sm:w-[18px] sm:h-[18px]" />
-                        </button>
-                        <button
-                          className="p-2 text-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] rounded-lg transition-colors min-w-[40px] min-h-[40px]"
-                          title="Eliminar usuario"
-                          onClick={() => handleDeleteUser((user as any).usuarioId || user.idUsuario)}
-                        >
-                          <Trash2 size={16} className="sm:w-[18px] sm:h-[18px]" />
-                        </button>
+                        {user.estado !== 'inactivo' && (
+                          <>
+                            <button
+                              className="p-2 text-[#60a5fa] hover:bg-[rgba(96,165,250,0.1)] rounded-lg transition-colors min-w-[40px] min-h-[40px]"
+                              title="Editar usuario"
+                              onClick={() => handleEditUser((user as any).usuarioId || user.idUsuario)}
+                            >
+                              <Edit size={16} className="sm:w-[18px] sm:h-[18px]" />
+                            </button>
+                            <button
+                              className="p-2 text-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] rounded-lg transition-colors min-w-[40px] min-h-[40px]"
+                              title="Eliminar usuario"
+                              onClick={() => handleDeleteUser((user as any).usuarioId || user.idUsuario, user.nombreUsuario)}
+                            >
+                              <Trash2 size={16} className="sm:w-[18px] sm:h-[18px]" />
+                            </button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -392,6 +468,19 @@ const UsersPage = () => {
         }}
         mode={editUserId ? 'edit' : 'create'}
         initialUser={editUserId && userDetail ? userDetail : undefined}
+      />
+
+      {/* Delete Modal */}
+      <DeleteUserModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false)
+          setDeleteUserId(null)
+          setDeleteUserName('')
+        }}
+        onConfirm={handleConfirmDelete}
+        userName={deleteUserName}
+        isLoading={deleteUserMutation.isPending}
       />
     </div>
   )

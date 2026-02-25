@@ -15,6 +15,11 @@ interface UserFormStepProps {
   mode?: 'create' | 'edit'
 }
 
+interface ValidationErrors {
+  telefono?: string
+  fechaNacimiento?: string
+}
+
 export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }: UserFormStepProps) => {
   const containerRef = useModalScroll(true)
 
@@ -23,6 +28,8 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
     tipoDocumento: initialData?.tipoDocumento || 'Cédula de Ciudadanía',
     ...initialData,
   })
+
+  const [errors, setErrors] = useState<ValidationErrors>({})
 
   // Actualizar el estado cuando initialData cambie (modo edición)
   useEffect(() => {
@@ -38,14 +45,79 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
     }
   }, [initialData])
 
+  // Validar teléfono
+  const validateTelefono = (telefono: string): string | undefined => {
+    if (!telefono) return undefined
+    
+    // Remover caracteres no numéricos para contar dígitos
+    const digitsOnly = telefono.replace(/\D/g, '')
+    
+    if (digitsOnly.length < 7) {
+      return 'El teléfono debe tener al menos 7 dígitos'
+    }
+    
+    // Validar formato básico (solo números, +, -, espacios)
+    const phoneRegex = /^[+\d\s-]+$/
+    if (!phoneRegex.test(telefono)) {
+      return 'Formato inválido. Solo números, +, - y espacios'
+    }
+    
+    return undefined
+  }
+
+  // Validar fecha de nacimiento
+  const validateFechaNacimiento = (fecha: string | undefined): string | undefined => {
+    if (!fecha) return undefined
+    
+    const fechaSeleccionada = new Date(fecha)
+    const hoy = new Date()
+    
+    if (fechaSeleccionada > hoy) {
+      return 'La fecha de nacimiento no puede ser futura'
+    }
+    
+    // Validar que no sea menor a 1900
+    const año = fechaSeleccionada.getFullYear()
+    if (año < 1900) {
+      return 'Fecha inválida (mínimo año 1900)'
+    }
+    
+    return undefined
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validar campos antes de continuar
+    const newErrors: ValidationErrors = {}
+    
+    const telefonoError = validateTelefono(formData.telefono || '')
+    if (telefonoError) newErrors.telefono = telefonoError
+    
+    const fechaError = validateFechaNacimiento(formData.fechaNacimiento)
+    if (fechaError) newErrors.fechaNacimiento = fechaError
+    
+    setErrors(newErrors)
+    
+    // Si hay errores, no continuar
+    if (Object.keys(newErrors).length > 0) {
+      return
+    }
+    
     console.log('DEBUG UserFormStep - formData al hacer submit:', formData)
     onNext(formData)
   }
 
   const updateField = (field: keyof CreateUserRequest, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+    
+    // Limpiar error del campo cuando el usuario modifique
+    if (field === 'telefono' && errors.telefono) {
+      setErrors(prev => ({ ...prev, telefono: undefined }))
+    }
+    if (field === 'fechaNacimiento' && errors.fechaNacimiento) {
+      setErrors(prev => ({ ...prev, fechaNacimiento: undefined }))
+    }
   }
 
   return (
@@ -88,15 +160,20 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   type="button"
                   onClick={() => mode === 'create' && updateField('rol', rol)}
                   disabled={mode === 'edit'}
-                  className={`flex-1 py-3 px-4 rounded-lg border transition-all ${
+                  className={`flex-1 py-3.5 px-4 rounded-lg border-2 transition-all font-medium relative ${
                     formData.rol === rol
-                      ? 'bg-[rgba(201,52,72,0.15)] border-[rgba(201,52,72,0.3)] text-[#c93448]'
-                      : 'bg-[rgba(64,64,64,0.2)] border-[rgba(64,64,64,0.3)] text-[#9ca3af] hover:border-[rgba(201,52,72,0.2)]'
+                      ? 'bg-[rgba(201,52,72,0.25)] border-[#c93448] text-white shadow-lg shadow-[rgba(201,52,72,0.3)] scale-105'
+                      : 'bg-[rgba(64,64,64,0.2)] border-[rgba(255,255,255,0.15)] text-[#9ca3af] hover:border-[rgba(201,52,72,0.4)] hover:text-[#f9fafb]'
                   } ${mode === 'edit' ? 'cursor-not-allowed opacity-60' : ''}`}
                 >
-                  {rol === 'admin' && '👨‍💼 Admin'}
-                  {rol === 'profesor' && '👨‍🏫 Profesor'}
-                  {rol === 'alumno' && '🧑‍🎓 Alumno'}
+                  <span className="flex items-center justify-center gap-2">
+                    {rol === 'admin' && '👨‍💼 Admin'}
+                    {rol === 'profesor' && '👨‍🏫 Profesor'}
+                    {rol === 'alumno' && '🧑‍🎓 Alumno'}
+                    {formData.rol === rol && (
+                      <span className="text-white text-lg">✓</span>
+                    )}
+                  </span>
                 </button>
               ))}
             </div>
@@ -120,7 +197,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   required
                   value={formData.nombreUsuario || ''}
                   onChange={(e) => updateField('nombreUsuario', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
+                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.2)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all"
                   placeholder="Ej: Juan Pérez González"
                 />
               </div>
@@ -133,7 +210,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.correo || ''}
                   onChange={(e) => updateField('correo', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.2)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
                   placeholder="usuario@chetango.com"
                 />
               </div>
@@ -145,9 +222,19 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   required
                   value={formData.telefono || ''}
                   onChange={(e) => updateField('telefono', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
+                  className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all ${
+                    errors.telefono 
+                      ? 'border-[#ef4444] focus:border-[#ef4444]' 
+                      : 'border-[rgba(255,255,255,0.2)] focus:border-[#c93448]'
+                  }`}
                   placeholder="+57 300 123 4567"
                 />
+                {errors.telefono && (
+                  <p className="text-[#ef4444] text-xs mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.telefono}
+                  </p>
+                )}
+                <p className="text-[#6b7280] text-xs mt-1">Mínimo 7 dígitos</p>
               </div>
 
               <div className="col-span-2 md:col-span-1">
@@ -157,7 +244,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.tipoDocumento || 'Cédula de Ciudadanía'}
                   onChange={(e) => updateField('tipoDocumento', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.2)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
                 >
                   <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
                 </select>
@@ -171,19 +258,38 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.numeroDocumento || ''}
                   onChange={(e) => updateField('numeroDocumento', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.2)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
                   placeholder="1234567890"
                 />
               </div>
 
               <div className="col-span-2 md:col-span-1">
-                <label className="block text-[#9ca3af] text-sm mb-2">Fecha Nacimiento</label>
-                <input
-                  type="date"
-                  value={formData.fechaNacimiento || ''}
-                  onChange={(e) => updateField('fechaNacimiento', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
-                />
+                <label className="block text-[#9ca3af] text-sm mb-2 flex items-center gap-2">
+                  Fecha Nacimiento 
+                  <span className="text-xs text-[#6b7280]">📅</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    value={formData.fechaNacimiento || ''}
+                    max={getToday()}
+                    onChange={(e) => updateField('fechaNacimiento', e.target.value)}
+                    className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all [color-scheme:dark] cursor-pointer ${
+                      errors.fechaNacimiento
+                        ? 'border-[#ef4444] focus:border-[#ef4444]'
+                        : 'border-[rgba(255,255,255,0.2)] focus:border-[#c93448]'
+                    }`}
+                    style={{
+                      colorScheme: 'dark'
+                    }}
+                  />
+                </div>
+                {errors.fechaNacimiento && (
+                  <p className="text-[#ef4444] text-xs mt-1.5 flex items-center gap-1">
+                    <span>⚠️</span> {errors.fechaNacimiento}
+                  </p>
+                )}
+                <p className="text-[#6b7280] text-xs mt-1">No puede ser fecha futura</p>
               </div>
             </div>
           </div>
