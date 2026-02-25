@@ -62,13 +62,13 @@ export const PackageDepletedNotification = ({
         >
           {/* Glow effect - amarillo/naranja para advertencia */}
           <div 
-            className="absolute inset-0 bg-[#f59e0b] blur-xl opacity-60 rounded-full"
+            className="absolute inset-0 bg-[#f59e0b] blur-xl opacity-60 rounded-2xl"
             style={{ animation: 'pulse-warning 2s ease-in-out infinite' }}
           />
           
-          {/* Burbuja circular naranja */}
+          {/* Caja con esquinas redondeadas - estilo consistente con la app */}
           <div 
-            className="relative w-20 h-20 bg-gradient-to-br from-[#f59e0b] to-[#ef4444] rounded-full flex items-center justify-center shadow-2xl"
+            className="relative w-20 h-20 bg-gradient-to-br from-[#f59e0b] to-[#ef4444] rounded-2xl flex items-center justify-center shadow-2xl"
             style={{ animation: 'float 3s ease-in-out infinite' }}
           >
             <span className="text-4xl">📦</span>
