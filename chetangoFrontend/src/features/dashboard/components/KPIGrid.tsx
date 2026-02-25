@@ -2,9 +2,10 @@
 // KPI GRID COMPONENT
 // ============================================
 
-import { Calendar, CheckCircle2, DollarSign, Package, TrendingDown, TrendingUp, Users } from 'lucide-react'
+import { Briefcase, Calendar, CheckCircle2, DollarSign, Package, TrendingDown, TrendingUp, Users } from 'lucide-react'
 import type { DashboardKPIs } from '../types/dashboard.types'
 import { KPICard } from './KPICard'
+import { KPICardWithBreakdown } from './KPICardWithBreakdown'
 import type { SedeFilter } from './TabsSedeFilter'
 
 interface KPIGridProps {
@@ -200,6 +201,44 @@ export const KPIGrid = ({ kpis, sedeFilter = 'all' }: KPIGridProps) => {
 
   // Renderizado condicional según el filtro de sede
   if (sedeFilter === 'all') {
+    // Preparar datos de desglose para Ingresos
+    const totalIngresos = kpis.ingresosEsteMes
+    const ingresosAlumnos = kpis.ingresosAlumnosEsteMes || 0
+    const otrosIngresos = kpis.otrosIngresosEsteMes || 0
+    const breakdownIngresos = [
+      {
+        label: 'Pagos de Alumnos',
+        value: ingresosAlumnos,
+        percentage: totalIngresos > 0 ? (ingresosAlumnos / totalIngresos) * 100 : 0,
+        icon: Users
+      },
+      {
+        label: 'Otros Ingresos',
+        value: otrosIngresos,
+        percentage: totalIngresos > 0 ? (otrosIngresos / totalIngresos) * 100 : 0,
+        icon: TrendingUp
+      }
+    ]
+
+    // Preparar datos de desglose para Egresos
+    const totalEgresos = kpis.egresosEsteMes
+    const egresosNomina = kpis.egresosNominaEsteMes || 0
+    const otrosGastos = kpis.otrosGastosEsteMes || 0
+    const breakdownEgresos = [
+      {
+        label: 'Nómina de Profesores',
+        value: egresosNomina,
+        percentage: totalEgresos > 0 ? (egresosNomina / totalEgresos) * 100 : 0,
+        icon: Users
+      },
+      {
+        label: 'Otros Gastos',
+        value: otrosGastos,
+        percentage: totalEgresos > 0 ? (otrosGastos / totalEgresos) * 100 : 0,
+        icon: Briefcase
+      }
+    ]
+
     return (
       <>
         {/* Primera fila: 4 tarjetas principales */}
@@ -209,11 +248,48 @@ export const KPIGrid = ({ kpis, sedeFilter = 'all' }: KPIGridProps) => {
           ))}
         </div>
 
-        {/* Segunda fila: 3 tarjetas financieras */}
+        {/* Segunda fila: 3 tarjetas financieras con desglose */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
-          {kpiConfigsFinancialAll.map((kpi) => (
-            <KPICard key={kpi.id} {...kpi} />
-          ))}
+          {/* Ingresos con Desglose */}
+          <KPICardWithBreakdown
+            title="Ingresos Total Mes"
+            value={`$${kpis.ingresosEsteMes.toLocaleString('es-CL')}`}
+            change={kpis.crecimientoIngresosMesAnterior}
+            comparison="vs mes anterior"
+            icon={DollarSign}
+            color="#10b981"
+            bgColor="rgba(16, 185, 129, 0.25)"
+            glowColor="rgba(16, 185, 129, 0.5)"
+            breakdown={breakdownIngresos}
+            type="ingresos"
+          />
+
+          {/* Egresos con Desglose */}
+          <KPICardWithBreakdown
+            title="Egresos Total Mes"
+            value={`$${kpis.egresosEsteMes.toLocaleString('es-CL')}`}
+            change={kpis.comparativaEgresosMesAnterior}
+            comparison="vs mes anterior"
+            icon={TrendingDown}
+            color="#dc2626"
+            bgColor="rgba(220, 38, 38, 0.25)"
+            glowColor="rgba(220, 38, 38, 0.5)"
+            breakdown={breakdownEgresos}
+            type="egresos"
+          />
+
+          {/* Ganancia Neta (sin desglose) */}
+          <KPICard
+            key="ganancia"
+            title="Ganancia Neta"
+            value={`$${kpis.gananciaNeta.toLocaleString('es-CL')}`}
+            change={kpis.comparativaGananciaMesAnterior}
+            comparison="vs mes anterior"
+            icon={TrendingUp}
+            color={kpis.gananciaNeta >= 0 ? '#10b981' : '#dc2626'}
+            bgColor={kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.25)' : 'rgba(220, 38, 38, 0.25)'}
+            glowColor={kpis.gananciaNeta >= 0 ? 'rgba(16, 185, 129, 0.5)' : 'rgba(220, 38, 38, 0.5)'}
+          />
         </div>
       </>
     )

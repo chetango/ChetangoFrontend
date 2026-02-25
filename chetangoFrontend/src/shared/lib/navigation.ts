@@ -3,7 +3,7 @@
 // ============================================
 
 import { ROUTES } from '@/shared/constants/routes'
-import { BarChart3, Calendar, CheckCircle2, ClipboardCheck, DollarSign, Home, Package, User, Users, Wallet } from 'lucide-react'
+import { BarChart3, Calendar, CheckCircle2, ClipboardCheck, DollarSign, Home, Package, TrendingUp, User, Users, Wallet } from 'lucide-react'
 
 export interface NavItem {
   label: string
@@ -25,6 +25,7 @@ const NAVIGATION_ITEMS: NavItem[] = [
   { label: 'Clases', path: ROUTES.ADMIN.CLASSES, icon: Calendar, roles: ['admin'] },
   { label: 'Paquetes', path: ROUTES.ADMIN.PACKAGES, icon: Package, roles: ['admin'] },
   { label: 'Nómina Profesores', path: ROUTES.ADMIN.PAYROLL, icon: Wallet, roles: ['admin'] },
+  { label: 'Otros Movimientos', path: ROUTES.ADMIN.FINANZAS, icon: TrendingUp, roles: ['admin'] },
   { label: 'Usuarios', path: ROUTES.ADMIN.USERS, icon: Users, roles: ['admin'] },
   { label: 'Reportes', path: ROUTES.ADMIN.REPORTS, icon: BarChart3, roles: ['admin'] },
   { label: 'Mi Perfil', path: ROUTES.ADMIN.PROFILE, icon: User, roles: ['admin'] },

@@ -44,6 +44,8 @@ export const ROUTES = {
     
     PAYROLL: '/admin/payroll',
     
+    FINANZAS: '/admin/finanzas',
+    
     REPORTS: '/admin/reports',
     REPORTS_ATTENDANCE: '/admin/reports/attendance',
     REPORTS_PAYMENTS: '/admin/reports/payments',

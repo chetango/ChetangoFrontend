@@ -21,6 +21,7 @@ const AdminAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m
 const AdminPackagesPage = lazy(() => import('@/pages').then(m => ({ default: m.AdminPackagesPage })))
 const AdminPaymentsPage = lazy(() => import('@/pages').then(m => ({ default: m.AdminPaymentsPage })))
 const AdminPayrollPage = lazy(() => import('@/pages/admin/AdminPayrollPage').then(m => ({ default: m.default })))
+const AdminFinanzasPage = lazy(() => import('@/pages/admin/AdminFinanzasPage').then(m => ({ default: m.default })))
 const AdminProfilePage = lazy(() => import('@/pages/admin/AdminProfilePage').then(m => ({ default: m.default })))
 const NotificationsPage = lazy(() => import('@/pages/admin/NotificationsPage').then(m => ({ default: m.default })))
 const UserDetailPage = lazy(() => import('@/pages').then(m => ({ default: m.UserDetailPage })))
@@ -129,6 +130,7 @@ export const appRoutes: AppRoute[] = [
           { path: 'users/:id', element: <UserDetailPage /> },
           { path: 'payments', element: <AdminPaymentsPage /> },
           { path: 'payroll', element: <AdminPayrollPage /> },
+          { path: 'finanzas', element: <AdminFinanzasPage /> },
           { path: 'classes', element: <ClassesPage /> },
           { path: 'paquetes', element: <AdminPackagesPage /> },
           { path: 'reports', element: <ReportsPage /> },
