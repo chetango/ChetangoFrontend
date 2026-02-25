@@ -109,17 +109,9 @@ export const DeleteUserModal = ({
               value={motivoSeleccionado}
               onChange={(e) => setMotivoSeleccionado(e.target.value)}
               disabled={isLoading}
-              size={8}
-              className="w-full px-4 py-2 rounded-lg bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(239,68,68,0.5)] text-[#f9fafb] text-sm focus:outline-none focus:ring-2 focus:ring-[#ef4444] focus:border-transparent transition-all disabled:opacity-50 overflow-y-auto shadow-sm [&>option]:py-2.5 [&>option]:px-3 [&>option:hover]:bg-[rgba(239,68,68,0.2)] [&>option:checked]:bg-[rgba(239,68,68,0.3)] [&>option:checked]:text-white [&>option]:bg-[rgba(40,40,40,0.8)] [&>option]:border-b [&>option]:border-[rgba(64,64,64,0.3)] [&>option:last-child]:border-b-0"
-              style={{
-                height: 'auto',
-                minHeight: '220px',
-                maxHeight: '280px'
-              }}
+              className="w-full px-4 py-3 rounded-lg bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(239,68,68,0.5)] text-[#f9fafb] focus:outline-none focus:border-[#ef4444] transition-all disabled:opacity-50 shadow-sm [&>option]:bg-[rgba(40,40,40,0.95)] [&>option]:py-2"
             >
-              <option value="" className="text-[#6b7280] italic bg-[rgba(239,68,68,0.1)]">
-                ⬇️ Selecciona un motivo...
-              </option>
+              <option value="">Selecciona un motivo...</option>
               {MOTIVOS_SUGERIDOS.map((motivo) => (
                 <option key={motivo} value={motivo}>
                   {motivo}

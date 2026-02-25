@@ -407,7 +407,6 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   <label className="block text-[#9ca3af] text-sm mb-2">Tipo Profesor *</label>
                   <select
                     required
-                    size={3}
                     value={formData.datosProfesor?.tipoProfesor || ''}
                     onChange={(e) =>
                       updateField('datosProfesor', {
@@ -418,15 +417,9 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         tarifaActual: formData.datosProfesor?.tarifaActual || 0,
                       })
                     }
-                    className="w-full px-4 py-2 rounded-xl bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] text-sm focus:outline-none focus:ring-2 focus:ring-[#c93448] focus:border-transparent transition-all overflow-y-auto shadow-sm [&>option]:py-2.5 [&>option]:px-3 [&>option:hover]:bg-[rgba(201,52,72,0.2)] [&>option:checked]:bg-[rgba(201,52,72,0.3)] [&>option:checked]:text-white [&>option]:bg-[rgba(40,40,40,0.8)] [&>option]:border-b [&>option]:border-[rgba(64,64,64,0.3)] [&>option:last-child]:border-b-0"
-                    style={{
-                      height: 'auto',
-                      minHeight: '120px'
-                    }}
+                    className="w-full px-5 py-3.5 rounded-xl bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-all shadow-sm [&>option]:bg-[rgba(40,40,40,0.95)] [&>option]:py-2"
                   >
-                    <option value="" className="text-[#6b7280] italic bg-[rgba(201,52,72,0.1)]">
-                      ⬇️ Seleccionar tipo...
-                    </option>
+                    <option value="">Seleccionar...</option>
                     <option value="Principal">Principal</option>
                     <option value="Monitor">Monitor</option>
                   </select>
