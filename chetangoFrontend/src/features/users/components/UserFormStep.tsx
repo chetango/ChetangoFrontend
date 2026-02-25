@@ -228,7 +228,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   required
                   value={formData.nombreUsuario || ''}
                   onChange={(e) => updateField('nombreUsuario', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.35)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all hover:border-[rgba(255,255,255,0.5)]"
+                  className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm"
                   placeholder="Ej: Juan Pérez González"
                 />
               </div>
@@ -241,7 +241,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.correo || ''}
                   onChange={(e) => updateField('correo', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.35)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all hover:border-[rgba(255,255,255,0.5)] disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
+                  className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[rgba(255,255,255,0.03)] disabled:border-[rgba(255,255,255,0.3)]"
                   placeholder="usuario@chetango.com"
                 />
               </div>
@@ -253,10 +253,10 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   required
                   value={formData.telefono || ''}
                   onChange={(e) => updateField('telefono', e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all ${
+                  className={`w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:bg-[rgba(255,255,255,0.12)] transition-all shadow-sm ${
                     errors.telefono 
                       ? 'border-[#ef4444] focus:border-[#ef4444]' 
-                      : 'border-[rgba(255,255,255,0.35)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.5)]'
+                      : 'border-[rgba(255,255,255,0.6)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.8)]'
                   }`}
                   placeholder="+57 300 123 4567"
                 />
@@ -277,7 +277,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.tipoDocumento || 'Cédula de Ciudadanía'}
                   onChange={(e) => updateField('tipoDocumento', e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 border-[rgba(255,255,255,0.35)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.08)] transition-all hover:border-[rgba(255,255,255,0.5)] disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)]"
+                  className="w-full px-5 py-3.5 rounded-xl bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(26,26,26,1)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[rgba(26,26,26,0.5)] disabled:border-[rgba(255,255,255,0.3)] [&>option]:bg-[rgba(40,40,40,0.95)] [&>option]:py-2"
                 >
                   <option value="Cédula de Ciudadanía">Cédula de Ciudadanía</option>
                 </select>
@@ -291,10 +291,10 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   disabled={mode === 'edit'}
                   value={formData.numeroDocumento || ''}
                   onChange={(e) => updateField('numeroDocumento', e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-[rgba(255,255,255,0.1)] ${
+                  className={`w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 text-[#f9fafb] placeholder:text-[#6b7280] focus:outline-none focus:bg-[rgba(255,255,255,0.12)] transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[rgba(255,255,255,0.03)] disabled:border-[rgba(255,255,255,0.3)] ${
                     errors.numeroDocumento
                       ? 'border-[#ef4444] focus:border-[#ef4444]'
-                      : 'border-[rgba(255,255,255,0.35)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.5)]'
+                      : 'border-[rgba(255,255,255,0.6)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.8)]'
                   }`}
                   placeholder="1234567890"
                 />
@@ -317,10 +317,10 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   value={formData.fechaNacimiento || ''}
                   max={getToday()}
                   onChange={(e) => updateField('fechaNacimiento', e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all [color-scheme:dark] cursor-pointer ${
+                  className={`w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 text-[#f9fafb] focus:outline-none focus:bg-[rgba(255,255,255,0.12)] transition-all [color-scheme:dark] cursor-pointer shadow-sm ${
                     errors.fechaNacimiento
                       ? 'border-[#ef4444] focus:border-[#ef4444]'
-                      : 'border-[rgba(255,255,255,0.35)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.5)]'
+                      : 'border-[rgba(255,255,255,0.6)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.8)]'
                   }`}
                   style={{
                     colorScheme: 'dark'
@@ -356,7 +356,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         contactoEmergencia: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
+                    className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm placeholder:text-[#6b7280]"
                     placeholder="Nombre del contacto"
                   />
                 </div>
@@ -372,7 +372,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         telefonoEmergencia: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
+                    className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm placeholder:text-[#6b7280]"
                     placeholder="+57 300 123 4567"
                   />
                 </div>
@@ -388,7 +388,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         observacionesMedicas: e.target.value,
                       })
                     }
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors resize-none"
+                    className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm resize-none placeholder:text-[#6b7280]"
                     placeholder="Alergias, condiciones especiales..."
                   />
                 </div>
@@ -407,6 +407,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                   <label className="block text-[#9ca3af] text-sm mb-2">Tipo Profesor *</label>
                   <select
                     required
+                    size={3}
                     value={formData.datosProfesor?.tipoProfesor || ''}
                     onChange={(e) =>
                       updateField('datosProfesor', {
@@ -417,9 +418,15 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         tarifaActual: formData.datosProfesor?.tarifaActual || 0,
                       })
                     }
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
+                    className="w-full px-4 py-2 rounded-xl bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] text-sm focus:outline-none focus:ring-2 focus:ring-[#c93448] focus:border-transparent transition-all overflow-y-auto shadow-sm [&>option]:py-2.5 [&>option]:px-3 [&>option:hover]:bg-[rgba(201,52,72,0.2)] [&>option:checked]:bg-[rgba(201,52,72,0.3)] [&>option:checked]:text-white [&>option]:bg-[rgba(40,40,40,0.8)] [&>option]:border-b [&>option]:border-[rgba(64,64,64,0.3)] [&>option:last-child]:border-b-0"
+                    style={{
+                      height: 'auto',
+                      minHeight: '120px'
+                    }}
                   >
-                    <option value="">Seleccionar...</option>
+                    <option value="" className="text-[#6b7280] italic bg-[rgba(201,52,72,0.1)]">
+                      ⬇️ Seleccionar tipo...
+                    </option>
                     <option value="Principal">Principal</option>
                     <option value="Monitor">Monitor</option>
                   </select>
@@ -440,7 +447,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         tarifaActual: formData.datosProfesor?.tarifaActual || 0,
                       })
                     }
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
+                    className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm [color-scheme:dark]"
                   />
                 </div>
 
@@ -461,7 +468,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         fechaIngreso: formData.datosProfesor?.fechaIngreso || '',
                       })
                     }
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
+                    className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm placeholder:text-[#6b7280]"
                     placeholder="50000"
                   />
                 </div>
@@ -485,7 +492,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         tarifaActual: formData.datosProfesor?.tarifaActual || 0,
                       })
                     }}
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors"
+                    className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm placeholder:text-[#6b7280]"
                   />
                 </div>
 
@@ -504,7 +511,7 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
                         tarifaActual: formData.datosProfesor?.tarifaActual || 0,
                       })
                     }
-                    className="w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] transition-colors resize-none"
+                    className="w-full px-5 py-3.5 rounded-xl bg-[rgba(255,255,255,0.08)] border-2 border-[rgba(255,255,255,0.6)] text-[#f9fafb] focus:outline-none focus:border-[#c93448] focus:bg-[rgba(255,255,255,0.12)] transition-all hover:border-[rgba(255,255,255,0.8)] shadow-sm resize-none placeholder:text-[#6b7280]"
                     placeholder="Breve descripción profesional..."
                   />
                 </div>

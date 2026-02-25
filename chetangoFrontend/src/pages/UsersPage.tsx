@@ -290,12 +290,17 @@ const UsersPage = () => {
           {/* Role Filter */}
           <select
             onChange={(e) => handleRoleFilter(e.target.value ? (e.target.value as UserRole) : undefined)}
-            className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-[rgba(64,64,64,0.2)] border border-[rgba(64,64,64,0.3)] text-[#f9fafb] text-sm sm:text-base focus:outline-none focus:border-[#c93448] transition-colors min-h-[44px]"
+            size={5}
+            className="flex-1 px-3 sm:px-4 py-2 rounded-lg bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(255,255,255,0.4)] text-[#f9fafb] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#c93448] focus:border-transparent transition-all overflow-y-auto shadow-sm [&>option]:py-2.5 [&>option]:px-3 [&>option:hover]:bg-[rgba(201,52,72,0.2)] [&>option:checked]:bg-[rgba(201,52,72,0.3)] [&>option:checked]:text-white [&>option]:bg-[rgba(40,40,40,0.8)] [&>option]:border-b [&>option]:border-[rgba(64,64,64,0.3)] [&>option:last-child]:border-b-0"
+            style={{
+              height: 'auto',
+              minHeight: '150px'
+            }}
           >
-            <option value="">Todos los roles</option>
-            <option value="admin">Administradores</option>
-            <option value="profesor">Profesores</option>
-            <option value="alumno">Alumnos</option>
+            <option value="" className="text-[#6b7280] italic bg-[rgba(201,52,72,0.1)]">⬇️ Todos los roles</option>
+            <option value="admin">👨‍💼 Administradores</option>
+            <option value="profesor">👨‍🏫 Profesores</option>
+            <option value="alumno">🧑‍🎓 Alumnos</option>
           </select>
 
           {/* Create Button */}
