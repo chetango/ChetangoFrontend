@@ -18,6 +18,7 @@ import { OtroGastoModal } from '@/features/finanzas/components/OtroGastoModal'
 import { OtroIngresoModal } from '@/features/finanzas/components/OtroIngresoModal'
 import type { CrearOtroGastoDTO, CrearOtroIngresoDTO, OtroGastoDTO, OtroIngresoDTO, Sede } from '@/features/finanzas/types/finanzasTypes'
 import { SEDE_LABELS } from '@/features/finanzas/types/finanzasTypes'
+import { ConfirmationModal } from '@/shared/components/ConfirmationModal'
 import { ArrowDown, ArrowUp, Calendar, DollarSign, Filter, Plus, Trash2, TrendingDown, TrendingUp, X } from 'lucide-react'
 import { useState } from 'react'
 
@@ -34,6 +35,12 @@ const AdminFinanzasPage = () => {
   const [isIngresoModalOpen, setIsIngresoModalOpen] = useState(false)
   const [isGastoModalOpen, setIsGastoModalOpen] = useState(false)
   const [selectedTab, setSelectedTab] = useState<'ingresos' | 'gastos'>('ingresos')
+  const [confirmDelete, setConfirmDelete] = useState<{
+    isOpen: boolean
+    id: string
+    type: 'ingreso' | 'gasto'
+    concepto: string
+  }>({ isOpen: false, id: '', type: 'ingreso', concepto: '' })
 
   // Queries
   const { data: ingresos = [], isLoading: loadingIngresos } = useOtrosIngresosQuery({
@@ -88,15 +95,29 @@ const AdminFinanzasPage = () => {
     await crearGastoMutation.mutateAsync(data)
   }
 
-  const handleEliminarIngreso = async (id: string) => {
-    if (window.confirm('¿Estás seguro de eliminar este ingreso?')) {
-      await eliminarIngresoMutation.mutateAsync(id)
-    }
+  const handleEliminarIngreso = (ingreso: OtroIngresoDTO) => {
+    setConfirmDelete({
+      isOpen: true,
+      id: ingreso.idOtroIngreso,
+      type: 'ingreso',
+      concepto: ingreso.concepto,
+    })
   }
 
-  const handleEliminarGasto = async (id: string) => {
-    if (window.confirm('¿Estás seguro de eliminar este gasto?')) {
-      await eliminarGastoMutation.mutateAsync(id)
+  const handleEliminarGasto = (gasto: OtroGastoDTO) => {
+    setConfirmDelete({
+      isOpen: true,
+      id: gasto.idOtroGasto,
+      type: 'gasto',
+      concepto: gasto.concepto,
+    })
+  }
+
+  const confirmDeleteAction = async () => {
+    if (confirmDelete.type === 'ingreso') {
+      await eliminarIngresoMutation.mutateAsync(confirmDelete.id)
+    } else {
+      await eliminarGastoMutation.mutateAsync(confirmDelete.id)
     }
   }
 
@@ -116,8 +137,9 @@ const AdminFinanzasPage = () => {
       <div className="mb-6 sm:mb-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div>
-            <h1 className="text-[#f9fafb] text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">
-              � Otros Movimientos
+            <h1 className="text-[#f9fafb] text-2xl sm:text-3xl font-bold mb-1 sm:mb-2 flex items-center gap-3">
+              <TrendingUp className="text-[#22c55e]" size={32} />
+              Otros Movimientos
             </h1>
             <p className="text-[#9ca3af] text-sm sm:text-base">
               Administra ingresos y gastos adicionales de la academia
@@ -329,6 +351,17 @@ const AdminFinanzasPage = () => {
         categorias={categoriasGasto}
         isSubmitting={crearGastoMutation.isPending}
       />
+
+      <ConfirmationModal
+        isOpen={confirmDelete.isOpen}
+        onClose={() => setConfirmDelete({ isOpen: false, id: '', type: 'ingreso', concepto: '' })}
+        onConfirm={confirmDeleteAction}
+        title="Eliminar Movimiento"
+        message={`¿Estás seguro de eliminar el ${confirmDelete.type === 'ingreso' ? 'ingreso' : 'gasto'} "${confirmDelete.concepto}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        variant="danger"
+      />
     </div>
   )
 }
@@ -343,7 +376,7 @@ function IngresosTable({
 }: {
   ingresos: OtroIngresoDTO[]
   isLoading: boolean
-  onDelete: (id: string) => void
+  onDelete: (ingreso: OtroIngresoDTO) => void
   formatCurrency: (amount: number) => string
   formatDate: (date: string) => string
 }) {
@@ -414,7 +447,7 @@ function IngresosTable({
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button
-                    onClick={() => onDelete(ingreso.idOtroIngreso)}
+                    onClick={() => onDelete(ingreso)}
                     className="p-2 text-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] rounded-lg transition-colors"
                     title="Eliminar ingreso"
                   >
@@ -440,7 +473,7 @@ function GastosTable({
 }: {
   gastos: OtroGastoDTO[]
   isLoading: boolean
-  onDelete: (id: string) => void
+  onDelete: (gasto: OtroGastoDTO) => void
   formatCurrency: (amount: number) => string
   formatDate: (date: string) => string
 }) {
@@ -520,7 +553,7 @@ function GastosTable({
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button
-                    onClick={() => onDelete(gasto.idOtroGasto)}
+                    onClick={() => onDelete(gasto)}
                     className="p-2 text-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] rounded-lg transition-colors"
                     title="Eliminar gasto"
                   >
