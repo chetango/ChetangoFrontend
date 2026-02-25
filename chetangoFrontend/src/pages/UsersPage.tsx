@@ -270,7 +270,7 @@ const UsersPage = () => {
           </div>
           <input
             type="text"
-            placeholder="🔍 Buscar usuario por nombre, email o documento... (Todas las sedes)"
+            placeholder="Buscar usuario por nombre, email o documento... (Todas las sedes)"
             onChange={(e) => handleSearch(e.target.value)}
             className="w-full pl-12 sm:pl-56 pr-4 py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-[rgba(201,52,72,0.08)] to-[rgba(64,64,64,0.15)] border-2 border-[rgba(201,52,72,0.3)] text-[#f9fafb] text-sm sm:text-base placeholder:text-[#9ca3af] focus:outline-none focus:border-[#c93448] focus:from-[rgba(201,52,72,0.15)] focus:to-[rgba(64,64,64,0.2)] transition-all shadow-lg"
           />
