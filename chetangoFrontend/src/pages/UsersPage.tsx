@@ -62,10 +62,6 @@ const UsersPage = () => {
     setFilters((prev) => ({ ...prev, rol, pageNumber: 1 }))
   }
 
-  const handleStatusFilter = (estado?: UserStatus) => {
-    setFilters((prev) => ({ ...prev, estado, pageNumber: 1 }))
-  }
-
   const handleTabChange = (tab: 'activos' | 'inactivos') => {
     setActiveTab(tab)
     setFilters((prev) => ({
