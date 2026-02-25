@@ -309,32 +309,31 @@ export const UserFormStep = ({ onNext, onCancel, initialData, mode = 'create' }:
               </div>
 
               <div className="col-span-2 md:col-span-1">
-                <label className="block text-[#9ca3af] text-sm mb-2 flex items-center gap-2">
-                  Fecha Nacimiento 
-                  <span className="text-xs text-[#6b7280]">📅</span>
+                <label className="block text-[#9ca3af] text-sm mb-1.5">
+                  Fecha Nacimiento
                 </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    value={formData.fechaNacimiento || ''}
-                    max={getToday()}
-                    onChange={(e) => updateField('fechaNacimiento', e.target.value)}
-                    className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all [color-scheme:dark] cursor-pointer ${
-                      errors.fechaNacimiento
-                        ? 'border-[#ef4444] focus:border-[#ef4444]'
-                        : 'border-[rgba(255,255,255,0.35)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.5)]'
-                    }`}
-                    style={{
-                      colorScheme: 'dark'
-                    }}
-                  />
-                </div>
+                <input
+                  type="date"
+                  value={formData.fechaNacimiento || ''}
+                  max={getToday()}
+                  onChange={(e) => updateField('fechaNacimiento', e.target.value)}
+                  className={`w-full px-4 py-3 rounded-lg bg-[rgba(255,255,255,0.05)] border-2 text-[#f9fafb] focus:outline-none focus:bg-[rgba(255,255,255,0.08)] transition-all [color-scheme:dark] cursor-pointer ${
+                    errors.fechaNacimiento
+                      ? 'border-[#ef4444] focus:border-[#ef4444]'
+                      : 'border-[rgba(255,255,255,0.35)] focus:border-[#c93448] hover:border-[rgba(255,255,255,0.5)]'
+                  }`}
+                  style={{
+                    colorScheme: 'dark'
+                  }}
+                />
                 {errors.fechaNacimiento && (
                   <p className="text-[#ef4444] text-xs mt-1.5 flex items-center gap-1">
                     <span>⚠️</span> {errors.fechaNacimiento}
                   </p>
                 )}
-                <p className="text-[#6b7280] text-xs mt-1">No puede ser fecha futura</p>
+                {!errors.fechaNacimiento && (
+                  <p className="text-[#6b7280] text-xs mt-1">No puede ser fecha futura</p>
+                )}
               </div>
             </div>
           </div>
