@@ -14,6 +14,8 @@ import type { ClaseFormData, CrearClaseRequest } from '@/features/classes/types/
 import { formatearFechaHoraISO, formatearFechaParaInput, formatearHoraConSegundos, formatearHoraParaInput } from '@/features/classes/utils/claseHelpers'
 import { RegisterPaymentModal } from '@/features/payments/components/RegisterPaymentModal'
 import type { SolicitudClasePrivadaDTO, SolicitudRenovacionPaqueteDTO } from '@/features/solicitudes/types/solicitudesTypes'
+import { usePagosPendientesAprobacionQuery } from '@/features/suscripciones/api/suscripcionQueries'
+import { ROUTES } from '@/shared/constants/routes'
 import { getNavigationForUser } from '@/shared/lib/navigation'
 import { useState } from 'react'
 
@@ -21,6 +23,7 @@ export const MainLayoutWrapper = () => {
   const { logout, session } = useAuth()
   const { activeRole } = useActiveRole()
   const isAdmin = session?.user?.roles?.includes('admin')
+  const isSuperAdmin = session?.user?.roles?.includes('SuperAdmin')
   const { data: tiposClase = [] } = useTiposClaseQuery()
   const { data: profesores = [] } = useProfesoresQuery(isAdmin)
   const createClaseMutation = useCreateClaseMutation()
@@ -28,6 +31,9 @@ export const MainLayoutWrapper = () => {
   const [isClasePrivadaModalOpen, setIsClasePrivadaModalOpen] = useState(false)
   const [renovacionSeleccionada, setRenovacionSeleccionada] = useState<SolicitudRenovacionPaqueteDTO | null>(null)
   const [clasePrivadaSeleccionada, setClasePrivadaSeleccionada] = useState<SolicitudClasePrivadaDTO | null>(null)
+  
+  // Query para pagos pendientes (solo SuperAdmin) con polling cada 30 segundos
+  const { data: pagosPendientes = [] } = usePagosPendientesAprobacionQuery(isSuperAdmin)
 
   const handleLogout = async () => {
     try {
@@ -77,8 +83,19 @@ export const MainLayoutWrapper = () => {
     handleCloseClasePrivadaModal()
   }
 
-  // Obtener navegación según el rol activo del usuario
-  const navigationItems = getNavigationForUser(activeRole)
+  // Obtener navegación según todos los roles del usuario (para multi-rol como Admin + SuperAdmin)
+  const allUserRoles = session?.user?.roles || []
+  let navigationItems = getNavigationForUser(activeRole, allUserRoles)
+  
+  // Agregar badge de pagos pendientes al item "Gestión Suscripciones" si es SuperAdmin
+  if (isSuperAdmin && pagosPendientes.length > 0) {
+    navigationItems = navigationItems.map(item => {
+      if (item.path === ROUTES.ADMIN.GESTION_SUSCRIPCIONES) {
+        return { ...item, badge: pagosPendientes.length }
+      }
+      return item
+    })
+  }
 
   const notaRenovacion = renovacionSeleccionada 
     ? [

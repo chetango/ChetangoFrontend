@@ -3,13 +3,14 @@
 // ============================================
 
 import { ROUTES } from '@/shared/constants/routes'
-import { BarChart3, Calendar, CheckCircle2, ClipboardCheck, DollarSign, Home, Package, TrendingUp, User, Users, Wallet } from 'lucide-react'
+import { BarChart3, Calendar, CheckCircle2, ClipboardCheck, CreditCard, DollarSign, Home, Package, Shield, TrendingUp, User, Users, Wallet } from 'lucide-react'
 
 export interface NavItem {
   label: string
   path: string
   icon?: any
   roles?: string[]
+  badge?: number // Contador de notificaciones/items pendientes
 }
 
 // Definición de elementos de navegación por rol
@@ -28,6 +29,11 @@ const NAVIGATION_ITEMS: NavItem[] = [
   { label: 'Otros Movimientos', path: ROUTES.ADMIN.FINANZAS, icon: TrendingUp, roles: ['admin'] },
   { label: 'Usuarios', path: ROUTES.ADMIN.USERS, icon: Users, roles: ['admin'] },
   { label: 'Reportes', path: ROUTES.ADMIN.REPORTS, icon: BarChart3, roles: ['admin'] },
+  
+  // Suscripciones - Solo SuperAdmin ve Gestión, solo Admin regular ve Mi Suscripción
+  { label: 'Mi Suscripción', path: ROUTES.ADMIN.SUSCRIPCION, icon: CreditCard, roles: ['admin'] },
+  { label: 'Gestión Suscripciones', path: ROUTES.ADMIN.GESTION_SUSCRIPCIONES, icon: Shield, roles: ['SuperAdmin'] },
+  
   { label: 'Mi Perfil', path: ROUTES.ADMIN.PROFILE, icon: User, roles: ['admin'] },
   
   // Elementos de Estudiante
@@ -46,16 +52,20 @@ const NAVIGATION_ITEMS: NavItem[] = [
 
 /**
  * Obtiene los elementos de navegación filtrados por el rol activo del usuario
+ * Para usuarios con múltiples roles (ej: Admin + SuperAdmin), muestra items de todos sus roles
  */
-export function getNavigationForUser(activeRole: string | null): NavItem[] {
+export function getNavigationForUser(activeRole: string | null, allRoles: string[] = []): NavItem[] {
   if (!activeRole) return []
+  
+  // Si el usuario tiene múltiples roles, verificar contra todos
+  const rolesToCheck = allRoles.length > 0 ? allRoles : [activeRole]
   
   return NAVIGATION_ITEMS.filter(item => {
     // Si no tiene roles definidos, es accesible para todos
     if (!item.roles || item.roles.length === 0) return true
     
-    // Verificar si el rol activo tiene acceso
-    return item.roles.includes(activeRole)
+    // Verificar si alguno de los roles del usuario tiene acceso
+    return item.roles.some(role => rolesToCheck.includes(role))
   })
 }
 
