@@ -20,6 +20,7 @@ interface AttendanceTableProps {
   onToggleAttendance: (studentId: string, idPaquete: string | null) => void
   onObservationChange: (studentId: string, idPaquete: string | null, observation: string) => void
   isUpdating: Record<string, boolean>
+  onPackageClick?: (idPaquete: string) => void
 }
 
 /**
@@ -37,6 +38,7 @@ export function AttendanceTable({
   onToggleAttendance,
   onObservationChange,
   isUpdating,
+  onPackageClick,
 }: AttendanceTableProps) {
   // Empty state when no students match search
   if (students.length === 0) {
@@ -87,6 +89,7 @@ export function AttendanceTable({
                   onObservationChange(student.idAlumno, student.paquete?.idPaquete ?? null, observation)
                 }
                 isUpdating={isUpdating[student.idAlumno] || false}
+                onPackageClick={onPackageClick}
               />
             ))}
           </GlassTableBody>
@@ -104,6 +107,7 @@ export function AttendanceTable({
               onObservationChange(student.idAlumno, student.paquete?.idPaquete ?? null, observation)
             }
             isUpdating={isUpdating[student.idAlumno] || false}
+            onPackageClick={onPackageClick}
           />
         ))}
       </div>

@@ -27,9 +27,12 @@ import {
 import { useAdminAttendance } from '@/features/attendance/hooks/useAdminAttendance'
 import { useAttendanceSearch } from '@/features/attendance/hooks/useAttendanceSearch'
 import { calculateAttendanceStats } from '@/features/attendance/utils/attendanceUtils'
+import { usePaqueteDetailQuery } from '@/features/packages/api/packageQueries'
+import { PackageDetailModal } from '@/features/packages/components/admin'
+import { getInitials } from '@/features/packages/hooks/useAdminPackages'
 import { ERROR_MESSAGES, type ApiError } from '@/shared/api/interceptors'
 import { CheckCircle2, Users } from 'lucide-react'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 /**
@@ -72,6 +75,20 @@ const AdminAttendancePage = () => {
   const { searchTerm, setSearchTerm, filteredStudents } = useAttendanceSearch(
     attendanceSummary?.alumnos ?? []
   )
+
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null)
+  const { data: paqueteDetail, isLoading: isLoadingPaqueteDetail } = usePaqueteDetailQuery(
+    selectedPackageId ?? '',
+    !!selectedPackageId
+  )
+
+  const handlePackageClick = useCallback((idPaquete: string) => {
+    setSelectedPackageId(idPaquete)
+  }, [])
+
+  const handleClosePackageDetail = useCallback(() => {
+    setSelectedPackageId(null)
+  }, [])
 
   // Apply URL params to filters when available
   useEffect(() => {
@@ -257,6 +274,7 @@ const AdminAttendancePage = () => {
                     onToggleAttendance={(studentId, idPaquete) => toggleAttendance(studentId, idPaquete)}
                     onObservationChange={(studentId, idPaquete, observation) => updateObservation(studentId, idPaquete, observation)}
                     isUpdating={isUpdatingAttendance}
+                    onPackageClick={handlePackageClick}
                   />
                 )
               ) : dateRangeError ? (
@@ -287,6 +305,13 @@ const AdminAttendancePage = () => {
           </div>
         </div>
       </div>
+      <PackageDetailModal
+        isOpen={!!selectedPackageId}
+        onClose={handleClosePackageDetail}
+        paqueteDetail={paqueteDetail}
+        isLoading={isLoadingPaqueteDetail}
+        getInitials={getInitials}
+      />
     </>
   )
 }

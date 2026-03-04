@@ -210,6 +210,10 @@ export function ClaseFormModal({
   )
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
+  // Estado local para el valor crudo del input cupoMaximo (permite campo vacío mientras se escribe en móvil)
+  const [cupoMaximoRaw, setCupoMaximoRaw] = useState<string>(
+    () => getInitialFormData(initialData, prefillData).cupoMaximo.toString()
+  )
 
   // Determinar si la clase ya pasó (para deshabilitar edición de fecha/hora)
   const claseYaPaso: boolean = !!(mode === 'edit' && initialData && 
@@ -233,6 +237,7 @@ export function ClaseFormModal({
       }
 
       setFormData(newFormData)
+      setCupoMaximoRaw(newFormData.cupoMaximo.toString())
       setErrors({})
       setTouched({})
     }
@@ -613,14 +618,28 @@ export function ClaseFormModal({
               Cupo Máximo <span className="text-red-400">*</span>
             </label>
             <GlassInput
-              type="number"
-              min={1}
-              max={100}
-              value={formData.cupoMaximo.toString()}
-              onChange={(e) =>
-                handleChange('cupoMaximo', parseInt(e.target.value, 10) || 1)
-              }
-              onBlur={() => handleBlur('cupoMaximo')}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={cupoMaximoRaw}
+              onChange={(e) => {
+                const raw = e.target.value.replace(/[^0-9]/g, '')
+                setCupoMaximoRaw(raw)
+                const num = parseInt(raw, 10)
+                if (!isNaN(num) && num >= 1) {
+                  handleChange('cupoMaximo', num)
+                }
+              }}
+              onBlur={() => {
+                handleBlur('cupoMaximo')
+                const num = parseInt(cupoMaximoRaw, 10)
+                if (isNaN(num) || num < 1) {
+                  setCupoMaximoRaw('1')
+                  handleChange('cupoMaximo', 1)
+                } else {
+                  setCupoMaximoRaw(num.toString())
+                }
+              }}
               icon={<Users className="w-4 h-4" />}
               error={touched.cupoMaximo ? errors.cupoMaximo : undefined}
             />

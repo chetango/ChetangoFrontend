@@ -13,6 +13,7 @@ interface AttendanceRowProps {
   onToggleAttendance: () => void
   onObservationChange: (observation: string) => void
   isUpdating: boolean
+  onPackageClick?: (idPaquete: string) => void
 }
 
 /**
@@ -34,6 +35,7 @@ export function AttendanceRow({
   onToggleAttendance,
   onObservationChange,
   isUpdating,
+  onPackageClick,
 }: AttendanceRowProps) {
   const [localObservation, setLocalObservation] = useState(
     student.asistencia.observacion || ''
@@ -107,7 +109,18 @@ export function AttendanceRow({
       {/* PAQUETE column */}
       <GlassTableCell>
         <div>
-          <PackageStatusBadge package={student.paquete} />
+          {student.paquete?.idPaquete && onPackageClick ? (
+            <button
+              type="button"
+              onClick={() => onPackageClick(student.paquete!.idPaquete!)}
+              className="text-left w-full cursor-pointer hover:opacity-80 transition-opacity duration-150"
+              title="Ver detalle del paquete"
+            >
+              <PackageStatusBadge package={student.paquete} />
+            </button>
+          ) : (
+            <PackageStatusBadge package={student.paquete} />
+          )}
           {isSharedPackage && sharedStudentNames.length > 0 && (
             <p className="text-[#7c5af8] text-[11px] mt-2 italic flex items-center gap-1">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#7c5af8]" />
