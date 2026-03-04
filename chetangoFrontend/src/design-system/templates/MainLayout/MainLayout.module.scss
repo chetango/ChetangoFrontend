@@ -184,6 +184,10 @@
   font-family: $font-family-primary;
   font-size: 14px;
   font-weight: 500;
+  background: none;
+  border: none;
+  width: 100%;
+  cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -235,9 +239,73 @@
   align-items: center;
   justify-content: center;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  position: relative; // Para posicionar el badge
   
   .nav-item--active & {
     filter: drop-shadow(0 0 4px rgba(201, 52, 72, 0.6));
+  }
+}
+
+.nav-item__badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  min-width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  box-shadow: 
+    0 2px 8px rgba(239, 68, 68, 0.6),
+    0 0 16px rgba(239, 68, 68, 0.4);
+  animation: pulse-badge 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+// Animación de pulsación para el badge
+@keyframes pulse-badge {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 
+      0 2px 8px rgba(239, 68, 68, 0.6),
+      0 0 16px rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 
+      0 2px 12px rgba(239, 68, 68, 0.8),
+      0 0 24px rgba(239, 68, 68, 0.6);
+  }
+}
+
+// Efecto de iluminación para items con badge
+.nav-item--glowing {
+  animation: glow-border 2s ease-in-out infinite;
+  
+  &:hover {
+    animation: none;
+  }
+}
+
+@keyframes glow-border {
+  0%, 100% {
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    box-shadow: 
+      0 0 8px rgba(239, 68, 68, 0.15),
+      inset 0 0 4px rgba(239, 68, 68, 0.1);
+  }
+  50% {
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    box-shadow: 
+      0 0 16px rgba(239, 68, 68, 0.3),
+      0 0 24px rgba(239, 68, 68, 0.2),
+      inset 0 0 8px rgba(239, 68, 68, 0.15);
   }
 }
 

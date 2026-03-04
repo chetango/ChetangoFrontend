@@ -2,9 +2,9 @@
 // USE ACTIVE ROLE HOOK - CHETANGO
 // ============================================
 
-import { useCallback, useEffect, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
-import { setAvailableRoles, setActiveRole, clearRoles, restoreActiveRole } from '@/features/auth/store/roleSlice'
+import { clearRoles, restoreActiveRole, setActiveRole, setAvailableRoles } from '@/features/auth/store/roleSlice'
+import { useCallback, useEffect, useRef } from 'react'
 import { useAuth } from './useAuth'
 
 export const useActiveRole = () => {
@@ -15,7 +15,7 @@ export const useActiveRole = () => {
 
   // Sincronizar roles disponibles cuando cambie la sesión
   // Usar JSON.stringify para comparar arrays por valor, no por referencia
-  const rolesKey = session.user?.roles ? JSON.stringify(session.user.roles.sort()) : ''
+  const rolesKey = session.user?.roles ? JSON.stringify([...session.user.roles].sort()) : ''
   
   useEffect(() => {
     if (session.user?.roles && session.user.roles.length > 0) {

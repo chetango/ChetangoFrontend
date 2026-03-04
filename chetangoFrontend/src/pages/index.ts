@@ -20,6 +20,8 @@ export { default as AdminPackagesPage } from './admin/AdminPackagesPage'
 export { default as AdminPaymentsPage } from './admin/AdminPaymentsPage'
 export { default as AdminProfilePage } from './admin/AdminProfilePage'
 export { default as AdminClassesPage } from './admin/ClassesPage'
+export { default as GestionSuscripcionesPage } from './admin/GestionSuscripcionesPage'
+export { default as MiSuscripcionPage } from './admin/MiSuscripcionPage'
 export { default as NotificationsPage } from './admin/NotificationsPage'
 export { UserDetailPage } from './admin/UserDetailPage'
 

@@ -11,13 +11,14 @@ import { useBreakpoint } from '@/shared/hooks'
 import { getPrimaryRoleText } from '@/shared/utils'
 import { Bell, ChevronLeft, ChevronRight, Menu, Search, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import styles from './MainLayout.module.scss'
 
 interface NavItem {
   label: string
   path: string
   icon?: any
+  badge?: number
 }
 
 interface MainLayoutProps {
@@ -51,6 +52,7 @@ const MainLayout = ({
   const profileRef = useRef<HTMLDivElement>(null)
   const sidebarRef = useRef<HTMLElement>(null)
   const location = useLocation()
+  const navigate = useNavigate()
   
   const isAdmin = user?.roles?.includes('admin')
   const userRole = isAdmin ? 'admin' : (user?.roles?.includes('profesor') ? 'profesor' : 'alumno')
@@ -184,19 +186,25 @@ const MainLayout = ({
         <nav className={styles['sidebar__nav']}>
           {navigationItems.map((item) => {
             const IconComponent = item.icon
+            const hasBadge = item.badge && item.badge > 0
             return (
-              <Link 
+              <button 
                 key={item.path} 
-                to={item.path} 
-                className={`${styles['nav-item']} ${isActive(item.path) ? styles['nav-item--active'] : ''}`}
+                onClick={() => navigate(item.path)}
+                className={`${styles['nav-item']} ${isActive(item.path) ? styles['nav-item--active'] : ''} ${hasBadge ? styles['nav-item--glowing'] : ''}`}
               >
                 {IconComponent && (
                   <span className={styles['nav-item__icon']}>
                     <IconComponent size={20} />
+                    {hasBadge && (
+                      <span className={styles['nav-item__badge']}>
+                        {item.badge}
+                      </span>
+                    )}
                   </span>
                 )}
                 {sidebarOpen && <span className={styles['nav-item__label']}>{item.label}</span>}
-              </Link>
+              </button>
             )
           })}
         </nav>

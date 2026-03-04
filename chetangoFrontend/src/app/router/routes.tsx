@@ -25,6 +25,8 @@ const AdminFinanzasPage = lazy(() => import('@/pages/admin/AdminFinanzasPage').t
 const AdminProfilePage = lazy(() => import('@/pages/admin/AdminProfilePage').then(m => ({ default: m.default })))
 const NotificationsPage = lazy(() => import('@/pages/admin/NotificationsPage').then(m => ({ default: m.default })))
 const UserDetailPage = lazy(() => import('@/pages').then(m => ({ default: m.UserDetailPage })))
+const MiSuscripcionPage = lazy(() => import('@/pages').then(m => ({ default: m.MiSuscripcionPage })))
+const GestionSuscripcionesPage = lazy(() => import('@/pages').then(m => ({ default: m.GestionSuscripcionesPage })))
 const ProfesorDashboardPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorDashboardPage })))
 const ProfesorAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorAttendancePage })))
 const ProfesorClassesPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorClassesPage })))
@@ -136,6 +138,8 @@ export const appRoutes: AppRoute[] = [
           { path: 'reports', element: <ReportsPage /> },
           { path: 'profile', element: <AdminProfilePage /> },
           { path: 'notifications', element: <NotificationsPage /> },
+          { path: 'suscripcion', element: <MiSuscripcionPage /> },
+          { path: 'gestion-suscripciones', element: <GestionSuscripcionesPage /> },
         ]
       },
       

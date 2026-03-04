@@ -57,6 +57,8 @@ export const ROUTES = {
     
     PROFILE: '/admin/profile',
     NOTIFICATIONS: '/admin/notifications',
+    SUSCRIPCION: '/admin/suscripcion',
+    GESTION_SUSCRIPCIONES: '/admin/gestion-suscripciones',
   },
   
   // RUTAS DE ESTUDIANTE
