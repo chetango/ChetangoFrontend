@@ -36,6 +36,8 @@ export function useCrearOtroIngresoMutation() {
     onSuccess: () => {
       // Invalidate all otros-ingresos queries to refetch
       queryClient.invalidateQueries({ queryKey: finanzasKeys.all })
+      // Invalidate dashboard so KPIs refresh immediately
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Ingreso registrado exitosamente')
     },
     onError: (error) => {
@@ -63,6 +65,8 @@ export function useCrearOtroGastoMutation() {
     onSuccess: () => {
       // Invalidate all otros-gastos queries to refetch
       queryClient.invalidateQueries({ queryKey: finanzasKeys.all })
+      // Invalidate dashboard so KPIs refresh immediately
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Gasto registrado exitosamente')
     },
     onError: (error) => {
@@ -85,6 +89,7 @@ export function useEliminarOtroIngresoMutation() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: finanzasKeys.all })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Ingreso eliminado exitosamente')
     },
     onError: (error) => {
@@ -107,6 +112,7 @@ export function useEliminarOtroGastoMutation() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: finanzasKeys.all })
+      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
       toast.success('Gasto eliminado exitosamente')
     },
     onError: (error) => {
