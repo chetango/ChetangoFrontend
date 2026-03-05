@@ -6,11 +6,11 @@
 // ENUMS Y CONSTANTES
 // ============================================
 
-export type Sede = 0 | 1
+export type Sede = 1 | 2
 
 export const SEDE_LABELS: Record<Sede, string> = {
-  0: 'Medellín',
-  1: 'Manizales',
+  1: 'Medellín',
+  2: 'Manizales',
 }
 
 // ============================================

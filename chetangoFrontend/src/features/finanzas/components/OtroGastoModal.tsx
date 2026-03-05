@@ -28,7 +28,7 @@ export function OtroGastoModal({
     concepto: '',
     monto: 0,
     fecha: new Date().toISOString().split('T')[0],
-    sede: 0,
+    sede: 1,
     idCategoriaGasto: '',
     proveedor: '',
     descripcion: '',
@@ -46,7 +46,7 @@ export function OtroGastoModal({
         concepto: '',
         monto: 0,
         fecha: new Date().toISOString().split('T')[0],
-        sede: 0,
+        sede: 1,
         idCategoriaGasto: '',
         proveedor: '',
         descripcion: '',
@@ -190,8 +190,8 @@ export function OtroGastoModal({
                 className="w-full px-4 py-2.5 bg-[rgba(26,26,26,0.95)] border-2 border-[rgba(255,255,255,0.4)] rounded-lg text-[#f9fafb] focus:outline-none focus:ring-2 focus:ring-[#c93448] focus:border-transparent [&>option]:bg-[rgba(40,40,40,0.95)] [&>option]:py-2"
                 disabled={isSubmitting}
               >
-                <option value={0}>{SEDE_LABELS[0]}</option>
                 <option value={1}>{SEDE_LABELS[1]}</option>
+                <option value={2}>{SEDE_LABELS[2]}</option>
               </select>
             </div>
 
