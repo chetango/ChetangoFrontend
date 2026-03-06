@@ -5,15 +5,14 @@
 // El branding del login se resuelve en runtime leyendo el hostname.
 //
 // Regla:
-//   corporacionchetango.aphellion.com  →  login Chetango (branding propio)
-//   app.corporacionchetango.com        →  login Chetango (alias legacy)
+//   app.corporacionchetango.com        →  login Chetango (branding propio)
+//   app.aphellion.com                  →  login genérico Aphellion (todas las academias)
 //   [cualquier otro].aphellion.com     →  login genérico Aphellion
 //   localhost / desarrollo             →  login genérico Aphellion por defecto
 
 const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
 
 const CHETANGO_HOSTNAMES = [
-  'corporacionchetango.aphellion.com',
   'app.corporacionchetango.com',
 ]
 

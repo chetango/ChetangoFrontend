@@ -10,8 +10,10 @@ export const MSAL_CONFIG = {
   TENANT_ID: import.meta.env.VITE_ENTRA_TENANT_ID,
   CLIENT_ID: import.meta.env.VITE_ENTRA_CLIENT_ID,
   AUTHORITY: import.meta.env.VITE_ENTRA_AUTHORITY,
-  REDIRECT_URI: import.meta.env.VITE_ENTRA_REDIRECT_URI,
-  POST_LOGOUT_REDIRECT_URI: import.meta.env.VITE_ENTRA_POST_LOGOUT_REDIRECT_URI,
+  // Dinámico: usa el origen actual del navegador (app.corporacionchetango.com o app.aphellion.com)
+  // Esto permite que el mismo build funcione en múltiples dominios sin re-deploy
+  REDIRECT_URI: typeof window !== 'undefined' ? window.location.origin : import.meta.env.VITE_ENTRA_REDIRECT_URI,
+  POST_LOGOUT_REDIRECT_URI: typeof window !== 'undefined' ? window.location.origin : import.meta.env.VITE_ENTRA_POST_LOGOUT_REDIRECT_URI,
   SCOPES: import.meta.env.VITE_ENTRA_SCOPES?.split(',') || ['openid', 'profile', 'email'],
 } as const
 
