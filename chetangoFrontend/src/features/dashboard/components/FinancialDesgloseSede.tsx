@@ -2,9 +2,9 @@
 // FINANCIAL DESGLOSE SEDE COMPONENT
 // ============================================
 
-import { GlassPanel } from '@/design-system/atoms/GlassPanel'
-import { ArrowDown, ArrowUp, Building2, TrendingUp } from 'lucide-react'
-import type { DashboardKPIs, FinancialPorSede } from '../types/dashboard.types'
+import { GlassPanel } from '@/design-system/atoms/GlassPanel';
+import { ArrowDown, ArrowUp, Building2, TrendingUp } from 'lucide-react';
+import type { DashboardKPIs, FinancialPorSede } from '../types/dashboard.types';
 
 // Paleta de colores para sedes dinámicas (rota entre los disponibles)
 const SEDE_COLORS: Array<{ color: string; bgColor: string }> = [

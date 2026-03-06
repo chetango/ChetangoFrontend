@@ -33,6 +33,9 @@ export { default as ProfesorPaymentsPage } from './profesor/ProfesorPaymentsPage
 export { ProfesorProfilePage } from './profesor/ProfesorProfilePage'
 export { default as ProfesorReportsPage } from './profesor/ProfesorReportsPage'
 
+// Compliance / Onboarding Legal
+export { default as OnboardingLegalPage } from './OnboardingLegalPage'
+
 // Student Pages
 export { default as StudentAttendancePage } from './student/StudentAttendancePage'
 export { default as StudentClassesPage } from './student/StudentClassesPage'

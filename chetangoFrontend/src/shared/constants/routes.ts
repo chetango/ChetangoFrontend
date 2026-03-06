@@ -12,6 +12,9 @@ export const ROUTES = {
   // AUTENTICACIÓN MSAL
   AUTH_CALLBACK: '/auth/callback',
   AUTH_LOGOUT: '/auth/logout',
+
+  // COMPLIANCE / ONBOARDING LEGAL
+  ONBOARDING_LEGAL: '/onboarding-legal',
   
   // DASHBOARD COMÚN
   DASHBOARD: '/dashboard',

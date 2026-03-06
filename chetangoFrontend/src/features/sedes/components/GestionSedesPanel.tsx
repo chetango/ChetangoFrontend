@@ -8,10 +8,10 @@ import { Building2, Check, Pencil, Plus, Trash2, X } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import {
-  useCreateSedeMutation,
-  useDeleteSedeMutation,
-  useSedesQuery,
-  useUpdateSedeMutation,
+    useCreateSedeMutation,
+    useDeleteSedeMutation,
+    useSedesQuery,
+    useUpdateSedeMutation,
 } from '../../dashboard/api/sedesQueries'
 import type { SedeConfig } from '../../dashboard/types/dashboard.types'
 

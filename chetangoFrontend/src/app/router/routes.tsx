@@ -27,6 +27,7 @@ const NotificationsPage = lazy(() => import('@/pages/admin/NotificationsPage').t
 const UserDetailPage = lazy(() => import('@/pages').then(m => ({ default: m.UserDetailPage })))
 const MiSuscripcionPage = lazy(() => import('@/pages').then(m => ({ default: m.MiSuscripcionPage })))
 const GestionSuscripcionesPage = lazy(() => import('@/pages').then(m => ({ default: m.GestionSuscripcionesPage })))
+const OnboardingLegalPage = lazy(() => import('@/pages').then(m => ({ default: m.OnboardingLegalPage })))
 const ProfesorDashboardPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorDashboardPage })))
 const ProfesorAttendancePage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorAttendancePage })))
 const ProfesorClassesPage = lazy(() => import('@/pages').then(m => ({ default: m.ProfesorClassesPage })))
@@ -110,6 +111,12 @@ export const appRoutes: AppRoute[] = [
         path: 'auth-callback', 
         element: <AuthCallbackPage />, 
         meta: { public: true } 
+      },
+      {
+        // Onboarding legal: requiere auth pero NO el MainLayout (pantalla completa sin sidebar)
+        path: 'onboarding-legal',
+        element: <OnboardingLegalPage />,
+        meta: { auth: true, anyRole: ['admin'] },
       },
 
       {

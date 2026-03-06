@@ -7,6 +7,8 @@ import { MainLayout } from '@/design-system/templates/MainLayout'
 import { useAuth } from '@/features/auth'
 import { RoleSelector } from '@/features/auth/components/RoleSelector/RoleSelector'
 import { useActiveRole } from '@/features/auth/hooks/useActiveRole'
+import { BannerReaceptacion } from '@/features/compliance/components/BannerReaceptacion'
+import { useComplianceGuard } from '@/features/compliance/hooks/useComplianceGuard'
 import { useCreateClaseMutation } from '@/features/classes/api/classMutations'
 import { useProfesoresQuery, useTiposClaseQuery } from '@/features/classes/api/classQueries'
 import { ClaseFormModal } from '@/features/classes/components'
@@ -24,6 +26,9 @@ export const MainLayoutWrapper = () => {
   const { activeRole } = useActiveRole()
   const isAdmin = session?.user?.roles?.includes('admin')
   const isSuperAdmin = session?.user?.roles?.includes('SuperAdmin')
+
+  // Compliance guard: redirige automáticamente si el onboarding no está completo
+  const { requiereBanner, documentosPendientes } = useComplianceGuard()
   const { data: tiposClase = [] } = useTiposClaseQuery()
   const { data: profesores = [] } = useProfesoresQuery(isAdmin)
   const createClaseMutation = useCreateClaseMutation()
@@ -126,6 +131,11 @@ export const MainLayoutWrapper = () => {
 
   return (
     <>
+      {/* Banner de reaceptación: solo visible cuando hay docs actualizados pendientes */}
+      {requiereBanner && isAdmin && (
+        <BannerReaceptacion documentosPendientes={documentosPendientes} />
+      )}
+
       <MainLayout 
         user={session.user} 
         onLogout={handleLogout}
