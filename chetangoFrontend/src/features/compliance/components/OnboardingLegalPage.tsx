@@ -111,90 +111,98 @@ export const OnboardingLegalPage = () => {
   const aceptadosCount = obligatorios.filter(d => aceptados.has(d.versionId)).length
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-gray-50 flex flex-col items-center justify-start pt-10 px-4 pb-36">
-      {/* ─── Header ──────────────────────────────────────────────────────────── */}
-      <div className="max-w-2xl w-full mb-8 text-center">
-        <div className="flex justify-center mb-4">
-          <div className="p-3 bg-blue-100 rounded-full">
-            <ShieldCheck className="h-10 w-10 text-blue-600" />
-          </div>
-        </div>
-        <h1 className="text-2xl font-bold text-gray-800">
-          {esReaceptacion ? 'Actualización de documentos legales' : 'Bienvenido a Aphellion'}
-        </h1>
-        <p className="mt-2 text-gray-500 text-sm leading-relaxed">
-          {esReaceptacion
-            ? 'Hemos actualizado nuestros documentos legales. Debes aceptarlos para continuar operando.'
-            : `Antes de comenzar a gestionar ${estado.nombreAcademia}, necesitas leer y aceptar los documentos legales de la plataforma.`}
-        </p>
-      </div>
+    <div className="h-screen flex flex-col bg-gradient-to-b from-blue-50 to-gray-50 overflow-hidden">
 
-      {/* ─── Lista de documentos ─────────────────────────────────────────────── */}
-      <div className="max-w-2xl w-full space-y-4">
-        {pendientes.map(doc => {
-          const yaAceptado = aceptados.has(doc.versionId)
-          const yaRevisado = revisados.has(doc.versionId)
+      {/* ─── Área scrollable ─────────────────────────────────────────────────── */}
+      <div className="flex-1 overflow-y-auto px-4 pt-10 pb-6">
+        <div className="max-w-2xl mx-auto">
 
-          return (
-            <div
-              key={doc.versionId}
-              className={`rounded-xl border bg-white p-5 shadow-sm transition-all ${
-                yaAceptado ? 'border-green-300 bg-green-50' : 'border-gray-200'
-              }`}
-            >
-              {/* Encabezado del documento */}
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <FileText className={`h-5 w-5 shrink-0 ${yaAceptado ? 'text-green-600' : 'text-blue-500'}`} />
-                  <div>
-                    <p className="font-semibold text-gray-800 text-sm">
-                      {doc.nombre}
-                      {doc.esObligatorio && (
-                        <span className="ml-2 text-xs text-red-500 font-normal">(obligatorio)</span>
-                      )}
-                    </p>
-                    <p className="text-xs text-gray-400">Versión {doc.numeroVersion}</p>
-                  </div>
-                </div>
-                {yaAceptado && <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />}
-              </div>
-
-              {/* Descripción */}
-              {doc.descripcion && (
-                <p className="mt-2 text-xs text-gray-500 leading-relaxed">{doc.descripcion}</p>
-              )}
-
-              {/* Acciones */}
-              <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => handleAbrirDocumento(doc)}
-                  className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 underline underline-offset-2 transition"
-                >
-                  <ExternalLink className="h-3.5 w-3.5" />
-                  Leer documento completo
-                </button>
-
-                <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 rounded accent-blue-600"
-                    checked={yaAceptado}
-                    disabled={!yaRevisado}
-                    onChange={() => toggleAceptado(doc.versionId)}
-                  />
-                  <span className={`text-xs font-medium ${!yaRevisado ? 'text-gray-400' : 'text-gray-700'}`}>
-                    {!yaRevisado ? 'Primero abre el documento' : 'Acepto este documento'}
-                  </span>
-                </label>
+          {/* ─── Header ────────────────────────────────────────────────────────── */}
+          <div className="mb-8 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-blue-100 rounded-full">
+                <ShieldCheck className="h-10 w-10 text-blue-600" />
               </div>
             </div>
-          )
-        })}
+            <h1 className="text-2xl font-bold text-gray-800">
+              {esReaceptacion ? 'Actualización de documentos legales' : 'Bienvenido a Aphellion'}
+            </h1>
+            <p className="mt-2 text-gray-500 text-sm leading-relaxed">
+              {esReaceptacion
+                ? 'Hemos actualizado nuestros documentos legales. Debes aceptarlos para continuar operando.'
+                : `Antes de comenzar a gestionar ${estado.nombreAcademia}, necesitas leer y aceptar los documentos legales de la plataforma.`}
+            </p>
+          </div>
+
+          {/* ─── Lista de documentos ───────────────────────────────────────────── */}
+          <div className="space-y-4">
+            {pendientes.map(doc => {
+              const yaAceptado = aceptados.has(doc.versionId)
+              const yaRevisado = revisados.has(doc.versionId)
+
+              return (
+                <div
+                  key={doc.versionId}
+                  className={`rounded-xl border bg-white p-5 shadow-sm transition-all ${
+                    yaAceptado ? 'border-green-300 bg-green-50' : 'border-gray-200'
+                  }`}
+                >
+                  {/* Encabezado del documento */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <FileText className={`h-5 w-5 shrink-0 ${yaAceptado ? 'text-green-600' : 'text-blue-500'}`} />
+                      <div>
+                        <p className="font-semibold text-gray-800 text-sm">
+                          {doc.nombre}
+                          {doc.esObligatorio && (
+                            <span className="ml-2 text-xs text-red-500 font-normal">(obligatorio)</span>
+                          )}
+                        </p>
+                        <p className="text-xs text-gray-400">Versión {doc.numeroVersion}</p>
+                      </div>
+                    </div>
+                    {yaAceptado && <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />}
+                  </div>
+
+                  {/* Descripción */}
+                  {doc.descripcion && (
+                    <p className="mt-2 text-xs text-gray-500 leading-relaxed">{doc.descripcion}</p>
+                  )}
+
+                  {/* Acciones */}
+                  <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={() => handleAbrirDocumento(doc)}
+                      className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-800 underline underline-offset-2 transition"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      Leer documento completo
+                    </button>
+
+                    <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 rounded accent-blue-600"
+                        checked={yaAceptado}
+                        disabled={!yaRevisado}
+                        onChange={() => toggleAceptado(doc.versionId)}
+                      />
+                      <span className={`text-xs font-medium ${!yaRevisado ? 'text-gray-400' : 'text-gray-700'}`}>
+                        {!yaRevisado ? 'Primero abre el documento' : 'Acepto este documento'}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+        </div>
       </div>
 
-      {/* ─── Barra de confirmación sticky ───────────────────────────────────── */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg px-4 py-4 z-50">
+      {/* ─── Barra de confirmación — siempre visible al pie ─────────────────── */}
+      <div className="flex-shrink-0 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] px-4 py-4">
         <div className="max-w-2xl mx-auto flex flex-col gap-2">
 
           {/* Progreso */}
@@ -245,6 +253,7 @@ export const OnboardingLegalPage = () => {
           </p>
         </div>
       </div>
+
     </div>
   )
 }
