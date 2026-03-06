@@ -62,12 +62,21 @@ export const KPIGrid = ({ kpis, sedeFilter = 'all' }: KPIGridProps) => {
     }
   ]
 
-  // Vista específica de sede (Medellín o Manizales)
-  const ingresosSede = sedeFilter === 'medellin' ? kpis.ingresosMedellinEsteMes : kpis.ingresosManizalesEsteMes
-  const egresosSede = sedeFilter === 'medellin' ? kpis.egresosMedellinEsteMes : kpis.egresosManizalesEsteMes
+  // Vista específica de sede (cuando sedeFilter es un número)
+  // Buscar la sede en el desglose dinámico; fallback a los campos legacy si no existe
+  const sedeData = typeof sedeFilter === 'number'
+    ? kpis.ingresosEgresosPorSede?.find(s => s.sedeValor === sedeFilter)
+    : undefined
+
+  const ingresosSede = sedeData?.ingresos
+    ?? (sedeFilter === 1 ? kpis.ingresosMedellinEsteMes : kpis.ingresosManizalesEsteMes ?? 0)
+  const egresosSede  = sedeData?.egresos
+    ?? (sedeFilter === 1 ? kpis.egresosMedellinEsteMes  : kpis.egresosManizalesEsteMes  ?? 0)
   const gananciaSede = ingresosSede - egresosSede
-  const sedeName = sedeFilter === 'medellin' ? 'Medellín' : 'Manizales'
-  const sedeColor = sedeFilter === 'medellin' ? '#10b981' : '#3b82f6'
+  const sedeName  = sedeData?.nombreSede ?? `Sede ${sedeFilter}`
+  const sedeColor = typeof sedeFilter === 'number'
+    ? ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'][(sedeFilter - 1) % 5]
+    : '#10b981'
 
   const kpiConfigsSede = [
     {
@@ -89,8 +98,8 @@ export const KPIGrid = ({ kpis, sedeFilter = 'all' }: KPIGridProps) => {
       comparison: 'vs mes anterior',
       icon: DollarSign,
       color: sedeColor,
-      bgColor: sedeFilter === 'medellin' ? 'rgba(16, 185, 129, 0.25)' : 'rgba(59, 130, 246, 0.25)',
-      glowColor: sedeFilter === 'medellin' ? 'rgba(16, 185, 129, 0.5)' : 'rgba(59, 130, 246, 0.5)'
+      bgColor: `${sedeColor}40`,
+      glowColor: `${sedeColor}80`
     },
     {
       id: 'egresos',
@@ -259,7 +268,7 @@ export const KPIGrid = ({ kpis, sedeFilter = 'all' }: KPIGridProps) => {
     )
   }
 
-  // Vista específica de sede (Medellín o Manizales)
+  // Vista específica de sede — kpiConfigsSede
   return (
     <>
       {/* Primera fila: 4 KPIs financieros */}

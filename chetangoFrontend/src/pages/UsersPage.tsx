@@ -381,13 +381,9 @@ const UsersPage = () => {
                     </td>
                     <td className="px-2 sm:px-3 py-3 sm:py-4">
                       <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap ${
-                          user.sede === 1
-                            ? 'bg-[rgba(16,185,129,0.25)] text-[#10b981] border-[rgba(16,185,129,0.5)]'
-                            : 'bg-[rgba(59,130,246,0.25)] text-[#3b82f6] border-[rgba(59,130,246,0.5)]'
-                        }`}
+                        className="inline-block px-3 py-1 rounded-full text-xs font-medium border whitespace-nowrap bg-[rgba(16,185,129,0.15)] text-[#10b981] border-[rgba(16,185,129,0.4)]"
                       >
-                        {user.sede === 1 ? '🏢 Medellín' : '🏢 Manizales'}
+                        🏢 {user.sedeNombre || user.sede}
                       </span>
                     </td>
                     <td className="px-2 sm:px-3 py-3 sm:py-4">{getRoleBadge(user.rol || user.roles)}</td>

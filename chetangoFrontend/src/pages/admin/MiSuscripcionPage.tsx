@@ -5,6 +5,7 @@
 import { AlertCircle, CheckCircle, Clock, CreditCard, FileText, TrendingUp, Upload } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { GestionSedesPanel } from '../../features/sedes/components/GestionSedesPanel'
 import { useSubirComprobanteMutation } from '../../features/suscripciones/api/suscripcionMutations'
 import { useConfiguracionPagoQuery, useEstadoSuscripcionQuery, useHistorialPagosQuery } from '../../features/suscripciones/api/suscripcionQueries'
 import { PLANES_SUSCRIPCION, type PlanType, type SubirComprobanteRequest } from '../../features/suscripciones/types/suscripcion.types'
@@ -317,6 +318,11 @@ const MiSuscripcionPage = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Gestión de Sedes */}
+      <div className="mb-8">
+        <GestionSedesPanel maxSedes={estado.maxSedes} />
       </div>
 
       {/* Historial de Pagos */}

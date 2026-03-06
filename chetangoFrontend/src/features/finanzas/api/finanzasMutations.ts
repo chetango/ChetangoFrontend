@@ -12,6 +12,7 @@ import type {
     OtroGastoDTO,
     OtroIngresoDTO,
 } from '../types/finanzasTypes'
+import { dashboardKeys } from '@/features/dashboard/api/dashboardQueries'
 import { finanzasKeys } from './finanzasQueries'
 
 // ============================================
@@ -36,8 +37,8 @@ export function useCrearOtroIngresoMutation() {
     onSuccess: () => {
       // Invalidate all otros-ingresos queries to refetch
       queryClient.invalidateQueries({ queryKey: finanzasKeys.all })
-      // Invalidate dashboard so KPIs refresh immediately
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+      // Invalidate dashboard so KPIs update immediately
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
       toast.success('Ingreso registrado exitosamente')
     },
     onError: (error) => {
@@ -65,8 +66,8 @@ export function useCrearOtroGastoMutation() {
     onSuccess: () => {
       // Invalidate all otros-gastos queries to refetch
       queryClient.invalidateQueries({ queryKey: finanzasKeys.all })
-      // Invalidate dashboard so KPIs refresh immediately
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+      // Invalidate dashboard so KPIs update immediately
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
       toast.success('Gasto registrado exitosamente')
     },
     onError: (error) => {
@@ -89,7 +90,7 @@ export function useEliminarOtroIngresoMutation() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: finanzasKeys.all })
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
       toast.success('Ingreso eliminado exitosamente')
     },
     onError: (error) => {
@@ -112,7 +113,7 @@ export function useEliminarOtroGastoMutation() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: finanzasKeys.all })
-      queryClient.invalidateQueries({ queryKey: ['dashboard'] })
+      queryClient.invalidateQueries({ queryKey: dashboardKeys.all })
       toast.success('Gasto eliminado exitosamente')
     },
     onError: (error) => {

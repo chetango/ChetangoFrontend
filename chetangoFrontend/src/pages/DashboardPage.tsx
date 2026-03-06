@@ -42,16 +42,7 @@ const DashboardPage = () => {
   const [showPackagesNotification, setShowPackagesNotification] = useState(true)
   const isCatalogsLoading = loadingTiposClase || loadingProfesores
 
-  // DEBUG: Log para verificar datos de paquetes agotados
-  if (dashboard?.kpIs) {
-    console.log('📦 Dashboard KPIs:', {
-      paquetesAgotados: dashboard.kpIs.paquetesAgotados,
-      paquetesAgotadosMedellin: dashboard.kpIs.paquetesAgotadosMedellin,
-      paquetesAgotadosManizales: dashboard.kpIs.paquetesAgotadosManizales,
-      showNotification: dashboard.kpIs.paquetesAgotados > 0 && showPackagesNotification
-    })
-  }
-
+  // Datos de sedes disponibles para notificaciones y filtros
   const notaRenovacion = useMemo(() => {
     if (!renovacionSeleccionada) return undefined
 
@@ -220,8 +211,8 @@ const DashboardPage = () => {
         <PackageDepletedNotification
           data={{
             total: dashboard.kpIs.paquetesAgotados,
-            medellin: dashboard.kpIs.paquetesAgotadosMedellin || 0,
-            manizales: dashboard.kpIs.paquetesAgotadosManizales || 0,
+            medellin: dashboard.kpIs.paquetesAgotadosPorSede?.find(s => s.sedeValor === 1)?.agotados ?? dashboard.kpIs.paquetesAgotadosMedellin ?? 0,
+            manizales: dashboard.kpIs.paquetesAgotadosPorSede?.find(s => s.sedeValor === 2)?.agotados ?? dashboard.kpIs.paquetesAgotadosManizales ?? 0,
           }}
           onDismiss={() => setShowPackagesNotification(false)}
         />

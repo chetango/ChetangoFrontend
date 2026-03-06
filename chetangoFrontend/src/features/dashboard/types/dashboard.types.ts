@@ -55,12 +55,50 @@ export interface DashboardKPIs {
   egresosMedellinEsteMes: number
   egresosManizalesEsteMes: number
   gananciaNeta: number
+  /** Desglose dinámico de ingresos / egresos / ganancia por sede del tenant. */
+  ingresosEgresosPorSede: FinancialPorSede[]
+  /** Desglose dinámico de paquetes agotados por sede del tenant. */
+  paquetesAgotadosPorSede: PaquetesPorSede[]
   crecimientoIngresosMesAnterior?: number
   comparativaAsistenciasMesAnterior?: number
   comparativaAlumnosMesAnterior?: number
   comparativaPaquetesVendidosMesAnterior?: number
   comparativaEgresosMesAnterior?: number
   comparativaGananciaMesAnterior?: number
+}
+
+/**
+ * Desglose de finanzas (ingresos / egresos / ganancia) para una sede del tenant.
+ * Reemplaza las propiedades hardcodeadas para sedes específicas.
+ */
+export interface FinancialPorSede {
+  sedeValor: number
+  nombreSede: string
+  ingresos: number
+  egresos: number
+  ganancia: number
+}
+
+/**
+ * Desglose de paquetes agotados por sede del tenant.
+ */
+export interface PaquetesPorSede {
+  sedeValor: number
+  nombreSede: string
+  agotados: number
+}
+
+/**
+ * Sede configurada para el tenant actual.
+ * Obtenida desde GET /api/sedes.
+ */
+export interface SedeConfig {
+  id: string        // Guid — requerido para PUT /api/sedes/{id} y DELETE
+  sedeValor: number
+  nombre: string
+  activa: boolean
+  esDefault: boolean
+  orden: number
 }
 
 /**
