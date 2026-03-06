@@ -299,7 +299,7 @@ export function LoginForm({ onSuccess, className = '' }: LoginFormProps) {
                   disablePictureInPicture
                   disableRemotePlayback
                   controlsList="nodownload nofullscreen noremoteplayback"
-                  className="w-full h-full object-contain animate-video-visibility-cycle"
+                  className="w-full h-full object-contain"
                   style={{ pointerEvents: 'none' }}
                 >
                   <source src="/Video-LogoChetango.mp4" type="video/mp4" />
