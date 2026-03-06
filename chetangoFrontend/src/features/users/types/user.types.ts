@@ -127,7 +127,7 @@ export interface UserFilters {
   searchTerm?: string
   rol?: UserRole | 'todos'
   estado?: UserStatus | 'todos'
-  sede?: Sede | 'all'
+  sede?: 'all' | number
   pageNumber?: number
   pageSize?: number
 }
