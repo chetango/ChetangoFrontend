@@ -361,7 +361,7 @@ export function LoginFormAphellion({ onSuccess, className = '' }: LoginFormAphel
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: 'linear-gradient(to right, #121212 0%, transparent 15%, transparent 85%, #121212 100%)',
+                  background: 'linear-gradient(to right, #121212 0%, rgba(18,18,18,0.9) 8%, rgba(18,18,18,0.6) 18%, transparent 30%, transparent 85%, #121212 100%)',
                 }}
               />
 
