@@ -22,15 +22,20 @@ export function LoginFormAphellion({ onSuccess, className = '' }: LoginFormAphel
   useEffect(() => {
     let attempts = 0
     const maxAttempts = 10
-
+    
     const attemptPlay = async () => {
       if (videoRef.current && attempts < maxAttempts) {
         try {
+          // Reset video to beginning
           videoRef.current.currentTime = 0
           await videoRef.current.play()
+          console.log('Video playing successfully')
           return true
-        } catch {
+        } catch (error) {
           attempts++
+          console.log(`Video play attempt ${attempts} failed, retrying...`)
+          
+          // Keep retrying with exponential backoff
           if (attempts < maxAttempts) {
             setTimeout(attemptPlay, 100 * attempts)
           }
@@ -40,27 +45,35 @@ export function LoginFormAphellion({ onSuccess, className = '' }: LoginFormAphel
       return false
     }
 
+    // First attempt immediately
     attemptPlay()
 
+    // Aggressive fallback: play on ANY user interaction
     const interactions = ['click', 'touchstart', 'touchend', 'mousedown', 'keydown']
-
+    
     const handleInteraction = async () => {
       if (videoRef.current && videoRef.current.paused) {
         try {
           await videoRef.current.play()
-          interactions.forEach(event => document.removeEventListener(event, handleInteraction))
-        } catch {
+          // Remove all listeners after successful play
+          interactions.forEach(event => {
+            document.removeEventListener(event, handleInteraction)
+          })
+        } catch (err) {
           // Silently fail
         }
       }
     }
 
+    // Add multiple event listeners for maximum compatibility
     interactions.forEach(event => {
       document.addEventListener(event, handleInteraction, { once: true, passive: true })
     })
 
     return () => {
-      interactions.forEach(event => document.removeEventListener(event, handleInteraction))
+      interactions.forEach(event => {
+        document.removeEventListener(event, handleInteraction)
+      })
     }
   }, [])
 
@@ -313,10 +326,10 @@ export function LoginFormAphellion({ onSuccess, className = '' }: LoginFormAphel
         </div>
 
         {/* ── RIGHT SIDE — Video Zone ── */}
-        <div className="flex items-center justify-center px-8 py-12 lg:py-0">
+        <div className="flex items-center justify-center px-8 py-16 lg:py-0 order-first lg:order-last">
           <div className="relative w-full max-w-2xl lg:max-w-4xl aspect-square lg:aspect-auto lg:h-[85vh]">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative w-full h-full flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative w-full h-full flex items-center justify-center">
 
               {/* Video del Logo Animado con ciclo de visibilidad */}
               <video
