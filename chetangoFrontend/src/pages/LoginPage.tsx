@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { LoginForm, useAuth } from '@/features/auth'
+import { LoginForm, LoginFormAphellion, useAuth } from '@/features/auth'
+import { isChetango } from '@/shared/config/tenantConfig'
 import { ROUTES, ROUTE_ACCESS } from '@/shared/constants/routes'
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 // Validar que la URL sea interna y segura
 function isValidReturnUrl(url: string): boolean {
@@ -40,7 +41,9 @@ function LoginPage() {
     navigate(destinationUrl, { replace: true })
   }
 
-  return <LoginForm onSuccess={handleLoginSuccess} />
+  return isChetango
+    ? <LoginForm onSuccess={handleLoginSuccess} />
+    : <LoginFormAphellion onSuccess={handleLoginSuccess} />
 }
 
 export default LoginPage
