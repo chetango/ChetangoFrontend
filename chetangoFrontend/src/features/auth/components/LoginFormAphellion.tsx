@@ -353,15 +353,15 @@ export function LoginFormAphellion({ onSuccess, className = '' }: LoginFormAphel
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: 'radial-gradient(ellipse at center, transparent 25%, rgba(18,18,18,0.3) 45%, rgba(18,18,18,0.7) 60%, rgba(18,18,18,0.9) 75%, #121212 90%)',
+                  background: 'radial-gradient(ellipse at center, transparent 20%, rgba(18,18,18,0.4) 35%, rgba(18,18,18,0.75) 50%, rgba(18,18,18,0.92) 65%, #121212 80%)',
                 }}
               />
 
-              {/* Difuminado lateral — costados izquierdo (más ancho) y derecho */}
+              {/* Difuminado lateral — costados izquierdo y derecho */}
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: 'linear-gradient(to right, #121212 0%, #121212 5%, rgba(18,18,18,0.85) 20%, transparent 40%, transparent 88%, #121212 100%)',
+                  background: 'linear-gradient(to right, #121212 0%, transparent 15%, transparent 85%, #121212 100%)',
                 }}
               />
 
