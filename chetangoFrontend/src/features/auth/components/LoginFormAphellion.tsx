@@ -313,7 +313,8 @@ export function LoginFormAphellion({ onSuccess, className = '' }: LoginFormAphel
         </div>
 
         {/* ── RIGHT SIDE — Video Zone ── */}
-        <div className="relative overflow-hidden order-first lg:order-last">
+        <div className="flex items-center justify-center px-8 py-12 lg:py-0">
+          <div className="relative w-full max-w-2xl lg:max-w-4xl aspect-square lg:aspect-auto lg:h-[85vh]">
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative w-full h-full flex items-center justify-center">
 
@@ -359,6 +360,7 @@ export function LoginFormAphellion({ onSuccess, className = '' }: LoginFormAphel
                 }}
               />
             </div>
+          </div>
           </div>
         </div>
 
