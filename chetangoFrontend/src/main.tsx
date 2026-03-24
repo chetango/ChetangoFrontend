@@ -1,3 +1,4 @@
+// Verified: Mac setup 2026-03-23
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from '@/App'
